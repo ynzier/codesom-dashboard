@@ -1,0 +1,8 @@
+{
+  "name": "KL Healthcare Dashboard",
+  "short_name": "KL Healthcare Dashboard",
+  "start_url": "/?utm_source=a2hs",
+  "theme_color": "#FF9C00",
+  "background_color": "#563d7c",
+  "display": "standalone"
+}

@@ -1,0 +1,7 @@
+{
+    "name": "KL Healthcare Dashboard",
+    "short_name": "KL Healthcare Dashboard",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

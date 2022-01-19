@@ -1,0 +1,86 @@
+.container {
+  height: 100vh;
+  max-width: 100%;
+  padding: 0px 0px;
+  margin: 0px 0px;
+}
+
+.icon {
+  margin-left: 8px;
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+/* Control the left side */
+.left {
+  align-items: center;
+  justify-content: center;
+  background-color: #ff9c00;
+  padding: 0;
+  flex-direction: column;
+  display: flex;
+}
+
+/* Control the right side */
+.right {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 233, 212, 0.5);
+}
+
+.loginBox {
+  /* Rectangle 759 */
+
+  align-items: center;
+  justify-content: center;
+  width: 417px;
+  height: 400px;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 70px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 24px 48px 32px;
+}
+
+.logoBox {
+  /* Rectangle 759 */
+
+  align-items: center;
+  justify-content: center;
+  width: 417px;
+  height: 400px;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 70px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 24px 48px 32px;
+}
+
+.logoText {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+}
+.logo {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  padding: 4%;
+}
+
+.prefixIcon {
+  color: #ff9c00;
+}
+
+.shadow-box-example {
+  height: 120px;
+  width: 100%;
+  background-color: #64b5f6;
+}
