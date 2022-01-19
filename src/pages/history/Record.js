@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
-import { EditForm } from 'components/editform/RecordEdit';
+import { RecordEdit } from 'components';
 import CustomerDataService from 'services/customer.service';
 
-const App = props => {
+const Record = props => {
   useEffect(() => {
     document.title = 'แก้ไข';
   }, []);
@@ -46,10 +46,10 @@ const App = props => {
       </div>
       <Row>
         <Col xs={12} xl={9}>
-          <EditForm data={data} />
+          <RecordEdit data={data} />
         </Col>
       </Row>
     </>
   );
 };
-export default App;
+export default Record;

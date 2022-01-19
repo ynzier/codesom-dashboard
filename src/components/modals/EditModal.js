@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Col,
-  Row,
-  Card,
-  Form,
-  Button,
-  Alert,
-} from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, Alert } from 'react-bootstrap';
 import ProductService from 'services/product.service';
 
 var getData = [];
@@ -272,9 +265,7 @@ const EditModal = props => {
                   Update
                 </Button>
               </div>
-              {errorMessage && (
-                <Alert variant="danger">{errorMessage}</Alert>
-              )}
+              {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             </Col>
             <Col md={5}>
               {status === 1 ? (
@@ -295,4 +286,4 @@ const EditModal = props => {
   );
 };
 
-export { EditModal };
+export default EditModal;

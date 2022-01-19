@@ -13,9 +13,9 @@ import {
 } from 'react-bootstrap';
 import Logo from 'assets/Codesom-Logo-x400.png';
 import AuthService from 'services/auth.service';
-import styles from './index.css';
+import './index.css';
 
-const App = () => {
+const Login = () => {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -130,4 +130,4 @@ const App = () => {
     </Container>
   );
 };
-export default App;
+export default Login;

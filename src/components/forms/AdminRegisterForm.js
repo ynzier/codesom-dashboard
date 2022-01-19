@@ -222,4 +222,4 @@ const AdminRegisterForm = () => {
   );
 };
 
-export { AdminRegisterForm };
+export default AdminRegisterForm;

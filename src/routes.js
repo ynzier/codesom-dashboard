@@ -8,9 +8,9 @@ export const Routes = {
   Signin: { path: '/' },
   ProductList: { path: '/dashboard' },
   AddAdmin: { path: '/dashboard/addadmin' },
-  AllAdmin: { path: '/dashboard/alladmin' },
-  AllCustomer: { path: '/dashboard/allItem' },
+  AdminList: { path: '/dashboard/AdminList' },
+  CustomerList: { path: '/dashboard/allItem' },
   AddItem: { path: '/dashboard/additem' },
   Setting: { path: '/dashboard/setting' },
-  TransactionList: { path: '/dashboard/transactions' },
+  Receipts: { path: '/dashboard/Receipts' },
 };

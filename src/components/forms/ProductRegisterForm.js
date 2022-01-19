@@ -313,4 +313,4 @@ const ProductRegisterForm = () => {
   );
 };
 
-export { ProductRegisterForm };
+export default ProductRegisterForm;

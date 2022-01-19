@@ -12,8 +12,8 @@ import {
 import { Table } from 'antd';
 import 'antd/dist/antd.min.css';
 
-import CustomerService from 'services/customer.service';
-const App = props => {
+import AuthService from 'services/auth.service';
+const AdminList = props => {
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const search = value => {
@@ -31,7 +31,7 @@ const App = props => {
     props.history.push('/record/' + id);
   };
   const refreshList = () => {
-    CustomerService.getAllCustomer()
+    AuthService.getAllAdminAccounts()
       .then(res => {
         setRecord(res.data);
       })
@@ -43,10 +43,9 @@ const App = props => {
   useEffect(() => {
     document.title = 'Admin Dashboard / ข้อมูลผู้ดูแล';
     let mounted = true;
-    CustomerService.getAllCustomer()
+    AuthService.getAllAdminAccounts()
       .then(res => {
         if (mounted) {
-          console.log(res.data)
           setRecord(res.data);
         }
       })
@@ -57,7 +56,7 @@ const App = props => {
   }, []);
 
   const deleteRecord = id => {
-    CustomerService.removeCustomer(id)
+    AuthService.removeAccount(id)
       .then(response => {
         refreshList();
       })
@@ -85,8 +84,8 @@ const App = props => {
       width: 300,
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: 'ตำแหน่ง',
+      dataIndex: 'roleName',
       align: 'center',
       width: 300,
     },
@@ -95,7 +94,7 @@ const App = props => {
       key: 'key',
       dataIndex: 'key',
       render: (text, record) => {
-        const id = record.cust_no;
+        const id = record.admin_id;
 
         return (
           <div>
@@ -156,7 +155,7 @@ const App = props => {
           <Table
             dataSource={filterData == null ? record : filterData}
             columns={header}
-            rowKey="cust_no"
+            rowKey="admin_id"
             pagination={{ pageSize: 20 }}
           />
         </Card.Body>
@@ -164,4 +163,4 @@ const App = props => {
     </>
   );
 };
-export default App;
+export default AdminList;

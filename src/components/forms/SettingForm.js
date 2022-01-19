@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 
-export const SettingForm = props => {
+const SettingForm = props => {
   const [brandData, setBrandData] = useState();
   const [typeData, setTypeData] = useState();
   const [input, setInput] = useState();
@@ -239,3 +239,5 @@ export const SettingForm = props => {
     </>
   );
 };
+
+export default SettingForm;

@@ -12,9 +12,9 @@ import {
 } from 'react-bootstrap';
 import { List, Card as CardAnt } from 'antd';
 import 'antd/dist/antd.min.css';
-import { EditModal } from 'components/editform/EditModal';
+import { EditModal } from 'components';
 import ProductService from 'services/product.service';
-const App = props => {
+const ProductList = props => {
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const [modalShow, setModalShow] = useState(false);
@@ -106,7 +106,18 @@ const App = props => {
 
   return (
     <>
-
+      <Breadcrumb
+        className="d-none d-md-inline-block"
+        listProps={{
+          className: 'breadcrumb-dark breadcrumb-transparent',
+        }}>
+        <Breadcrumb.Item active>
+          <FontAwesomeIcon icon={faHome} /> แดชบอร์ด
+        </Breadcrumb.Item>
+        <Breadcrumb.Item >
+          bbb
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <Card>
         <Card.Header>
           <div className="table-settings mb-4">
@@ -197,4 +208,4 @@ const App = props => {
     </>
   );
 };
-export default App;
+export default ProductList;

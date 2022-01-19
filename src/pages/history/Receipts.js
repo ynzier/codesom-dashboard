@@ -18,7 +18,7 @@ import NumberFormat from 'react-number-format';
 import moment from 'moment-timezone';
 
 import CustomerDataService from 'services/customer.service';
-const App = props => {
+const Receipts = props => {
   const [record, setRecord] = useState([]);
   const [recieveData, setRecieveData] = useState([]);
   const [name, setName] = useState();
@@ -330,4 +330,4 @@ const App = props => {
     </>
   );
 };
-export default App;
+export default Receipts;

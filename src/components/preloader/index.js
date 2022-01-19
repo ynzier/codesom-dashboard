@@ -1,9 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 
 import React from 'react';
-import { Preloader, ThreeDots } from 'react-preloader-icon';
+import { Preloader as Loader, ThreeDots } from 'react-preloader-icon';
 
-export default props => {
+const Preloader = props => {
   const { show } = props;
 
   return (
@@ -11,7 +11,7 @@ export default props => {
       className={`preloader bg-soft flex-column justify-content-center align-items-center ${
         show ? '' : 'show'
       }`}>
-      <Preloader
+      <Loader
         use={ThreeDots}
         size={60}
         strokeWidth={6}
@@ -22,3 +22,5 @@ export default props => {
     </div>
   );
 };
+
+export default Preloader;

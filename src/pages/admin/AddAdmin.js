@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
-import { AdminRegisterForm } from 'components/forms/AdminRegisterForm';
+import { AdminRegisterForm } from 'components';
 
-const App = () => {
+const AddAdmin = () => {
   useEffect(() => {
     document.title = 'Admin Dashboard / ผู้ดูแลระบบ';
   }, []);
@@ -31,4 +31,4 @@ const App = () => {
     </>
   );
 };
-export default App;
+export default AddAdmin;

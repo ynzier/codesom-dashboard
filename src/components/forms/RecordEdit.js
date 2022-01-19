@@ -21,7 +21,7 @@ var record = [];
 
 var getData = [];
 
-export const EditForm = props => {
+const RecordEdit = props => {
   const [modalShow, setModalShow] = useState(false);
   const [name, setName] = useState();
   const [tel, setTel] = useState();
@@ -402,3 +402,4 @@ export const EditForm = props => {
     </Card>
   );
 };
+export default RecordEdit;

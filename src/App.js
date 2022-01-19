@@ -3,23 +3,13 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 
 // Components
-import Sidebar from 'components/sidebar';
-import Navbar from 'components/navbar';
-import Preloader from 'components/preloader';
+import { Sidebar, Navbar, Preloader } from 'components';
+
+import AuthService from 'services/auth.service';
 
 // Error Pages
-import NotFoundPage from 'pages/errors/NotFound';
-import ServerError from 'pages/errors/ServerError';
-// Pages
-import SignIn from 'pages/auth';
-import AddItem from 'deploy/AddItem';
-import AddAdmin from 'deploy/AddAdmin';
-import AllAdmin from 'deploy/AdminList';
-import AllCustomer from 'deploy/CustomerList';
-import ProductList from 'deploy/ProductList';
-import AuthService from 'services/auth.service';
-import Setting from 'deploy/Setting';
-import TransactionList from 'deploy/Receipts';
+import * as Page from 'pages';
+
 const App = () => {
   const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
   let history = useHistory();
@@ -31,7 +21,7 @@ const App = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const RouteWithLoader = ({ component: Component, ...rest }) => {
+  const RouteWithLoader = ({ page: Component, ...rest }) => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -51,7 +41,7 @@ const App = () => {
       />
     );
   };
-  const RouteWithSidebar = ({ component: Component, ...rest }) => {
+  const RouteWithSidebar = ({ page: Component, ...rest }) => {
     return (
       <Route
         {...rest}
@@ -81,54 +71,54 @@ const App = () => {
         <RouteWithLoader
           exact
           path={Routes.NotFound.path}
-          component={NotFoundPage}
+          page={Page.NotFound}
         />
         <RouteWithLoader
           exact
           path={Routes.ServerError.path}
-          component={ServerError}
+          page={Page.ServerError}
         />
         {/* deploy */}
-        <RouteWithLoader exact path="/" component={SignIn} />
+        <RouteWithLoader exact path="/" page={Page.Login} />
         <RouteWithSidebar
           exact
           path={Routes.ProductList.path}
-          component={ProductList}
+          page={Page.ProductList}
         />
         <RouteWithSidebar
           exact
           path={Routes.AddItem.path}
-          component={AddItem}
+          page={Page.AddItem}
         />
         <RouteWithSidebar
           exact
           path={Routes.AddAdmin.path}
-          component={AddAdmin}
+          page={Page.AddAdmin}
         />
         <RouteWithSidebar
           exact
-          path={Routes.AllAdmin.path}
-          component={AllAdmin}
+          path={Routes.AdminList.path}
+          page={Page.AdminList}
         />
         <RouteWithSidebar
           exact
-          path={Routes.AllCustomer.path}
-          component={AllCustomer}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.Setting.path}
-          component={Setting}
+          path={Routes.CustomerList.path}
+          page={Page.CustomerList}
         />
         <RouteWithSidebar
           exact
           path={Routes.Setting.path}
-          component={Setting}
+          page={Page.Setting}
         />
         <RouteWithSidebar
           exact
-          path={Routes.TransactionList.path}
-          component={TransactionList}
+          path={Routes.Setting.path}
+          page={Page.Setting}
+        />
+        <RouteWithSidebar
+          exact
+          path={Routes.Receipts.path}
+          page={Page.Receipts}
         />
         <Redirect to={Routes.NotFound.path} />
       </Switch>

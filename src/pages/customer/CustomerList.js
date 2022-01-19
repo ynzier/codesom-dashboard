@@ -12,8 +12,8 @@ import {
 import { Table } from 'antd';
 import 'antd/dist/antd.min.css';
 
-import AuthService from 'services/auth.service';
-const App = props => {
+import CustomerService from 'services/customer.service';
+const CustomerList = props => {
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const search = value => {
@@ -31,7 +31,7 @@ const App = props => {
     props.history.push('/record/' + id);
   };
   const refreshList = () => {
-    AuthService.getAllAdminAccounts()
+    CustomerService.getAllCustomer()
       .then(res => {
         setRecord(res.data);
       })
@@ -43,9 +43,10 @@ const App = props => {
   useEffect(() => {
     document.title = 'Admin Dashboard / ข้อมูลผู้ดูแล';
     let mounted = true;
-    AuthService.getAllAdminAccounts()
+    CustomerService.getAllCustomer()
       .then(res => {
         if (mounted) {
+          console.log(res.data)
           setRecord(res.data);
         }
       })
@@ -56,7 +57,7 @@ const App = props => {
   }, []);
 
   const deleteRecord = id => {
-    AuthService.removeAccount(id)
+    CustomerService.removeCustomer(id)
       .then(response => {
         refreshList();
       })
@@ -84,8 +85,8 @@ const App = props => {
       width: 300,
     },
     {
-      title: 'ตำแหน่ง',
-      dataIndex: 'roleName',
+      title: 'Email',
+      dataIndex: 'email',
       align: 'center',
       width: 300,
     },
@@ -94,7 +95,7 @@ const App = props => {
       key: 'key',
       dataIndex: 'key',
       render: (text, record) => {
-        const id = record.admin_id;
+        const id = record.cust_no;
 
         return (
           <div>
@@ -155,7 +156,7 @@ const App = props => {
           <Table
             dataSource={filterData == null ? record : filterData}
             columns={header}
-            rowKey="admin_id"
+            rowKey="cust_no"
             pagination={{ pageSize: 20 }}
           />
         </Card.Body>
@@ -163,4 +164,4 @@ const App = props => {
     </>
   );
 };
-export default App;
+export default CustomerList;
