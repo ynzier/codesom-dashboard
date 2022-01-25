@@ -9,7 +9,6 @@ import {
   Breadcrumb,
   InputGroup,
   Button,
-  Modal,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
@@ -18,11 +17,9 @@ import { Table } from 'antd';
 import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
 
-import EmployeeService from 'services/employee.service';
+import UserService from 'services/users.service';
 const UserList = props => {
   const [records, setRecord] = useState([]);
-  const [deleteData, setDeleteData] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
   const [filterData, setfilterData] = useState();
   const search = value => {
     const filterTable = records.filter(o =>
@@ -39,7 +36,7 @@ const UserList = props => {
     props.history.push('/record/' + id);
   };
   const refreshList = () => {
-    EmployeeService.getEmployeeList()
+    UserService.getUserList()
       .then(res => {
         setRecord(res.data);
       })
@@ -57,7 +54,7 @@ const UserList = props => {
   useEffect(() => {
     document.title = 'รายชื่อพนักงานทั้งหมด';
     let mounted = true;
-    EmployeeService.getEmployeeList()
+    UserService.getUserList()
       .then(res => {
         if (mounted) {
           console.log(res.data);
@@ -91,24 +88,36 @@ const UserList = props => {
     });
   }, []);
 
-  const deleteRecord = () => {
-    EmployeeService.deleteEmp(deleteData.emp_id)
-      .then(response => {
-        refreshList();
-        generate('success', response.data.message);
-        setModalShow(false);
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        generate('danger', resMessage);
-      });
-  };
+  // const deleteRecord = () => {
+  //   UserService.deleteEmp(deleteData.emp_id)
+  //     .then(response => {
+  //       refreshList();
+  //       generate('success', response.data.message);
+  //       setModalShow(false);
+  //     })
+  //     .catch(error => {
+  //       const resMessage =
+  //         (error.response &&
+  //           error.response.data &&
+  //           error.response.data.message) ||
+  //         error.message ||
+  //         error.toString();
+  //       generate('danger', resMessage);
+  //     });
+  // };
   const header = [
+    {
+      title: 'รหัสผู้ใช้งาน',
+      dataIndex: 'user_id',
+      align: 'center',
+      width: 300,
+    },
+    {
+      title: 'ชื่อผู้ใช้งาน',
+      dataIndex: 'username',
+      align: 'center',
+      width: 300,
+    },
     {
       title: 'ชื่อ',
       dataIndex: 'first_name',
@@ -122,14 +131,8 @@ const UserList = props => {
       width: 300,
     },
     {
-      title: 'ตำแหน่ง',
+      title: 'ระดับ',
       dataIndex: 'role_name',
-      align: 'center',
-      width: 300,
-    },
-    {
-      title: 'สาขา',
-      dataIndex: 'br_name',
       align: 'center',
       width: 300,
     },
@@ -143,42 +146,34 @@ const UserList = props => {
             <span onClick={() => {}}>
               <i className="far fa-edit action mr-2"></i>
             </span>
-            <span>&nbsp;&nbsp;</span>
-            <span
-              onClick={() => {
-                setDeleteData(record);
-                setModalShow(true);
-              }}>
-              <i className="fas fa-trash action"></i>
-            </span>
           </div>
         );
       },
     },
   ];
 
-  const DeleteModal = props => {
-    return (
-      <Modal {...props}>
-        <Modal.Header closeButton>
-          <Modal.Title>ลบข้อมูลพนักงาน</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>ข้อมูลของพนักงานที่ต้องการลบ</p>
-          <p>
-            ชื่อ: {deleteData.first_name} {deleteData.last_name}
-          </p>
-          <p>ตำแหน่ง: {deleteData.role_name}</p>
-          <p>สาขา: {deleteData.br_name}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={deleteRecord}>
-            ลบข้อมูล
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
+  // const DeleteModal = props => {
+  //   return (
+  //     <Modal {...props}>
+  //       <Modal.Header closeButton>
+  //         <Modal.Title>ลบข้อมูลพนักงาน</Modal.Title>
+  //       </Modal.Header>
+  //       <Modal.Body>
+  //         <p>ข้อมูลของพนักงานที่ต้องการลบ</p>
+  //         <p>
+  //           ชื่อ: {deleteData.first_name} {deleteData.last_name}
+  //         </p>
+  //         <p>ตำแหน่ง: {deleteData.role_name}</p>
+  //         <p>สาขา: {deleteData.br_name}</p>
+  //       </Modal.Body>
+  //       <Modal.Footer>
+  //         <Button variant="danger" onClick={deleteRecord}>
+  //           ลบข้อมูล
+  //         </Button>
+  //       </Modal.Footer>
+  //     </Modal>
+  //   );
+  // };
   return (
     <>
       <AlertList
@@ -219,10 +214,10 @@ const UserList = props => {
               <Button
                 className="w-100"
                 as={Link}
-                to={Routes.CreateNewEmployee.path}
+                to={Routes.AddPermission.path}
                 variant="codesom"
                 style={{ color: '#fff' }}>
-                เพิ่มข้อมูลพนักงาน
+                เพิ่มผู้ใช้งาน
               </Button>
             </Col>
           </Row>
@@ -239,12 +234,6 @@ const UserList = props => {
           />
         </Card.Body>
       </Card>
-      <DeleteModal
-        show={modalShow}
-        onHide={() => {
-          setModalShow(false);
-        }}
-      />
     </>
   );
 };

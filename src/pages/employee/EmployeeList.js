@@ -96,7 +96,6 @@ const EmployeeList = props => {
       .then(response => {
         refreshList();
         generate('success', response.data.message);
-        setModalShow(false);
       })
       .catch(error => {
         const resMessage =
@@ -109,6 +108,12 @@ const EmployeeList = props => {
       });
   };
   const header = [
+    {
+      title: 'รหัสพนักงาน',
+      dataIndex: 'emp_id',
+      align: 'center',
+      width: 300,
+    },
     {
       title: 'ชื่อ',
       dataIndex: 'first_name',
@@ -172,7 +177,12 @@ const EmployeeList = props => {
           <p>สาขา: {deleteData.br_name}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={deleteRecord}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              setModalShow(false);
+              deleteRecord();
+            }}>
             ลบข้อมูล
           </Button>
         </Modal.Footer>
@@ -219,7 +229,9 @@ const EmployeeList = props => {
               <Button
                 className="w-100"
                 as={Link}
-                to={Routes.CreateNewEmployee.path} variant="codesom" style={{color:'#fff'}}>
+                to={Routes.CreateNewEmployee.path}
+                variant="codesom"
+                style={{ color: '#fff' }}>
                 เพิ่มข้อมูลพนักงาน
               </Button>
             </Col>

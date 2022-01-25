@@ -37,5 +37,19 @@ const deleteEmp = empId => {
     },
   });
 };
-
-export default { getEmployeeList, createNewEmployee, updateEmp, deleteEmp };
+const getEmployeeByIdForUserCreate = empId => {
+  return http.get(prefix + '/getEmployeeByIdForUserCreate', {
+    headers: {
+      'Content-type': 'application/json',
+      // 'x-access-token': user.accessToken,
+    },
+    params: { empId: empId },
+  });
+};
+export default {
+  getEmployeeList,
+  createNewEmployee,
+  updateEmp,
+  deleteEmp,
+  getEmployeeByIdForUserCreate,
+};

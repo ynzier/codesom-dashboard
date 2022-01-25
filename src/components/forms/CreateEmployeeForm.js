@@ -44,14 +44,14 @@ const CreateEmployeeForm = () => {
     const { name, value } = event.target;
     setRecord({
       ...record,
-      [name]: value.replace(/[^\wก-๙]|_/g, '').toLowerCase(),
+      [name]: value,
     });
   };
 
   const [alerts, setAlerts] = React.useState([]);
   const generate = React.useCallback((type, message) => {
     const headline =
-      type === 'danger' ? 'พบข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
+      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
     setAlerts(alerts => [
       ...alerts,
       {
@@ -174,11 +174,6 @@ const CreateEmployeeForm = () => {
                     autocomplete="new-password"
                     maxLength="40"
                     onChange={handleInputChange}
-                    onKeyUp={e => {
-                      e.target.value = e.target.value
-                        .replace(/[^\wก-๙]|_/g, '')
-                        .toLowerCase();
-                    }}
                   />
                 </Form.Group>
               </Col>
@@ -193,11 +188,6 @@ const CreateEmployeeForm = () => {
                     maxLength="40"
                     autocomplete="new-password"
                     onChange={handleInputChange}
-                    onKeyUp={e => {
-                      e.target.value = e.target.value
-                        .replace(/[^\wก-๙]|_/g, '')
-                        .toLowerCase();
-                    }}
                   />
                 </Form.Group>
               </Col>

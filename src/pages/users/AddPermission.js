@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
-import { CreateEmployeeForm } from 'components';
+import { UserCreateForm } from 'components';
 
 const AddPermission = () => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const AddPermission = () => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <CreateEmployeeForm />
+          <UserCreateForm />
         </Col>
       </Row>
     </>
