@@ -216,7 +216,7 @@
 }
 .content {
   overflow: hidden;
-  padding: 0 $spacer 0 $spacer;
+  padding: 0 3rem 0 3rem;
   @include transition(all 0.3s);
 
   margin-left: var(--contentMargin);

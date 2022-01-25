@@ -80,45 +80,28 @@ const App = () => {
         />
         {/* deploy */}
         <RouteWithLoader exact path="/" page={Page.Login} />
+        <RouteWithSidebar exact path={Routes.Home.path} page={Page.Home} />
+        {/* Employee */}
         <RouteWithSidebar
           exact
-          path={Routes.ProductList.path}
-          page={Page.ProductList}
+          path={Routes.EmployeeList.path}
+          page={Page.EmployeeList}
         />
         <RouteWithSidebar
           exact
-          path={Routes.AddItem.path}
-          page={Page.AddItem}
+          path={Routes.CreateNewEmployee.path}
+          page={Page.CreateNewEmployee}
+        />
+        {/* User */}
+        <RouteWithSidebar
+          exact
+          path={Routes.UserList.path}
+          page={Page.UserList}
         />
         <RouteWithSidebar
           exact
-          path={Routes.AddAdmin.path}
-          page={Page.AddAdmin}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.AdminList.path}
-          page={Page.AdminList}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.CustomerList.path}
-          page={Page.CustomerList}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.Setting.path}
-          page={Page.Setting}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.Setting.path}
-          page={Page.Setting}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.Receipts.path}
-          page={Page.Receipts}
+          path={Routes.AddPermission.path}
+          page={Page.AddPermission}
         />
         <Redirect to={Routes.NotFound.path} />
       </Switch>

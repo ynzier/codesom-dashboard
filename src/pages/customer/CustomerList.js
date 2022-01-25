@@ -12,7 +12,7 @@ import {
 import { Table } from 'antd';
 import 'antd/dist/antd.min.css';
 
-import CustomerService from 'services/customer.service';
+// import CustomerService from 'services/customer.service';
 const CustomerList = props => {
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
@@ -31,39 +31,39 @@ const CustomerList = props => {
     props.history.push('/record/' + id);
   };
   const refreshList = () => {
-    CustomerService.getAllCustomer()
-      .then(res => {
-        setRecord(res.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerService.getAllCustomer()
+    //   .then(res => {
+    //     setRecord(res.data);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
 
   useEffect(() => {
     document.title = 'Admin Dashboard / ข้อมูลผู้ดูแล';
     let mounted = true;
-    CustomerService.getAllCustomer()
-      .then(res => {
-        if (mounted) {
-          console.log(res.data)
-          setRecord(res.data);
-        }
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerService.getAllCustomer()
+    //   .then(res => {
+    //     if (mounted) {
+    //       console.log(res.data)
+    //       setRecord(res.data);
+    //     }
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
     return () => (mounted = false);
   }, []);
 
   const deleteRecord = id => {
-    CustomerService.removeCustomer(id)
-      .then(response => {
-        refreshList();
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerService.removeCustomer(id)
+    //   .then(response => {
+    //     refreshList();
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
   const header = [
     {

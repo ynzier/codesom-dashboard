@@ -9,3 +9,13 @@ export { default as Record } from './history/Record';
 export { default as ProductList } from './product/ProductList';
 export { default as AddItem } from './product/AddItem';
 export { default as Setting } from './setting/Setting';
+
+// Home
+export { default as Home } from './dashboard/Home';
+//Employee
+export { default as EmployeeList } from './employee/EmployeeList';
+export { default as CreateNewEmployee } from './employee/CreateNewEmployee';
+
+//User
+export { default as UserList } from './users/UserList';
+export { default as AddPermission } from './users/AddPermission';

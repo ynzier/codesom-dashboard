@@ -13,7 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-bootstrap';
-import CustomerDataService from 'services/customer.service';
+// import CustomerDataService from 'services/customer.service';
 
 import ProductService from 'services/product.service';
 
@@ -131,13 +131,13 @@ const RecordEdit = props => {
       var SerialArray = massSerial.replace(/\n/g, ' ').split(' ');
       Object.assign(data, { SerialArray: SerialArray });
     }
-    CustomerDataService.update(props.data._id, data)
-      .then(response => {
-        setModalShow(false);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerDataService.update(props.data._id, data)
+    //   .then(response => {
+    //     setModalShow(false);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
 
   return (

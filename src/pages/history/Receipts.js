@@ -17,7 +17,7 @@ import NumberFormat from 'react-number-format';
 
 import moment from 'moment-timezone';
 
-import CustomerDataService from 'services/customer.service';
+// import CustomerDataService from 'services/customer.service';
 const Receipts = props => {
   const [record, setRecord] = useState([]);
   const [recieveData, setRecieveData] = useState([]);
@@ -32,26 +32,26 @@ const Receipts = props => {
   const [receiptID, setreceiptID] = useState();
 
   const openRecord = id => {
-    CustomerDataService.getTransaction(id)
-      .then(res => {
-        var rec_Data = res.data;
-        setRecieveData(rec_Data);
-        if (res.data[0] != null) {
-          setName(res.data[0].firstName + ' ' + res.data[0].lastName);
-          setShippingAddr(res.data[0].shipping_addr);
-          setphone(res.data[0].phone);
-          setemail(res.data[0].email);
-          setStatus(res.data[0].status);
-          setDate(res.data[0].rec_date);
-          setreceiptID(id);
-        }
-        var sum = res.data.reduce((a, b) => a + b.quantity * b.price, 0);
-        setTotal(sum);
-        setModalShow(true);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerDataService.getTransaction(id)
+    //   .then(res => {
+    //     var rec_Data = res.data;
+    //     setRecieveData(rec_Data);
+    //     if (res.data[0] != null) {
+    //       setName(res.data[0].firstName + ' ' + res.data[0].lastName);
+    //       setShippingAddr(res.data[0].shipping_addr);
+    //       setphone(res.data[0].phone);
+    //       setemail(res.data[0].email);
+    //       setStatus(res.data[0].status);
+    //       setDate(res.data[0].rec_date);
+    //       setreceiptID(id);
+    //     }
+    //     var sum = res.data.reduce((a, b) => a + b.quantity * b.price, 0);
+    //     setTotal(sum);
+    //     setModalShow(true);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
   const header2 = [
     {
@@ -112,18 +112,19 @@ const Receipts = props => {
                   <InputGroup>
                     <Form.Select
                       defaultValue={status}
-                      onChange={async e => {
-                        await CustomerDataService.updateReceipt(
-                          receiptID,
-                          e.target.value,
-                        )
-                          .then(res => {
-                            console.log(res);
-                          })
-                          .catch(e => {
-                            console.log(e);
-                          });
-                      }}>
+                      // onChange={async e => {
+                      //   await CustomerDataService.updateReceipt(
+                      //     receiptID,
+                      //     e.target.value,
+                      //   )
+                      //     .then(res => {
+                      //       console.log(res);
+                      //     })
+                      //     .catch(e => {
+                      //       console.log(e);
+                      //     });
+                      // }}
+                      >
                       <option value="0">รอการชำระเงิน</option>
                       <option value="1">กำลังจัดเตรียมสินค้า</option>
                       <option value="2">อยู่ระหว่างขนส่ง</option>
@@ -166,28 +167,28 @@ const Receipts = props => {
     );
   };
   const refreshList = () => {
-    CustomerDataService.getAllReceipts()
-      .then(res => {
-        setRecord(res.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerDataService.getAllReceipts()
+    //   .then(res => {
+    //     setRecord(res.data);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
 
   useEffect(() => {
     document.title = 'ประวัติการสั่งซื้อสินค้า';
     let mounted = true;
-    CustomerDataService.getAllReceipts()
-      .then(res => {
-        if (mounted) {
-          console.log(res.data);
-          setRecord(res.data);
-        }
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // CustomerDataService.getAllReceipts()
+    //   .then(res => {
+    //     if (mounted) {
+    //       console.log(res.data);
+    //       setRecord(res.data);
+    //     }
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
     return () => {
       mounted = false;
     };

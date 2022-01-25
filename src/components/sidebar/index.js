@@ -70,11 +70,20 @@ export default (props = {}) => {
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <Menu iconShape="circle" subMenuBullets >
-            <MenuItem icon={<MdSpaceDashboard />}>แดชบอร์ด</MenuItem>
+          <Menu iconShape="circle" subMenuBullets>
+            <MenuItem icon={<MdSpaceDashboard />}>
+              แดชบอร์ด
+              <Link to={Routes.Home.path} />
+            </MenuItem>
             <SubMenu title="บุคลากร" icon={<FiUsers />}>
-              <MenuItem>จัดการผู้ดูแล</MenuItem>
-              <MenuItem>จัดการพนักงาน</MenuItem>
+              <MenuItem>
+                จัดการผู้ใช้งาน
+                <Link to={Routes.UserList.path} />
+              </MenuItem>
+              <MenuItem>
+                จัดการพนักงาน
+                <Link to={Routes.EmployeeList.path} />
+              </MenuItem>
               <MenuItem>กำหนดสิทธิ์พนักงาน</MenuItem>
             </SubMenu>
             <SubMenu title="สาขา" icon={<CgGitBranch />}>

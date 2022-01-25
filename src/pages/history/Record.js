@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { RecordEdit } from 'components';
-import CustomerDataService from 'services/customer.service';
+// import CustomerDataService from 'services/customer.service';
 
 const Record = props => {
   useEffect(() => {
@@ -11,23 +11,23 @@ const Record = props => {
   }, []);
 
   const [data, setData] = useState();
-  const getRecord = id => {
-    CustomerDataService.get(id)
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert(resMessage);
-      });
-  };
+  // const getRecord = id => {
+  //   CustomerDataService.get(id)
+  //     .then(response => {
+  //       setData(response.data);
+  //     })
+  //     .catch(error => {
+  //       const resMessage =
+  //         (error.response &&
+  //           error.response.data &&
+  //           error.response.data.message) ||
+  //         error.message ||
+  //         error.toString();
+  //       alert(resMessage);
+  //     });
+  // };
   useEffect(() => {
-    getRecord(props.match.params.id);
+    // getRecord(props.match.params.id);
   }, [props.match.params.id]);
   return (
     <>

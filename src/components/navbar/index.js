@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
 import {
   Row,
@@ -34,14 +34,13 @@ export default () => {
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle as={Nav.Link} className="pt-1 px-0">
                 <div className="media d-flex align-items-center">
-                  <Image
-                    src={Profile3}
-                    className="user-avatar md-avatar rounded-circle"
+                  <FontAwesomeIcon
+                    icon={faUserCircle}
+                    className="user-avatar md-avatar rounded-circle2" style={{color:'grey'}}
                   />
                 </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className="user-dropdown dropdown-menu-right mt-2">
-
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() => {

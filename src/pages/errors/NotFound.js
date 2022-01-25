@@ -18,7 +18,7 @@ const NotFound = () => {
               xs={12}
               className="text-center d-flex align-items-center justify-content-center">
               <div>
-                <Card.Link as={Link} to={Routes.ProductList.path}>
+                <Card.Link as={Link} to={Routes.Home.path}>
                   <Image src={NotFoundImage} className="img-fluid w-75" />
                 </Card.Link>
                 <h1 className="text-primary mt-5">
@@ -32,7 +32,7 @@ const NotFound = () => {
                   as={Link}
                   variant="primary"
                   className="animate-hover"
-                  to={Routes.ProductList.path}>
+                  to={Routes.Home.path}>
                   <FontAwesomeIcon
                     icon={faChevronLeft}
                     className="animate-left-3 me-3 ms-2"
