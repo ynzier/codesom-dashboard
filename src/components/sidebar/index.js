@@ -84,7 +84,10 @@ export default (props = {}) => {
                 จัดการพนักงาน
                 <Link to={Routes.EmployeeList.path} />
               </MenuItem>
-              <MenuItem>กำหนดสิทธิ์พนักงาน</MenuItem>
+              <MenuItem>
+                กำหนดสิทธิ์ผู้ใช้งาน
+                <Link to={Routes.AddPermission.path} />
+              </MenuItem>
             </SubMenu>
             <SubMenu title="สาขา" icon={<CgGitBranch />}>
               <MenuItem>จัดการสาขา</MenuItem>

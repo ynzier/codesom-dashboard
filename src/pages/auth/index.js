@@ -11,41 +11,66 @@ import {
   InputGroup,
   Image,
 } from 'react-bootstrap';
+import { AlertList } from 'react-bs-notifier';
 import Logo from 'assets/Codesom-Logo-x400.png';
 import AuthService from 'services/auth.service';
 import './index.css';
 
-const Login = () => {
+const Login = props => {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [alerts, setAlerts] = React.useState([]);
+  const generate = React.useCallback((type, message) => {
+    const headline =
+      type === 'danger' ? 'พบข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
+    setAlerts(alerts => [
+      ...alerts,
+      {
+        id: new Date().getTime(),
+        type: type,
+        headline: `${headline}!`,
+        message: message,
+      },
+    ]);
+  }, []);
+  const onDismissed = React.useCallback(alert => {
+    setAlerts(alerts => {
+      const idx = alerts.indexOf(alert);
+      if (idx < 0) return alerts;
+      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
+    });
+  }, []);
   useEffect(() => {
     document.title = 'Log In';
   }, []);
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault();
 
-    AuthService.login(Username, Password).then(
-      () => {
-        // window.location.reload();
-        history.push('/dashboard');
-      },
-      error => {
+    await AuthService.signinDashboard(Username, Password)
+      .then(() => {
+        props.history.push('/dashboard');
+        window.location.reload();
+      })
+      .catch(error => {
         const resMessage =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||
           error.message ||
           error.toString();
-
-        setMessage(resMessage);
-      },
-    );
+        generate('danger', resMessage);
+      });
   };
 
   return (
     <>
+      <AlertList
+        position="top-right"
+        alerts={alerts}
+        onDismiss={onDismissed}
+        timeout={1500}
+      />
       <Container className="d-flex container">
         <Row
           className="justify-content-center  align-items-center w-100"
@@ -81,8 +106,7 @@ const Login = () => {
                     </InputGroup.Text>
                     <Form.Control
                       autoFocus
-                      required
-                      type="email"
+                      type="text"
                       placeholder="กรอกชื่อผู้ใช้งาน"
                       onChange={e => setUsername(e.target.value)}
                     />
@@ -119,11 +143,6 @@ const Login = () => {
                   }}>
                   เข้าสู่ระบบ
                 </Button>
-                {message && (
-                  <div style={{ color: 'red' }} role="alert">
-                    {message}
-                  </div>
-                )}
               </Form>
             </div>
           </Col>

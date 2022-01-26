@@ -47,7 +47,7 @@ const App = () => {
         {...rest}
         render={props => (
           <>
-            {currentUser && history.push('/')}
+            {!currentUser && history.push('/')}
             <Sidebar />
 
             <main

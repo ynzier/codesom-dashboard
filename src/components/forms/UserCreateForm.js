@@ -130,6 +130,7 @@ const UserCreateForm = () => {
                     />
                     <Button
                       variant="outline-codesom"
+                      style={{zIndex: 5,}}
                       onClick={e => {
                         EmployeeService.getEmployeeByIdForUserCreate(empId)
                           .then(response => {

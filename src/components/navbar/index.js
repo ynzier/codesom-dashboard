@@ -22,7 +22,7 @@ import AuthService from 'services/auth.service';
 
 export default () => {
   const logOut = () => {
-    AuthService.logout();
+    AuthService.logoutDashboard();
   };
 
   return (
@@ -36,7 +36,8 @@ export default () => {
                 <div className="media d-flex align-items-center">
                   <FontAwesomeIcon
                     icon={faUserCircle}
-                    className="user-avatar md-avatar rounded-circle2" style={{color:'grey'}}
+                    className="user-avatar md-avatar rounded-circle2"
+                    style={{ color: 'grey' }}
                   />
                 </div>
               </Dropdown.Toggle>

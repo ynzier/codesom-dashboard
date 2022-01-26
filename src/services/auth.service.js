@@ -1,16 +1,10 @@
 import http from 'http-common';
 const user = JSON.parse(localStorage.getItem('user'));
 
-const register = data => {
-  return http.post('/auth/signup', {
-    data,
-  });
-};
-
-const login = (username, password) => {
+const signinDashboard = (userName, password) => {
   return http
     .post('/auth/signin', {
-      username,
+      userName,
       password,
     })
     .then(response => {
@@ -22,45 +16,16 @@ const login = (username, password) => {
     });
 };
 
-const getAllRole = () => {
-  return http.get('/getAdminRoles', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-
-const getAllAdminAccounts = () => {
-  return http.get('/getAdminAccounts', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-const removeAccount = id => {
-  return http.get(`/deleteAdminAccount/${id}`, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-const logout = () => {
+const logoutDashboard = () => {
   localStorage.removeItem('user');
 };
 
 const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem('user'));
 };
-// eslint-disable-next-line
+
 export default {
-  register,
-  login,
-  logout,
+  signinDashboard,
+  logoutDashboard,
   getCurrentUser,
-  getAllRole,
-  getAllAdminAccounts,
-  removeAccount,
 };

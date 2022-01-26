@@ -209,17 +209,6 @@ const UserList = props => {
                 />
               </InputGroup>
             </Col>
-            <Col md={4} lg={2} xl={4} />
-            <Col xs={2} md={2} lg={4} xl={2}>
-              <Button
-                className="w-100"
-                as={Link}
-                to={Routes.AddPermission.path}
-                variant="codesom"
-                style={{ color: '#fff' }}>
-                เพิ่มผู้ใช้งาน
-              </Button>
-            </Col>
           </Row>
         </Card.Header>
         <Card.Body
