@@ -1,8 +1,8 @@
 {
-  "name": "kldashboard",
-  "author": "Kunut",
+  "name": "codesom-ctp",
+  "author": "KunutAndBenya",
   "license": "MIT",
-  "homepage": "./",
+  "homepage": "http://knt-dev.online",
   "version": "1.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",

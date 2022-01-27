@@ -26,8 +26,8 @@ import 'react-datetime/css/react-datetime.css';
 
 import App from './App';
 
-ReactDOM.render(
-  <BrowserRouter basename="/">
+ReactDOM.hydrate(
+  <BrowserRouter>
     <App />
   </BrowserRouter>,
   document.getElementById('root'),

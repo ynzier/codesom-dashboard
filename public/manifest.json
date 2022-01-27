@@ -1,8 +1,8 @@
 {
-  "name": "KL Healthcare Dashboard",
-  "short_name": "KL Healthcare Dashboard",
-  "start_url": "/?utm_source=a2hs",
+  "name": "Codesom Back Office",
+  "short_name": "Codesom",
+  "start_url": "/",
   "theme_color": "#FF9C00",
-  "background_color": "#563d7c",
+  "background_color": "#FFFFFF",
   "display": "standalone"
 }
