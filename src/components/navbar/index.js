@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/no-anonymous-default-export */
-
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +17,7 @@ import {
 import Profile3 from 'assets/img/jib.png';
 import AuthService from 'services/auth.service';
 
-export default () => {
+const NavbarComponent = () => {
   const logOut = () => {
     AuthService.logoutDashboard();
   };
@@ -62,3 +59,5 @@ export default () => {
     </Navbar>
   );
 };
+
+export default NavbarComponent;

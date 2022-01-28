@@ -124,12 +124,11 @@ const Receipts = props => {
                       //       console.log(e);
                       //     });
                       // }}
-                      >
+                    >
                       <option value="0">รอการชำระเงิน</option>
                       <option value="1">กำลังจัดเตรียมสินค้า</option>
                       <option value="2">อยู่ระหว่างขนส่ง</option>
                       <option value="3">ได้รับสินค้าแล้ว</option>
-                      )}
                     </Form.Select>
                   </InputGroup>
                 </Col>

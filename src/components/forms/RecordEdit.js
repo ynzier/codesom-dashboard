@@ -339,7 +339,7 @@ const RecordEdit = props => {
                       value={moment(purchaseDate, 'DD.MM.YYYY')
                         .add(warrantyTime, 'y')
                         .format('DD/MM/YYYY')}
-                      onChange={e => {}}
+                      onChange={() => {}}
                     />
                   </InputGroup>
                 </Form.Group>

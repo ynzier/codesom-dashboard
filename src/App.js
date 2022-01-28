@@ -19,7 +19,7 @@ const App = () => {
     if (!currentUser && user) {
       setCurrentUser(user);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const RouteWithLoader = ({ page: Component, ...rest }) => {
     const [loaded, setLoaded] = useState(false);
@@ -103,6 +103,8 @@ const App = () => {
           path={Routes.AddPermission.path}
           page={Page.AddPermission}
         />
+        <RouteWithSidebar exact path={Routes.Branch.path} page={Page.Branch} />{' '}
+        <RouteWithSidebar exact path={Routes.AddBranch.path} page={Page.AddBranch} />
         <Redirect to={Routes.NotFound.path} />
       </Switch>
     </>

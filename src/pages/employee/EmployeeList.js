@@ -202,10 +202,12 @@ const EmployeeList = props => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item active>
-              <FontAwesomeIcon icon={faHome} />
+            <Breadcrumb.Item>
+              <Link to={Routes.Home.path}>
+                <FontAwesomeIcon icon={faHome} />
+              </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
+            <Breadcrumb.Item active>พนักงาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

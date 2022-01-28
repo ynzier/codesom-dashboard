@@ -26,7 +26,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import App from './App';
 
-ReactDOM.hydrate(
+ReactDOM.render(
   <BrowserRouter>
     <App />
   </BrowserRouter>,

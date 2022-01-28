@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import React from 'react';
 import { Preloader as Loader, ThreeDots } from 'react-preloader-icon';
 

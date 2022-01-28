@@ -1,5 +1,4 @@
 import http from 'http-common';
-const user = JSON.parse(localStorage.getItem('user'));
 const prefix = '/user';
 
 const getUserList = () => {
@@ -15,7 +14,6 @@ const createNewUser = data => {
   return http.post(prefix + '/createNewUser', data, {
     headers: {
       'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
     },
   });
 };

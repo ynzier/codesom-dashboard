@@ -17,3 +17,7 @@ export { default as CreateNewEmployee } from './employee/CreateNewEmployee';
 //User
 export { default as UserList } from './users/UserList';
 export { default as AddPermission } from './users/AddPermission';
+
+// Branch
+export { default as Branch } from './branch/Branch';
+export { default as AddBranch } from './branch/AddBranch';

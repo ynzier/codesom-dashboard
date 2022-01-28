@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -29,7 +27,7 @@ import {
 } from 'react-pro-sidebar';
 import AuthService from 'services/auth.service';
 
-export default (props = {}) => {
+const Sidebar = (props = {}) => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
@@ -54,20 +52,18 @@ export default (props = {}) => {
           zIndex: 10,
         }}
         collapsed={collapsed}>
-        <SidebarHeader>
-          <div
-            style={{
-              padding: '24px',
-              textTransform: 'uppercase',
-              fontWeight: 'bold',
-              fontSize: 14,
-              letterSpacing: '1px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}>
-            Codesom
-          </div>
+        <SidebarHeader
+          style={{
+            padding: '24px',
+            textTransform: 'uppercase',
+            fontWeight: 'bold',
+            fontSize: 14,
+            letterSpacing: '1px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}>
+          Codesom
         </SidebarHeader>
         <SidebarContent>
           <Menu iconShape="circle" subMenuBullets>
@@ -90,7 +86,10 @@ export default (props = {}) => {
               </MenuItem>
             </SubMenu>
             <SubMenu title="สาขา" icon={<CgGitBranch />}>
-              <MenuItem>จัดการสาขา</MenuItem>
+              <MenuItem>
+                จัดการสาขา
+                <Link to={Routes.Branch.path} />
+              </MenuItem>
             </SubMenu>
             <SubMenu title="วัตถุดิบ" icon={<FaWarehouse />}>
               <MenuItem>คำร้องขอวัตถุดิบ</MenuItem>
@@ -107,31 +106,28 @@ export default (props = {}) => {
             </SubMenu>
           </Menu>
         </SidebarContent>
-        <SidebarFooter style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              padding: '20px 24px',
-            }}>
-            {collapsed ? (
-              <CgPushChevronRight
-                style={{
-                  fontSize: 24,
-                  right: 0,
-                }}
-                onClick={() => setCollapsed(!collapsed)}
-              />
-            ) : (
-              <CgPushChevronLeft
-                style={{
-                  fontSize: 24,
-                  right: 0,
-                }}
-                onClick={() => setCollapsed(!collapsed)}
-              />
-            )}
-          </div>
+        <SidebarFooter style={{ textAlign: 'center', padding: '20px 24px' }}>
+          {collapsed ? (
+            <CgPushChevronRight
+              style={{
+                fontSize: 24,
+                right: 0,
+              }}
+              onClick={() => setCollapsed(!collapsed)}
+            />
+          ) : (
+            <CgPushChevronLeft
+              style={{
+                fontSize: 24,
+                right: 0,
+              }}
+              onClick={() => setCollapsed(!collapsed)}
+            />
+          )}
         </SidebarFooter>
       </ProSidebar>
     </>
   );
 };
+
+export default Sidebar;

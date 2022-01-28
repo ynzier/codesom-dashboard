@@ -20,4 +20,8 @@ export const Routes = {
   // Dashboard User
   UserList: { path: '/dashboard/users' },
   AddPermission: { path: '/dashboard/users/addPermission' },
+
+  // Branch
+  Branch: { path: '/dashboard/branch' },
+  AddBranch: { path: '/dashboard/branch/create' },
 };

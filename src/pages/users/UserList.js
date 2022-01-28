@@ -52,7 +52,7 @@ const UserList = props => {
   };
 
   useEffect(() => {
-    document.title = 'รายชื่อพนักงานทั้งหมด';
+    document.title = 'รายชื่อผู้ใช้งานแดชบอร์ด';
     let mounted = true;
     UserService.getUserList()
       .then(res => {
@@ -187,10 +187,12 @@ const UserList = props => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item active>
-              <FontAwesomeIcon icon={faHome} />
+            <Breadcrumb.Item>
+              <Link to={Routes.Home.path}>
+                <FontAwesomeIcon icon={faHome} />
+              </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
+            <Breadcrumb.Item active>ผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

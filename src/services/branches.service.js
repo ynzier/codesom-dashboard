@@ -10,5 +10,13 @@ const getAllBranch = () => {
     },
   });
 };
+const createNewBranch = data => {
+  return http.post(prefix + '/createNewBranch', data, {
+    headers: {
+      'Content-type': 'application/json',
+      // 'x-access-token': user.accessToken,
+    },
+  });
+};
 
-export default { getAllBranch};
+export default { getAllBranch, createNewBranch };

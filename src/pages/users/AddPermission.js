@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { UserCreateForm } from 'components';
+import { Link } from 'react-router-dom';
+import { Routes } from 'routes';
 
 const AddPermission = () => {
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลพนักงาน / Add New Employee';
+    document.title = 'เพิ่มสิทธิ์ผู้ใช้งาน';
   }, []);
   return (
     <>
@@ -15,11 +17,15 @@ const AddPermission = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item active>
-              <FontAwesomeIcon icon={faHome} />
+            <Breadcrumb.Item>
+              <Link to={Routes.Home.path}>
+                <FontAwesomeIcon icon={faHome} />
+              </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item href="/dashboard">แดชบอร์ด</Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มข้อมูลพนักงาน</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to={Routes.UserList.path}>ผู้ใช้งาน</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มสิทธิ์ผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

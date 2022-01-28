@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Col,
-  Row,
-  Card,
-  Form,
-  Button,
-  Modal,
-  Alert,
-} from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
 import ProductService from 'services/product.service';
 
 var getData = [];
@@ -147,7 +139,7 @@ const ProductRegisterForm = () => {
       brand_id: productBrand,
     };
     ProductService.add(data)
-      .then(response => {
+      .then(() => {
         setModalShow(false);
         setStatus(1);
         form.reset();

@@ -13,3 +13,7 @@ export { default as CreateEmployeeForm } from './forms/CreateEmployeeForm';
 
 // user
 export { default as UserCreateForm } from './forms/UserCreateForm';
+
+// branch
+export { default as BranchList } from './lists/BranchList';
+export { default as BranchCreate } from './forms/BranchCreate';
