@@ -24,4 +24,5 @@ export const Routes = {
   // Branch
   Branch: { path: '/dashboard/branch' },
   AddBranch: { path: '/dashboard/branch/create' },
+  getBranch: { path: '/dashboard/branch/getBranch/:brId' },
 };

@@ -103,8 +103,17 @@ const App = () => {
           path={Routes.AddPermission.path}
           page={Page.AddPermission}
         />
-        <RouteWithSidebar exact path={Routes.Branch.path} page={Page.Branch} />{' '}
-        <RouteWithSidebar exact path={Routes.AddBranch.path} page={Page.AddBranch} />
+        <RouteWithSidebar exact path={Routes.Branch.path} page={Page.Branch} />
+        <RouteWithSidebar
+          exact
+          path={Routes.AddBranch.path}
+          page={Page.AddBranch}
+        />
+        <RouteWithSidebar
+          exact
+          path={Routes.getBranch.path}
+          page={Page.GetBranch}
+        />
         <Redirect to={Routes.NotFound.path} />
       </Switch>
     </>

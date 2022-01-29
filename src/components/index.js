@@ -17,3 +17,4 @@ export { default as UserCreateForm } from './forms/UserCreateForm';
 // branch
 export { default as BranchList } from './lists/BranchList';
 export { default as BranchCreate } from './forms/BranchCreate';
+export { default as BranchData } from './forms/BranchData';

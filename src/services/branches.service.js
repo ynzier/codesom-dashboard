@@ -18,5 +18,13 @@ const createNewBranch = data => {
     },
   });
 };
-
-export default { getAllBranch, createNewBranch };
+const getBranchById = brId => {
+  return http.get(prefix + '/getBranchById', {
+    headers: {
+      'Content-type': 'application/json',
+      // 'x-access-token': user.accessToken,
+    },
+    params: { brId: brId },
+  });
+};
+export default { getAllBranch, createNewBranch, getBranchById };

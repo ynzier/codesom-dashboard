@@ -2,21 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { List, Card } from 'antd';
 import { Image, Button } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
+import { useHistory } from 'react-router-dom';
 
 var getBranchData = [];
-const BranchList = () => {
+const BranchList = props => {
   const [record, setRecord] = useState([]);
-  const [filterData, setfilterData] = useState();
   const [loading, setLoading] = useState(true);
-  const search = value => {
-    const filterTable = record.filter(o =>
-      Object.keys(o).some(k =>
-        String(o[k]).toLowerCase().includes(value.toLowerCase()),
-      ),
-    );
-
-    setfilterData(filterTable);
-  };
+  let history = useHistory();
 
   useEffect(async () => {
     document.title = 'ข้อมูลสาขา';
@@ -35,7 +27,9 @@ const BranchList = () => {
       });
     return () => (mounted = false);
   }, []);
-
+  const openRecord = brId => {
+    history.push('/dashboard/branch/getBranch/' + brId);
+  };
   return (
     <>
       <List
@@ -61,10 +55,11 @@ const BranchList = () => {
                   height: 114,
                   columnGap: '10px',
                 }}>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 2 }}>
                   <Image
                     style={{
-                      width: '140px',
+                      objectFit: 'contain',
+                      width: '100%',
                       height: '100%',
                       backgroundColor: 'grey',
                     }}
@@ -99,19 +94,23 @@ const BranchList = () => {
                 <div style={{ flex: 2 }} />
                 <div
                   style={{
-                    flex: 1,
+                    flex: 2,
                     justifyContent: 'center',
                     alignSelf: 'center',
                   }}>
                   <Button
                     variant="secondary"
                     style={{
-                      width: 140,
+                      width: '100%',
                       height: 40,
                       padding: 0,
                       borderRadius: 20,
                       color: 'white',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    }}
+                    onClick={() => {
+                      openRecord(item.brId);
+                      console.log(item.brId);
                     }}>
                     เพิ่มเติม
                   </Button>

@@ -3,14 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { ImPlus } from 'react-icons/im';
 import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
-import { BranchCreate } from 'components';
-const AddBranch = props => {
+import { BranchData } from 'components';
+const GetBranch = props => {
+  const [brId, setbrId] = useState();
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลสาขา';
-  }, []);
+    document.title = 'ข้อมูลสาขา';
+    setbrId(props.match.params.brId);
+  }, [brId]);
 
   return (
     <>
@@ -27,16 +28,16 @@ const AddBranch = props => {
             <Breadcrumb.Item>
               <Link to={Routes.Branch.path}> สาขา</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสาขา</Breadcrumb.Item>
+            <Breadcrumb.Item active>ข้อมูลสาขา</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
       <Row className="mb-4">
-        <Col xs={12} xl={8}>
-          <BranchCreate />
+        <Col xs={12} xl={10}>
+          <BranchData brId={brId} />
         </Col>
       </Row>
     </>
   );
 };
-export default AddBranch;
+export default GetBranch;

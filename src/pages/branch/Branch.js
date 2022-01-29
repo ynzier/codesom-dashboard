@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { ImPlus } from 'react-icons/im';
 import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
-import BranchList from 'components/lists/BranchList';
+import { BranchList } from 'components';
 const Branch = props => {
   useEffect(() => {
     document.title = 'จัดการข้อมูลสาขา';

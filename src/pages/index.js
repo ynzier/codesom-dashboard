@@ -21,3 +21,4 @@ export { default as AddPermission } from './users/AddPermission';
 // Branch
 export { default as Branch } from './branch/Branch';
 export { default as AddBranch } from './branch/AddBranch';
+export { default as GetBranch } from './branch/GetBranch';
