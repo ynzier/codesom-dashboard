@@ -69,8 +69,6 @@ const BranchCreate = props => {
     });
   }, []);
 
-  const form = document.forms[0];
-
   const handleSubmit = e => {
     e.preventDefault();
     sendData();
@@ -82,10 +80,10 @@ const BranchCreate = props => {
       brAddr: brAddr,
       brTel: brTel, //on start
     };
-    await BranchesService.createNewBranch(data)
+    await BranchesService.updateBranch(props.brId, data)
       .then(response => {
         generate('success', response.data.message);
-        form.reset();
+        setEditable(!editable);
       })
       .catch(error => {
         const resMessage =
@@ -115,7 +113,7 @@ const BranchCreate = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <h2 className="mb-4">ข้อมูลสาขา</h2>
             <Row className="my-3">
               <Col sm={6} md={6} />
@@ -138,7 +136,7 @@ const BranchCreate = props => {
                   ) : (
                     <Button
                       variant="tertiary"
-                      // type="submit"
+                      onClick={handleSubmit}
                       style={{
                         borderRadius: '36px',
                         width: '100%',

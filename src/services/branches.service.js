@@ -1,5 +1,4 @@
 import http from 'http-common';
-const user = JSON.parse(localStorage.getItem('user'));
 const prefix = '/branch';
 
 const getAllBranch = () => {
@@ -18,6 +17,15 @@ const createNewBranch = data => {
     },
   });
 };
+const updateBranch = (brId, data) => {
+  return http.put(prefix + '/updateBranch', data, {
+    headers: {
+      'Content-type': 'application/json',
+      // 'x-access-token': user.accessToken,
+    },
+    params: { brId: brId },
+  });
+};
 const getBranchById = brId => {
   return http.get(prefix + '/getBranchById', {
     headers: {
@@ -27,4 +35,4 @@ const getBranchById = brId => {
     params: { brId: brId },
   });
 };
-export default { getAllBranch, createNewBranch, getBranchById };
+export default { getAllBranch, createNewBranch, getBranchById, updateBranch };
