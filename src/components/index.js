@@ -9,7 +9,8 @@ export { default as Preloader } from './preloader';
 export { default as Sidebar } from './sidebar';
 
 // employee
-export { default as CreateEmployeeForm } from './forms/CreateEmployeeForm';
+export { default as EmployeeCreate } from './forms/EmployeeCreate';
+export { default as EmployeeEdit } from './forms/EmployeeEdit';
 
 // user
 export { default as UserCreateForm } from './forms/UserCreateForm';
@@ -17,4 +18,4 @@ export { default as UserCreateForm } from './forms/UserCreateForm';
 // branch
 export { default as BranchList } from './lists/BranchList';
 export { default as BranchCreate } from './forms/BranchCreate';
-export { default as BranchData } from './forms/BranchData';
+export { default as BranchEdit } from './forms/BranchEdit';

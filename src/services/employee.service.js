@@ -21,11 +21,12 @@ const createNewEmployee = data => {
 };
 
 const updateEmp = (empId, data) => {
-  return http.put(`/updateEmp/${empId}`, data, {
+  return http.put(prefix + `/updateEmp`, data, {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
     },
+    params: { empId: empId },
   });
 };
 
@@ -35,6 +36,15 @@ const deleteEmp = empId => {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
     },
+  });
+};
+const getEmpById = empId => {
+  return http.get(prefix + '/getEmpById', {
+    headers: {
+      'Content-type': 'application/json',
+      // 'x-access-token': user.accessToken,
+    },
+    params: { empId: empId },
   });
 };
 const getEmployeeByIdForUserCreate = empId => {
@@ -52,4 +62,5 @@ export default {
   updateEmp,
   deleteEmp,
   getEmployeeByIdForUserCreate,
+  getEmpById,
 };

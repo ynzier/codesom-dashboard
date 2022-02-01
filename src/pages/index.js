@@ -13,12 +13,13 @@ export { default as Home } from './dashboard/Home';
 //Employee
 export { default as EmployeeList } from './employee/EmployeeList';
 export { default as CreateNewEmployee } from './employee/CreateNewEmployee';
+export { default as GetEmployee } from './employee/GetEmployee';
 
 //User
 export { default as UserList } from './users/UserList';
 export { default as AddPermission } from './users/AddPermission';
 
 // Branch
-export { default as Branch } from './branch/Branch';
+export { default as BranchLists } from './branch/BranchLists';
 export { default as AddBranch } from './branch/AddBranch';
 export { default as GetBranch } from './branch/GetBranch';

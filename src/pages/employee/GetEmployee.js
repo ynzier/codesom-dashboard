@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Col, Row, Breadcrumb } from 'react-bootstrap';
+import { EmployeeEdit } from 'components';
 import { Routes } from 'routes';
-import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
-import { BranchEdit } from 'components';
-const GetBranch = props => {
-  const [brId, setbrId] = useState();
+import { Link } from 'react-router-dom';
+const GetEmployee = props => {
+  const [empId, setEmpId] = useState();
   useEffect(() => {
-    document.title = 'ข้อมูลสาขา';
-    setbrId(props.match.params.brId);
-  }, [brId]);
-
+    document.title = 'ข้อมูลพนักงาน';
+    setEmpId(props.match.params.empId);
+  }, [empId]);
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-        <div className="d-block mb-4 mb-md-0">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
+        <div className="d-block mb-4 mb-md-0 ">
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
@@ -26,18 +24,18 @@ const GetBranch = props => {
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={Routes.BranchLists.path}> สาขา</Link>
+              <Link to={Routes.EmployeeList.path}>พนักงาน</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ข้อมูลสาขา</Breadcrumb.Item>
+            <Breadcrumb.Item active>ข้อมูลพนักงาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
       <Row className="mb-4">
-        <Col xs={12} xl={10}>
-          <BranchEdit brId={brId} />
+        <Col xs={12} xl={8}>
+          <EmployeeEdit empId={empId} />
         </Col>
       </Row>
     </>
   );
 };
-export default GetBranch;
+export default GetEmployee;

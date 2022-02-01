@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://api.knt-dev.online/',
+  baseURL: 'http://localhost:4000/',
 });

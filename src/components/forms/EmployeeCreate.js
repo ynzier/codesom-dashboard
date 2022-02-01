@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Col,
-  Row,
-  Card,
-  Form,
-  Button,
-  InputGroup,
-} from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import Datetime from 'react-datetime';
 import { AlertList } from 'react-bs-notifier';
@@ -117,7 +110,7 @@ const CreateEmployeeForm = () => {
     var data = {
       firstName: record.firstName,
       lastName: record.lastName,
-      birthDate: moment(birthDate).format('DD/MM/YYYY'),
+      birthDate: moment(birthDate).format('YYYY-MM-DD'),
       tel: tel,
       address: address,
       roleId: selectedRoleId,
@@ -171,7 +164,7 @@ const CreateEmployeeForm = () => {
                     type="text"
                     placeholder="ชื่อ"
                     name="firstName"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     maxLength="40"
                     onChange={handleInputChange}
                   />
@@ -186,7 +179,7 @@ const CreateEmployeeForm = () => {
                     placeholder="นามสกุล"
                     name="lastName"
                     maxLength="40"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     onChange={handleInputChange}
                   />
                 </Form.Group>
@@ -208,7 +201,7 @@ const CreateEmployeeForm = () => {
                         <Form.Control
                           required
                           type="text"
-                          autocomplete="new-password"
+                          autoComplete="new-password"
                           value={
                             birthDate
                               ? moment(birthDate, 'DD/MM/YYYY').format(
@@ -240,7 +233,7 @@ const CreateEmployeeForm = () => {
                     type="tel"
                     maxLength="10"
                     value={tel}
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     placeholder="เบอร์โทรศัพท์"
                     onChange={e => checkInput(e)}
                   />
@@ -259,7 +252,7 @@ const CreateEmployeeForm = () => {
                     placeholder="ที่อยู่"
                     name="address"
                     maxLength="255"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     onChange={e => setAddress(e.target.value)}
                     style={{ resize: 'none' }}
                   />
@@ -275,8 +268,8 @@ const CreateEmployeeForm = () => {
                     onChange={e => setBranchId(e.target.value)}>
                     <option value="">เลือกสาขา</option>
                     {branchData.map(option => (
-                      <option key={option.br_id} value={option.br_id}>
-                        {option.br_name}
+                      <option key={option.brId} value={option.brId}>
+                        {option.brName}
                       </option>
                     ))}
                   </Form.Select>
@@ -291,9 +284,7 @@ const CreateEmployeeForm = () => {
                     <option value="">เลือกตำแหน่ง</option>
                     {roleData.map(option => (
                       <option key={option.roleId} value={option.roleId}>
-                        {option.roleName !== 'ค่าเริ่มต้น'
-                          ? option.roleName
-                          : 'ตำแหน่ง'}
+                        {option.roleName}
                       </option>
                     ))}
                   </Form.Select>
@@ -309,7 +300,7 @@ const CreateEmployeeForm = () => {
                     type="number"
                     placeholder="เงินเดือน (บาท)"
                     name="salary"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     min="0"
                     onWheel={event => event.currentTarget.blur()}
                     onKeyDown={blockInvalidChar}

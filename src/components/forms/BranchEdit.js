@@ -9,7 +9,7 @@ import BranchesService from 'services/branches.service';
 // CSS
 import './index.css';
 
-const BranchCreate = props => {
+const BranchEdit = props => {
   const [editable, setEditable] = useState(false);
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
@@ -380,4 +380,4 @@ const BranchCreate = props => {
     </>
   );
 };
-export default BranchCreate;
+export default BranchEdit;

@@ -11,7 +11,7 @@ import {
   Button,
   Modal,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table } from 'antd';
 
@@ -20,6 +20,7 @@ import 'antd/dist/antd.min.css';
 
 import EmployeeService from 'services/employee.service';
 const EmployeeList = props => {
+  let history = useHistory();
   const [records, setRecord] = useState([]);
   const [deleteData, setDeleteData] = useState([]);
   const [modalShow, setModalShow] = useState(false);
@@ -34,9 +35,9 @@ const EmployeeList = props => {
     setfilterData(filterTable);
   };
 
-  const openRecord = id => {
-    console.log(id);
-    props.history.push('/record/' + id);
+  const openRecord = empId => {
+    console.log(empId);
+    history.push('/dashboard/employee/getEmployee/' + empId);
   };
   const refreshList = () => {
     EmployeeService.getEmployeeList()
@@ -145,7 +146,11 @@ const EmployeeList = props => {
       render: (text, record) => {
         return (
           <div>
-            <span onClick={() => {}}>
+            <span
+              onClick={() => {
+                const empId = record.emp_id;
+                openRecord(empId);
+              }}>
               <i className="far fa-edit action mr-2"></i>
             </span>
             <span>&nbsp;&nbsp;</span>

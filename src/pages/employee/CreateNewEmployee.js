@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
-import { CreateEmployeeForm } from 'components';
+import { EmployeeCreate } from 'components';
 import { Routes } from 'routes';
 import { Link } from 'react-router-dom';
 const AddAdmin = () => {
@@ -30,7 +30,7 @@ const AddAdmin = () => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <CreateEmployeeForm />
+          <EmployeeCreate />
         </Col>
       </Row>
     </>

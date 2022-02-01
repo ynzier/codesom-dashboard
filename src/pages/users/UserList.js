@@ -219,7 +219,7 @@ const UserList = props => {
           <Table
             dataSource={filterData == null ? records : filterData}
             columns={header}
-            rowKey="emp_id"
+            rowKey="user_id"
             pagination={{ pageSize: 20 }}
             style={{ fontFamily: 'Prompt' }}
           />

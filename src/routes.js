@@ -15,6 +15,7 @@ export const Routes = {
   // People
   Home: { path: '/dashboard' },
   EmployeeList: { path: '/dashboard/employee' },
+  GetEmployee: { path: '/dashboard/employee/getEmployee/:empId' },
   CreateNewEmployee: { path: '/dashboard/employee/create' },
 
   // Dashboard User
@@ -22,7 +23,7 @@ export const Routes = {
   AddPermission: { path: '/dashboard/users/addPermission' },
 
   // Branch
-  Branch: { path: '/dashboard/branch' },
+  BranchLists: { path: '/dashboard/branch' },
   AddBranch: { path: '/dashboard/branch/create' },
-  getBranch: { path: '/dashboard/branch/getBranch/:brId' },
+  GetBranch: { path: '/dashboard/branch/getBranch/:brId' },
 };

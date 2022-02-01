@@ -89,6 +89,11 @@ const App = () => {
         />
         <RouteWithSidebar
           exact
+          path={Routes.GetEmployee.path}
+          page={Page.GetEmployee}
+        />
+        <RouteWithSidebar
+          exact
           path={Routes.CreateNewEmployee.path}
           page={Page.CreateNewEmployee}
         />
@@ -103,7 +108,12 @@ const App = () => {
           path={Routes.AddPermission.path}
           page={Page.AddPermission}
         />
-        <RouteWithSidebar exact path={Routes.Branch.path} page={Page.Branch} />
+        {/* Branch */}
+        <RouteWithSidebar
+          exact
+          path={Routes.BranchLists.path}
+          page={Page.BranchLists}
+        />
         <RouteWithSidebar
           exact
           path={Routes.AddBranch.path}
@@ -111,7 +121,7 @@ const App = () => {
         />
         <RouteWithSidebar
           exact
-          path={Routes.getBranch.path}
+          path={Routes.GetBranch.path}
           page={Page.GetBranch}
         />
         <Redirect to={Routes.NotFound.path} />

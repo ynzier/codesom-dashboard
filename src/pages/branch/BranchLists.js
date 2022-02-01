@@ -7,7 +7,7 @@ import { ImPlus } from 'react-icons/im';
 import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchList } from 'components';
-const Branch = props => {
+const BranchLists = props => {
   useEffect(() => {
     document.title = 'จัดการข้อมูลสาขา';
   }, []);
@@ -68,4 +68,4 @@ const Branch = props => {
     </>
   );
 };
-export default Branch;
+export default BranchLists;

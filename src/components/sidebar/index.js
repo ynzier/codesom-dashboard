@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import {
   CgPushChevronLeft,
@@ -13,7 +12,6 @@ import { FaWarehouse } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
 
-import { Button } from 'react-bootstrap';
 import { Routes } from 'routes';
 import './styles.scss';
 import {
@@ -29,12 +27,8 @@ import AuthService from 'services/auth.service';
 
 const Sidebar = (props = {}) => {
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
-    // Accessing scss variable "--background-color"
-    // and "--text-color" using plain JavaScript
-    // and changing the same according to the state of "darkTheme"
     const root = document.documentElement;
     root?.style.setProperty('--contentMargin', collapsed ? '80px' : '270px');
   }, [collapsed]);
@@ -88,7 +82,7 @@ const Sidebar = (props = {}) => {
             <SubMenu title="สาขา" icon={<CgGitBranch />}>
               <MenuItem>
                 จัดการสาขา
-                <Link to={Routes.Branch.path} />
+                <Link to={Routes.BranchLists.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu title="วัตถุดิบ" icon={<FaWarehouse />}>
