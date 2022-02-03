@@ -9,11 +9,297 @@ import BranchesService from 'services/branches.service';
 // CSS
 import './index.css';
 
+// Modal
+import { BranchAccDetail } from 'components';
+
+function BranchEditForm(props) {
+  return (
+    <Form>
+      <h2 className="mb-4">ข้อมูลสาขา</h2>
+      <Row className="my-3">
+        <Col sm={6} md={6} />
+        <Col sm={3} md={3}>
+          <div>
+            {!props.editable ? (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  props.setEditable(!props.editable);
+                }}
+                style={{
+                  borderRadius: '36px',
+                  width: '100%',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  color: 'white',
+                }}>
+                แก้ไข
+              </Button>
+            ) : (
+              <Button
+                variant="tertiary"
+                onClick={props.handleSubmit}
+                style={{
+                  borderRadius: '36px',
+                  width: '100%',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  color: 'white',
+                }}>
+                บันทึกข้อมูล
+              </Button>
+            )}
+          </div>
+        </Col>
+        <Col sm={3} md={3}>
+          <div>
+            {!props.editable ? (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  props.setBrName('');
+                  props.setBrTel('');
+                  props.setBrAddr('');
+                }}
+                style={{
+                  borderRadius: '36px',
+                  width: '100%',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  color: 'white',
+                }}>
+                ลบ
+              </Button>
+            ) : (
+              <Button
+                variant="danger"
+                onClick={() => {
+                  location.reload();
+                }}
+                style={{
+                  borderRadius: '36px',
+                  width: '100%',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  color: 'white',
+                }}>
+                ยกเลิก
+              </Button>
+            )}
+          </div>
+        </Col>
+      </Row>
+      <Card
+        border="light"
+        className="bg-white px-4 py-4"
+        style={{
+          borderRadius: '36px',
+          height: '576px',
+          position: 'block',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+        }}>
+        <Card.Body
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <div
+              style={{
+                flex: 6,
+              }}>
+              <Image
+                style={{
+                  objectFit: 'contain',
+                  width: '100%',
+                  minHeight: '184px',
+                  backgroundColor: 'grey',
+                }}
+              />
+            </div>
+            <div
+              style={{
+                flex: 2,
+              }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                flex: 10,
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                marginTop: '10px',
+              }}>
+              <div>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="2">
+                    ชื่อสาขา
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="text"
+                      placeholder="ชื่อสาขา"
+                      value={props.brName}
+                      onChange={e => props.setBrName(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+              </div>
+              <div>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="2">
+                    ที่อยู่
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="text"
+                      placeholder="ที่อยู่"
+                      value={props.brAddr}
+                      onChange={e => props.setBrAddr(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+              </div>
+              <div>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="2">
+                    เบอร์โทร
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="phone"
+                      maxLength="10"
+                      placeholder="เบอร์โทร"
+                      value={props.brTel}
+                      onChange={e => {
+                        props.checkInput(e);
+                      }}
+                    />
+                  </Col>
+                </Form.Group>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 2,
+              marginTop: '24px',
+            }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}>
+              <div
+                style={{
+                  flex: 18,
+                }}>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="3">
+                    ผู้จัดการสาขา
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="text"
+                      placeholder="ผู้จัดการ"
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="3">
+                    จำนวนพนักงาน
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      type="number"
+                      disabled={!props.editable}
+                      placeholder="จำนวนพนักงาน"
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="3">
+                    การเข้างานของพนักงาน
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="text"
+                      placeholder="การเข้างาน"
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="formPlaintextPassword">
+                  <Form.Label column sm="3">
+                    เวลาทำการ
+                  </Form.Label>
+                  <Col sm="6">
+                    <Form.Control
+                      disabled={!props.editable}
+                      type="text"
+                      placeholder="เวลาทำการ"
+                    />
+                  </Col>
+                </Form.Group>
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                }}></div>
+            </div>
+            <div
+              style={{
+                alignSelf: 'flex-end',
+                color: '#C6C6C6',
+                textDecoration: 'underline',
+              }}>
+              <div onClick={() => props.setModalShow(true)}>
+                ข้อมูลสำหรับเข้าสู่ระบบ
+              </div>
+            </div>
+          </div>
+        </Card.Body>
+      </Card>
+    </Form>
+  );
+}
+
 const BranchEdit = props => {
   const [editable, setEditable] = useState(false);
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [brTel, setBrTel] = useState('');
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(async () => {
     document.title = 'ข้อมูลสาขา';
@@ -26,7 +312,6 @@ const BranchEdit = props => {
             setBrName(getData.brName);
             setBrAddr(getData.brAddr);
             setBrTel(getData.brTel);
-            console.log(brName);
           }
         }
       })
@@ -113,252 +398,18 @@ const BranchEdit = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Body>
-          <Form>
-            <h2 className="mb-4">ข้อมูลสาขา</h2>
-            <Row className="my-3">
-              <Col sm={6} md={6} />
-              <Col sm={3} md={3}>
-                <div>
-                  {!editable ? (
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        setEditable(!editable);
-                      }}
-                      style={{
-                        borderRadius: '36px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      แก้ไข
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="tertiary"
-                      onClick={handleSubmit}
-                      style={{
-                        borderRadius: '36px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      บันทึกข้อมูล
-                    </Button>
-                  )}
-                </div>
-              </Col>
-              <Col sm={3} md={3}>
-                <div>
-                  {!editable ? (
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        setBrName('');
-                        setBrTel('');
-                        setBrAddr('');
-                      }}
-                      style={{
-                        borderRadius: '36px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      ลบ
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        location.reload();
-                      }}
-                      style={{
-                        borderRadius: '36px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      ยกเลิก
-                    </Button>
-                  )}
-                </div>
-              </Col>
-            </Row>
-            <Card
-              border="light"
-              className="bg-white px-4 py-4"
-              style={{
-                borderRadius: '36px',
-                height: '576px',
-                position: 'block',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-              }}>
-              <Card.Body style={{ display: 'flex', flexDirection: 'column' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    flex: 1,
-                    flexDirection: 'row',
-                  }}>
-                  <div style={{ flex: 6 }}>
-                    <Image
-                      style={{
-                        objectFit: 'contain',
-                        width: '100%',
-                        minHeight: '184px',
-                        backgroundColor: 'grey',
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 2 }} />
-                  <div
-                    style={{
-                      display: 'flex',
-                      flex: 10,
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      marginTop: '10px',
-                    }}>
-                    <div>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="2">
-                          ชื่อสาขา
-                        </Form.Label>
-                        <Col sm="10">
-                          <Form.Control
-                            disabled={!editable}
-                            type="text"
-                            placeholder="ชื่อสาขา"
-                            value={brName}
-                            onChange={e => setBrName(e.target.value)}
-                          />
-                        </Col>
-                      </Form.Group>
-                    </div>
-                    <div>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="2">
-                          ที่อยู่
-                        </Form.Label>
-                        <Col sm="10">
-                          <Form.Control
-                            disabled={!editable}
-                            type="text"
-                            placeholder="ที่อยู่"
-                            value={brAddr}
-                            onChange={e => setBrAddr(e.target.value)}
-                          />
-                        </Col>
-                      </Form.Group>
-                    </div>
-                    <div>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="2">
-                          เบอร์โทร
-                        </Form.Label>
-                        <Col sm="10">
-                          <Form.Control
-                            disabled={!editable}
-                            type="phone"
-                            maxLength="10"
-                            placeholder="เบอร์โทร"
-                            value={brTel}
-                            onChange={e => {
-                              checkInput(e);
-                            }}
-                          />
-                        </Col>
-                      </Form.Group>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flex: 2,
-                    marginTop: '24px',
-                  }}>
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ flex: 18 }}>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                          ผู้จัดการสาขา
-                        </Form.Label>
-                        <Col sm="6">
-                          <Form.Control
-                            disabled={!editable}
-                            type="text"
-                            placeholder="ผู้จัดการ"
-                          />
-                        </Col>
-                      </Form.Group>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                          จำนวนพนักงาน
-                        </Form.Label>
-                        <Col sm="6">
-                          <Form.Control
-                            type="number"
-                            disabled={!editable}
-                            placeholder="จำนวนพนักงาน"
-                          />
-                        </Col>
-                      </Form.Group>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                          การเข้างานของพนักงาน
-                        </Form.Label>
-                        <Col sm="6">
-                          <Form.Control
-                            disabled={!editable}
-                            type="text"
-                            placeholder="การเข้างาน"
-                          />
-                        </Col>
-                      </Form.Group>
-                      <Form.Group
-                        as={Row}
-                        className="mb-3"
-                        controlId="formPlaintextPassword">
-                        <Form.Label column sm="3">
-                          เวลาทำการ
-                        </Form.Label>
-                        <Col sm="6">
-                          <Form.Control
-                            disabled={!editable}
-                            type="text"
-                            placeholder="เวลาทำการ"
-                          />
-                        </Col>
-                      </Form.Group>
-                    </div>
-                    <div style={{ flex: 1 }}></div>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Form>
+          <BranchEditForm
+            editable={editable}
+            setEditable={setEditable}
+            brName={brName}
+            setBrName={setBrName}
+            brAddr={brAddr}
+            setBrAddr={setBrAddr}
+            brTel={brTel}
+            setBrTel={setBrTel}
+            checkInput={checkInput}
+            handleSubmit={handleSubmit}
+            setModalShow={setModalShow}></BranchEditForm>
           <Row className="mt-3">
             <Col sm={3} md={3}>
               <div>
@@ -377,6 +428,13 @@ const BranchEdit = props => {
           </Row>
         </Card.Body>
       </Card>
+      <BranchAccDetail
+        show={modalShow}
+        onHide={() => {
+          setModalShow(false);
+        }}
+        brId={props.brId}
+      />
     </>
   );
 };

@@ -25,7 +25,7 @@ const AddBranch = props => {
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={Routes.Branch.path}> สาขา</Link>
+              <Link to={Routes.BranchLists.path}> สาขา</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item active>เพิ่มสาขา</Breadcrumb.Item>
           </Breadcrumb>

@@ -16,7 +16,6 @@ const BranchList = props => {
     await BranchesService.getAllBranch()
       .then(res => {
         if (mounted) {
-          console.log(res);
           getBranchData = res.data;
           setRecord(getBranchData);
           setLoading(false);
@@ -110,7 +109,6 @@ const BranchList = props => {
                     }}
                     onClick={() => {
                       openRecord(item.brId);
-                      console.log(item.brId);
                     }}>
                     เพิ่มเติม
                   </Button>

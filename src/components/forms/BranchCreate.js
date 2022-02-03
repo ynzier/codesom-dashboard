@@ -62,8 +62,10 @@ const BranchCreate = () => {
     console.log(data);
     await BranchService.createNewBranch(data)
       .then(response => {
+        setTel('');
+        setBrName('');
+        setBrAddr('');
         generate('success', response.data.message);
-        form.reset();
       })
       .catch(error => {
         const resMessage =

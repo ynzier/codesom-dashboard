@@ -19,3 +19,4 @@ export { default as UserCreateForm } from './forms/UserCreateForm';
 export { default as BranchList } from './lists/BranchList';
 export { default as BranchCreate } from './forms/BranchCreate';
 export { default as BranchEdit } from './forms/BranchEdit';
+export { default as BranchAccDetail } from './modals/BranchAccDetail';
