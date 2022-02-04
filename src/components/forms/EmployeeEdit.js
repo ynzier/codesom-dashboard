@@ -230,6 +230,7 @@ const EmployeeEdit = props => {
                                 )
                               : ''
                           }
+                          style={{paddingLeft: '10px'}}
                           name="birthDate"
                           placeholder="วัน/เดือน/ปีเกิด"
                           onFocus={openCalendar}
@@ -350,7 +351,7 @@ const EmployeeEdit = props => {
                         setEditable(!editable);
                       }}
                       style={{
-                        borderRadius: '36px',
+                        borderRadius: '10px',
                         width: '100%',
                         boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                         color: 'white',
@@ -362,7 +363,7 @@ const EmployeeEdit = props => {
                       variant="tertiary"
                       onClick={handleSubmit}
                       style={{
-                        borderRadius: '36px',
+                        borderRadius: '10px',
                         width: '100%',
                         boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                         color: 'white',

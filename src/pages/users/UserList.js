@@ -182,7 +182,7 @@ const UserList = props => {
         onDismiss={onDismissed}
         timeout={1500}
       />
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
             className="d-none d-md-inline-block"
@@ -200,16 +200,33 @@ const UserList = props => {
         <Card.Header>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
-              <InputGroup>
+              <InputGroup style={{ height: '50px' }}>
                 <InputGroup.Text>
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>
                 <Form.Control
                   type="text"
-                  placeholder="ค้นหาพนักงาน"
+                  placeholder="ค้นหาผู้ใช้งาน"
                   onChange={e => search(e.target.value)}
                 />
               </InputGroup>
+            </Col>
+            <Col md={4} lg={2} xl={4} />
+            <Col xs={2} md={2} lg={4} xl={2}>
+              <Button
+                className="w-100"
+                as={Link}
+                to={Routes.AddPermission.path}
+                variant="codesom"
+                style={{
+                  color: '#fff',
+                  height: '50px',
+                  paddingTop: '0.75rem',
+                  borderRadius: '10px',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                }}>
+                เพิ่มผู้ใช้งานใหม่
+              </Button>
             </Col>
           </Row>
         </Card.Header>

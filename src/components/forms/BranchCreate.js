@@ -159,8 +159,9 @@ const BranchCreate = () => {
                     variant="tertiary"
                     type="submit"
                     style={{
-                      borderRadius: '36px',
+                      borderRadius: '10px',
                       width: '100%',
+                      height: '50px',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                       color: 'white',
                     }}>
@@ -178,8 +179,9 @@ const BranchCreate = () => {
                       setBrAddr('');
                     }}
                     style={{
-                      borderRadius: '36px',
+                      borderRadius: '10px',
                       width: '100%',
+                      height: '50px',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                       color: 'white',
                     }}>

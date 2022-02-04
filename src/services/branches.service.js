@@ -1,5 +1,6 @@
 import http from 'http-common';
 const prefix = '/branch';
+import authHeader from './auth-header';
 
 const getAllBranch = () => {
   return http.get(prefix + '/getAllBranch', {
@@ -33,9 +34,13 @@ const getBranchById = brId => {
 };
 const createBranchAcc = (brId, data) => {
   return http.post(prefix + '/createBranchAcc', data, {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
+    params: { brId: brId },
+  });
+};
+const updateBrAcc = (brId, data) => {
+  return http.put(prefix + '/updateBrAcc', data, {
+    headers: authHeader(),
     params: { brId: brId },
   });
 };
@@ -54,4 +59,5 @@ export default {
   updateBranch,
   createBranchAcc,
   checkExistAcc,
+  updateBrAcc,
 };

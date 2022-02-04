@@ -187,7 +187,7 @@ const UserCreateForm = () => {
                   />
                 </Form.Group>
               </Col>
-            </Row>{' '}
+            </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Form.Group id="firstname">
@@ -242,7 +242,7 @@ const UserCreateForm = () => {
                     variant="tertiary"
                     type="submit"
                     style={{
-                      borderRadius: '36px',
+                      borderRadius: '10px',
                       width: '100%',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                       color: 'white',
@@ -263,7 +263,7 @@ const UserCreateForm = () => {
                       form.reset();
                     }}
                     style={{
-                      borderRadius: '36px',
+                      borderRadius: '10px',
                       width: '100%',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                       color: 'white',

@@ -1,20 +1,8 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
-import {
-  Row,
-  Col,
-  Nav,
-  Image,
-  Navbar,
-  Dropdown,
-  Container,
-  Button,
-  ListGroup,
-} from 'react-bootstrap';
+import { Nav, Navbar, Dropdown, Container } from 'react-bootstrap';
 
-import Profile3 from 'assets/img/jib.png';
 import AuthService from 'services/auth.service';
 
 const NavbarComponent = () => {
@@ -23,7 +11,11 @@ const NavbarComponent = () => {
   };
 
   return (
-    <Navbar variant="dark" expanded className="ps-0 pe-2 pb-0">
+    <Navbar
+      variant="dark"
+      expanded
+      className="ps-0 pe-2 pb-0"
+      style={{ float: 'right' }}>
       <Container fluid className="px-0">
         <div className="d-flex justify-content-between w-100">
           <div className="d-flex align-items-center"></div>

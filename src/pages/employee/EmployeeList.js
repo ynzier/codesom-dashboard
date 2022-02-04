@@ -202,7 +202,7 @@ const EmployeeList = props => {
         onDismiss={onDismissed}
         timeout={1500}
       />
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
             className="d-none d-md-inline-block"
@@ -220,7 +220,7 @@ const EmployeeList = props => {
         <Card.Header>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
-              <InputGroup>
+              <InputGroup style={{ height: '50px' }}>
                 <InputGroup.Text>
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>
@@ -238,7 +238,13 @@ const EmployeeList = props => {
                 as={Link}
                 to={Routes.CreateNewEmployee.path}
                 variant="codesom"
-                style={{ color: '#fff' }}>
+                style={{
+                  color: '#fff',
+                  height: '50px',
+                  paddingTop: '0.75rem',
+                  borderRadius: '10px',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                }}>
                 เพิ่มข้อมูลพนักงาน
               </Button>
             </Col>

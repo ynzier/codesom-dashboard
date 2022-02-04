@@ -10,25 +10,25 @@
 }
 
 .ant-pagination-item-active {
-  border-color: #ff9c00;
+  border-color: #9D7463;
 }
 
 .ant-pagination-item:focus-visible,
 .ant-pagination-item:hover {
-  border-color: #ff9c00;
+  border-color: #9D7463;
 }
 
 .ant-pagination-item a:hover {
-  border-color: #ff9c00;
+  border-color: #9D7463;
 }
 .ant-pagination-prev:focus-visible .ant-pagination-item-link,
 .ant-pagination-next:focus-visible .ant-pagination-item-link,
 .ant-pagination-prev:hover .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link {
-  border-color: #ff9c00;
+  border-color: #9D7463;
 }
 
 .ant-pagination-options-quick-jumper input:focus,
 .ant-pagination-options-quick-jumper input-focused {
-  border-color: #ff9c00;
+  border-color: #9D7463;
 }

@@ -11,7 +11,7 @@ const AddAdmin = () => {
   }, []);
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0 ">
           <Breadcrumb
             className="d-none d-md-inline-block"

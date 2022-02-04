@@ -54,7 +54,7 @@ const BranchList = props => {
                   height: 114,
                   columnGap: '10px',
                 }}>
-                <div style={{ flex: 2 }}>
+                <div style={{ flex: 1 }}>
                   <Image
                     style={{
                       objectFit: 'contain',
@@ -73,9 +73,9 @@ const BranchList = props => {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                   }}>
-                  <div>ชื่อสาขา</div>
-                  <div>ที่อยู่</div>
-                  <div>เบอร์โทร</div>
+                  <div style={{ fontWeight: 'bold' }}>ชื่อสาขา</div>
+                  <div style={{ fontWeight: 'bold' }}>ที่อยู่</div>
+                  <div style={{ fontWeight: 'bold' }}>เบอร์โทร</div>
                 </div>
                 <div
                   style={{
@@ -85,25 +85,53 @@ const BranchList = props => {
                     width: '100%',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
+                    color: '#BDBDBD',
                   }}>
-                  <div>{item.brName || 'none'}</div>
-                  <div>{item.brAddr || 'none'}</div>
-                  <div>{item.brTel || 'none'}</div>
+                  <div
+                    style={{
+                      borderColor: '#E8E8E8',
+                      borderStyle: 'solid',
+                      borderWidth: '0.155rem',
+                      borderRadius: '8px',
+                      paddingLeft: 10,
+                    }}>
+                    {item.brName || 'none'}
+                  </div>
+                  <div
+                    style={{
+                      borderColor: '#E8E8E8',
+                      borderStyle: 'solid',
+                      borderWidth: '0.155rem',
+                      borderRadius: '8px',
+                      paddingLeft: 10,
+                    }}>
+                    {item.brAddr || 'none'}
+                  </div>
+                  <div
+                    style={{
+                      borderColor: '#E8E8E8',
+                      borderStyle: 'solid',
+                      borderWidth: '0.155rem',
+                      borderRadius: '8px',
+                      paddingLeft: 10,
+                    }}>
+                    {item.brTel || 'none'}
+                  </div>
                 </div>
                 <div style={{ flex: 2 }} />
                 <div
                   style={{
-                    flex: 2,
+                    flex: 1,
                     justifyContent: 'center',
                     alignSelf: 'center',
                   }}>
                   <Button
                     variant="secondary"
                     style={{
-                      width: '100%',
+                      width: '120px',
                       height: 40,
                       padding: 0,
-                      borderRadius: 20,
+                      borderRadius: 5,
                       color: 'white',
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                     }}

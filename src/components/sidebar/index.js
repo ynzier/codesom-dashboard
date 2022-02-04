@@ -25,7 +25,7 @@ import {
 } from 'react-pro-sidebar';
 import AuthService from 'services/auth.service';
 
-const Sidebar = (props = {}) => {
+const Sidebar = props => {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -60,40 +60,42 @@ const Sidebar = (props = {}) => {
           Codesom
         </SidebarHeader>
         <SidebarContent>
-          <Menu iconShape="circle" subMenuBullets>
-            <MenuItem icon={<MdSpaceDashboard />}>
+          <Menu iconShape="circle">
+            <MenuItem icon={<MdSpaceDashboard color="#9D7463" />}>
               แดชบอร์ด
               <Link to={Routes.Home.path} />
             </MenuItem>
-            <SubMenu title="บุคลากร" icon={<FiUsers />}>
+            <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
               <MenuItem>
-                จัดการผู้ใช้งาน
+                ๐ จัดการผู้ใช้งาน
                 <Link to={Routes.UserList.path} />
               </MenuItem>
               <MenuItem>
-                จัดการพนักงาน
+                ๐ จัดการพนักงาน
                 <Link to={Routes.EmployeeList.path} />
               </MenuItem>
-              <MenuItem>
-                กำหนดสิทธิ์ผู้ใช้งาน
-                <Link to={Routes.AddPermission.path} />
-              </MenuItem>
             </SubMenu>
-            <SubMenu title="สาขา" icon={<CgGitBranch />}>
+            <SubMenu
+              title="สาขา"
+              icon={<CgGitBranch color="#9D7463" size="24px" />}>
               <MenuItem>
-                จัดการสาขา
+                ๐ จัดการสาขา
                 <Link to={Routes.BranchLists.path} />
               </MenuItem>
             </SubMenu>
-            <SubMenu title="วัตถุดิบ" icon={<FaWarehouse />}>
+            <SubMenu title="วัตถุดิบ" icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem>คำร้องขอวัตถุดิบ</MenuItem>
               <MenuItem>ประวัติการเบิกวัตถุดิบ</MenuItem>
             </SubMenu>
-            <SubMenu title="เดลิเวอรี่" icon={<MdDeliveryDining />}>
+            <SubMenu
+              title="เดลิเวอรี่"
+              icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
               <MenuItem>รายการที่ต้องส่ง</MenuItem>
               <MenuItem>ประวัติการส่งสินค้า</MenuItem>
             </SubMenu>
-            <SubMenu title="รายงาน" icon={<CgFileDocument />}>
+            <SubMenu
+              title="รายงาน"
+              icon={<CgFileDocument color="#9D7463" size="16px" />}>
               <MenuItem>รายงานวัตถุดิบ</MenuItem>
               <MenuItem>รายงานยอดจำหน่าย</MenuItem>
               <MenuItem>รายงานข้อมูลพนักงาน</MenuItem>

@@ -53,7 +53,7 @@ const App = () => {
             <main
               className="content"
               style={{
-                backgroundColor: 'rgba(255, 233, 212, 0.5)',
+                backgroundColor: 'rgba(249, 220, 194, 0.5)',
                 minHeight: '100vh',
               }}>
               <Navbar />

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { ImPlus } from 'react-icons/im';
+import { FaPlus } from 'react-icons/fa';
 import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchList } from 'components';
@@ -14,7 +14,7 @@ const BranchLists = props => {
 
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
             className="d-none d-md-inline-block"
@@ -42,23 +42,26 @@ const BranchLists = props => {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row-reverse',
+              flexDirection: 'row',
               width: '100%',
             }}
             className="mb-4">
+            <div style={{flex:10}}/>
             <Button
-              variant="secondary"
+              variant="codesom"
               style={{
-                width: 140,
-                height: 40,
-                borderRadius: 20,
+                flex:2,
+                paddingTop: '0.75rem',
+                width: '100%',
+                height: 50,
+                borderRadius: '10px',
                 color: 'white',
                 boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
               }}
               as={Link}
               to={Routes.AddBranch.path}>
               <div>
-                <ImPlus /> เพิ่มสาขา
+                <FaPlus /> เพิ่มสาขา
               </div>
             </Button>
           </div>

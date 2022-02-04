@@ -27,7 +27,7 @@ function BranchEditForm(props) {
                   props.setEditable(!props.editable);
                 }}
                 style={{
-                  borderRadius: '36px',
+                  borderRadius: '10px',
                   width: '100%',
                   boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   color: 'white',
@@ -39,7 +39,7 @@ function BranchEditForm(props) {
                 variant="tertiary"
                 onClick={props.handleSubmit}
                 style={{
-                  borderRadius: '36px',
+                  borderRadius: '10px',
                   width: '100%',
                   boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   color: 'white',
@@ -54,13 +54,9 @@ function BranchEditForm(props) {
             {!props.editable ? (
               <Button
                 variant="secondary"
-                onClick={() => {
-                  props.setBrName('');
-                  props.setBrTel('');
-                  props.setBrAddr('');
-                }}
+                onClick={() => {}}
                 style={{
-                  borderRadius: '36px',
+                  borderRadius: '10px',
                   width: '100%',
                   boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   color: 'white',
@@ -71,10 +67,22 @@ function BranchEditForm(props) {
               <Button
                 variant="danger"
                 onClick={() => {
-                  location.reload();
+                  BranchesService.getBranchById(props.brId)
+                    .then(res => {
+                      if (res.data) {
+                        const getData = res.data;
+                        props.setBrName(getData.brName);
+                        props.setBrAddr(getData.brAddr);
+                        props.setBrTel(getData.brTel);
+                        props.setEditable(!props.editable);
+                      }
+                    })
+                    .catch(e => {
+                      console.log(e);
+                    });
                 }}
                 style={{
-                  borderRadius: '36px',
+                  borderRadius: '10px',
                   width: '100%',
                   boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   color: 'white',
@@ -89,7 +97,7 @@ function BranchEditForm(props) {
         border="light"
         className="bg-white px-4 py-4"
         style={{
-          borderRadius: '36px',
+          borderRadius: '10px',
           height: '576px',
           position: 'block',
           whiteSpace: 'nowrap',
@@ -256,21 +264,6 @@ function BranchEditForm(props) {
                     />
                   </Col>
                 </Form.Group>
-                <Form.Group
-                  as={Row}
-                  className="mb-3"
-                  controlId="formPlaintextPassword">
-                  <Form.Label column sm="3">
-                    เวลาทำการ
-                  </Form.Label>
-                  <Col sm="6">
-                    <Form.Control
-                      disabled={!props.editable}
-                      type="text"
-                      placeholder="เวลาทำการ"
-                    />
-                  </Col>
-                </Form.Group>
               </div>
               <div
                 style={{
@@ -399,6 +392,7 @@ const BranchEdit = props => {
         }}>
         <Card.Body>
           <BranchEditForm
+            brId={props.brId}
             editable={editable}
             setEditable={setEditable}
             brName={brName}
@@ -409,17 +403,21 @@ const BranchEdit = props => {
             setBrTel={setBrTel}
             checkInput={checkInput}
             handleSubmit={handleSubmit}
-            setModalShow={setModalShow}></BranchEditForm>
+            setModalShow={setModalShow}
+          />
           <Row className="mt-3">
             <Col sm={3} md={3}>
               <div>
                 <Button
                   variant="secondary"
                   style={{
-                    borderRadius: '36px',
+                    borderRadius: '10px',
                     width: '100%',
                     boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                     color: 'white',
+                  }}
+                  onClick={() => {
+                    history.back();
                   }}>
                   ย้อนกลับ
                 </Button>

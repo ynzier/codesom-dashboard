@@ -70,8 +70,8 @@ $colors: (
 // Color scheme
 $default:       #262B40;
 $primary:       #0d6efd;
-$secondary:     #C8CBCA;
-$tertiary:      #0AC265;
+$secondary:     #837B7F;
+$tertiary:      #2DC678;
 $quaternary:    #C96480;
 
 // Series names and colors. This can be extended or customized as desired. Just add more series and colors.
@@ -94,7 +94,7 @@ $secondary-app:   #424AA0;
 $success:       $green;
 $info:          $blue;
 $warning:       $yellow;
-$danger:        $red;
+$danger:        #D8434B;
 $gray:          $gray-900;
 $light:         $gray-400;
 $lighten:       $gray-300;
@@ -116,7 +116,7 @@ $twitch:        #4B367C;
 $paypal:        #ecb32c;
 $behance:       #0057ff;
 $reddit:        #E84422;
-$codesom: #FF9C00;
+$codesom: #97515F;
 
 // Brand colors
 $brand-colors: ();
@@ -798,11 +798,11 @@ $input-padding-x-lg:                    $input-btn-padding-x-lg;
 $input-font-size-lg:                    $input-btn-font-size-lg;
 
 $input-bg:                              $white;
-$input-disabled-bg:                     $gray-200;
+$input-disabled-bg:                     #E8E8E8;
 $input-disabled-border-color:           null;
 
-$input-color:                           $gray-700;
-$input-border-color:                    $gray-500;
+$input-color:                           #BDBDBD;
+$input-border-color:                    #E8E8E8;
 $input-border-width:                    $input-btn-border-width;
 $input-box-shadow:                      $box-shadow-inset;
 
@@ -816,7 +816,7 @@ $input-focus-color:                     $input-color;
 $input-focus-width:                     $input-btn-focus-width;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow;
 
-$input-placeholder-color:               $gray-600;
+$input-placeholder-color:               #BDBDBD;
 $input-plaintext-color:                 $body-color;
 
 $input-height-border:                   $input-border-width * 2;
@@ -1239,7 +1239,7 @@ $pagination-bg:                     $white;
 $pagination-border-width:           $border-width;
 $pagination-border-radius:          $border-radius;
 $pagination-margin-start:            -$pagination-border-width;
-$pagination-border-color:           #FF9C00;
+$pagination-border-color:           #9D7463;
 
 $pagination-focus-box-shadow:       $input-btn-focus-box-shadow;
 $pagination-focus-outline:          0;

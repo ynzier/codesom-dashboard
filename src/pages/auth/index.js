@@ -78,7 +78,7 @@ const Login = props => {
           <Col
             xs={6}
             className="d-flex justify-content-center align-items-center"
-            style={{ backgroundColor: '#FF9C00', minHeight: '100vh' }}>
+            style={{ backgroundColor: '#9D7463', minHeight: '100vh' }}>
             <div className="logoBox">
               <Image src={Logo} className="logo" />
               <div className="text-center text-md-center mb-4 mt-md-0">
@@ -89,7 +89,7 @@ const Login = props => {
           <Col
             xs={6}
             className="d-flex justify-content-center align-items-center"
-            style={{ minHeight: '100vh', backgroundColor: '#FFE9D4' }}>
+            style={{ minHeight: '100vh', backgroundColor: 'rgba(249, 220, 194, 0.5)' }}>
             <div className="loginBox">
               <div className="text-center text-md-center mb-4 mt-md-3">
                 <h3 className="mb-0">เข้าสู่ระบบเพื่อใช้งาน</h3>
@@ -101,7 +101,7 @@ const Login = props => {
                     <InputGroup.Text>
                       <FontAwesomeIcon
                         icon={faEnvelope}
-                        style={{ color: '#FF9C00' }}
+                        style={{ color: '#9D7463' }}
                       />
                     </InputGroup.Text>
                     <Form.Control
@@ -119,7 +119,7 @@ const Login = props => {
                       <InputGroup.Text>
                         <FontAwesomeIcon
                           icon={faUnlockAlt}
-                          style={{ color: '#FF9C00' }}
+                          style={{ color: '#9D7463' }}
                         />
                       </InputGroup.Text>
                       <Form.Control
@@ -138,7 +138,7 @@ const Login = props => {
                   style={{
                     color: 'white',
                     boxShadow: '1px 3px 1px #CFCFCF',
-                    backgroundColor: '#FF9C00',
+
                     borderWidth: 0,
                   }}>
                   เข้าสู่ระบบ
