@@ -46,11 +46,11 @@ const BranchLists = props => {
               width: '100%',
             }}
             className="mb-4">
-            <div style={{flex:10}}/>
+            <div style={{ flex: 10 }} />
             <Button
               variant="codesom"
               style={{
-                flex:2,
+                flex: 2,
                 paddingTop: '0.75rem',
                 width: '100%',
                 height: 50,

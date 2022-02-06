@@ -16,6 +16,7 @@ import { Table } from 'antd';
 
 import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
+import './index.css';
 
 import UserService from 'services/users.service';
 const UserList = props => {
@@ -196,7 +197,13 @@ const UserList = props => {
           </Breadcrumb>
         </div>
       </div>
-      <Card className="mb-4">
+      <Card
+        border="light"
+        className="bg-white px-6 py-4 mb-4"
+        style={{
+          borderRadius: '36px',
+          boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+        }}>
         <Card.Header>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
