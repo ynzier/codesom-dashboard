@@ -2,7 +2,6 @@
 
 export { default as EditModal } from './modals/EditModal';
 export { default as RecordEdit } from './forms/RecordEdit';
-export { default as ProductRegisterForm } from './forms/ProductRegisterForm';
 export { default as SettingForm } from './forms/SettingForm';
 export { default as Navbar } from './navbar';
 export { default as Preloader } from './preloader';
@@ -20,3 +19,9 @@ export { default as BranchList } from './lists/BranchList';
 export { default as BranchCreate } from './forms/BranchCreate';
 export { default as BranchEdit } from './forms/BranchEdit';
 export { default as BranchAccDetail } from './modals/BranchAccDetail';
+
+// ingredient
+export { default as IngrReqList } from './lists/IngrReqList';
+
+// Product
+export { default as ProductCreate } from './forms/ProductCreate';

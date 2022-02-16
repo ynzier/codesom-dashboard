@@ -8,7 +8,6 @@ export const Routes = {
   Signin: { path: '/' },
   AddAdmin: { path: '/dashboard/addadmin' },
   CustomerList: { path: '/dashboard/allItem' },
-  AddItem: { path: '/dashboard/additem' },
   Setting: { path: '/dashboard/setting' },
   Receipts: { path: '/dashboard/Receipts' },
 
@@ -26,4 +25,11 @@ export const Routes = {
   BranchLists: { path: '/dashboard/branch' },
   AddBranch: { path: '/dashboard/branch/create' },
   GetBranch: { path: '/dashboard/branch/getBranch/:brId' },
+
+  // Ingredient
+  IngrRequestPage: { path: '/dashboard/ingr' },
+
+  // Products
+  ProductList: { path: '/dashboard/product' },
+  AddProduct: { path: '/dashboard/product/create' },
 };

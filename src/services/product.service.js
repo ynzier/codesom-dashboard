@@ -1,10 +1,9 @@
 import http from 'http-common';
 
-const add = data => {
-  return http.post('/product/add', data, {
+const createProduct = data => {
+  return http.post('/product/createProduct', data, {
     headers: {
       'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
     },
   });
 };
@@ -18,8 +17,8 @@ const remove = id => {
   });
 };
 
-const getAll = () => {
-  return http.get('/product/getAll', {
+const getAllProducts = () => {
+  return http.get('/product/getAllProducts', {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
@@ -27,16 +26,16 @@ const getAll = () => {
   });
 };
 
-const getProductType = () => {
-  return http.get('/product/getAllProductType', {
+const getAllProductTypes = () => {
+  return http.get('/product/getAllProductTypes', {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
     },
   });
 };
-const addProductType = data => {
-  return http.post('/product/addProductType', data, {
+const createType = data => {
+  return http.post('/product/createType', data, {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
@@ -90,15 +89,15 @@ const update = (id, data) => {
 };
 // eslint-disable-next-line
 export default {
-  add,
+  createProduct,
   remove,
-  getAll,
-  getProductType,
+  getAllProducts,
+  getAllProductTypes,
   getBrand,
   addBrand,
   deleteBrand,
   getOne,
   update,
-  addProductType,
+  createType,
   deleteProductType,
 };

@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { ImPlus } from 'react-icons/im';
 import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
-import { BranchCreate } from 'components';
+import { ProductCreate } from 'components';
 const AddBranch = props => {
   useEffect(() => {
     document.title = 'เพิ่มข้อมูลสาขา';
@@ -25,15 +25,15 @@ const AddBranch = props => {
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={Routes.BranchLists.path}>สาขา</Link>
+              <Link to={Routes.ProductList.path}>รายการสินค้า</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสาขา</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มสินค้า</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <BranchCreate />
+          <ProductCreate />
         </Col>
       </Row>
     </>

@@ -16,7 +16,6 @@ import { Table } from 'antd';
 
 import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
-import './index.css';
 
 import UserService from 'services/users.service';
 const UserList = props => {
@@ -204,7 +203,7 @@ const UserList = props => {
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
         }}>
-        <Card.Header>
+        <Card.Header style={{ borderWidth: 0 }}>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
               <InputGroup style={{ height: '50px' }}>
@@ -218,8 +217,8 @@ const UserList = props => {
                 />
               </InputGroup>
             </Col>
-            <Col md={4} lg={2} xl={4} />
-            <Col xs={2} md={2} lg={4} xl={2}>
+            <Col md={1} lg={2} xl={4} />
+            <Col xs={4} md={5} lg={4} xl={2}>
               <Button
                 className="w-100"
                 as={Link}

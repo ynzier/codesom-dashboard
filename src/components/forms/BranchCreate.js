@@ -6,9 +6,6 @@ import { AlertList } from 'react-bs-notifier';
 // services
 import BranchService from 'services/branches.service';
 
-// CSS
-import './index.css';
-
 const BranchCreate = () => {
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');

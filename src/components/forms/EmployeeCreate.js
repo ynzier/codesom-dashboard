@@ -7,7 +7,6 @@ import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
-import './index.css';
 
 var getRoleData = [];
 var getBranchData = [];
@@ -300,7 +299,6 @@ const CreateEmployeeForm = () => {
                     type="number"
                     placeholder="เงินเดือน (บาท)"
                     name="salary"
-                    autoComplete="new-password"
                     min="0"
                     onWheel={event => event.currentTarget.blur()}
                     onKeyDown={blockInvalidChar}

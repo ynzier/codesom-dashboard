@@ -7,7 +7,6 @@ import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
-import './index.css';
 
 var getRoleData = [];
 var getBranchData = [];
@@ -230,7 +229,7 @@ const EmployeeEdit = props => {
                                 )
                               : ''
                           }
-                          style={{paddingLeft: '10px'}}
+                          style={{ paddingLeft: '10px' }}
                           name="birthDate"
                           placeholder="วัน/เดือน/ปีเกิด"
                           onFocus={openCalendar}

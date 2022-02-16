@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { ImPlus } from 'react-icons/im';
 import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
-import { BranchCreate } from 'components';
-const AddBranch = props => {
+import { IngrReqList } from 'components';
+const IngrRequestPage = () => {
+  const [selectedBranchId, setBranchId] = useState('');
+  const [reqData, setReqData] = useState([]);
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลสาขา';
+    document.title = 'คำร้องขอวัตถุดิบ';
   }, []);
 
   return (
@@ -24,19 +25,30 @@ const AddBranch = props => {
                 <FontAwesomeIcon icon={faHome} />
               </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.BranchLists.path}>สาขา</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสาขา</Breadcrumb.Item>
+            {reqData.length > 0 ? (
+              <Breadcrumb.Item active>คำร้องขอวัตถุดิบ</Breadcrumb.Item>
+            ) : (
+              <>
+                <Breadcrumb.Item>
+                  <Link to={Routes.IngrRequestPage.path}>คำร้องขอวัตถุดิบ</Link>
+                </Breadcrumb.Item>
+                <Breadcrumb.Item active>ยืนยันคำขอวัตถุดิบ</Breadcrumb.Item>
+              </>
+            )}
           </Breadcrumb>
         </div>
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <BranchCreate />
+          <IngrReqList
+            selectedBranchId={selectedBranchId}
+            setBranchId={setBranchId}
+            reqData={reqData}
+            setReqData={setReqData}
+          />
         </Col>
       </Row>
     </>
   );
 };
-export default AddBranch;
+export default IngrRequestPage;

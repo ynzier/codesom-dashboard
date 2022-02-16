@@ -178,54 +178,66 @@ const BranchAccDetail = props => {
                 />
               </Col>
             </Form.Group>
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextPassword">
-              <Form.Label column sm="3">
-                รหัสผ่าน
-              </Form.Label>
-              <Col sm="9">
-                <Form.Control
-                  type="password"
-                  placeholder="รหัสผ่าน"
-                  value={brPassword}
-                  onChange={e => setBrPassword(e.target.value)}
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextPassword">
-              <Form.Label column sm="3">
-                ยืนยันรหัสผ่าน
-              </Form.Label>
-              <Col sm="9">
-                <Form.Control
-                  type="password"
-                  placeholder="ยืนยันรหัสผ่าน"
-                  value={brConfirmPassword}
-                  onChange={e => setBrConfirmPassword(e.target.value)}
-                />
-              </Col>
-            </Form.Group>
-            {accStatus == 'valid' && (
-              <Button
-                variant="codesom"
-                type="submit"
-                style={{ color: 'white', alignSelf: 'flex-end' }}>
-                เปิดใช้งาน
-              </Button>
+            {(props.editable || accStatus == 'valid') && (
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextPassword">
+                <Form.Label column sm="3">
+                  รหัสผ่าน
+                </Form.Label>
+                <Col sm="9">
+                  <Form.Control
+                    type="password"
+                    placeholder="รหัสผ่าน"
+                    value={brPassword}
+                    onChange={e => setBrPassword(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
             )}
-            {accStatus == 'existed' && (
-              <Button
-                variant="codesom"
-                type="submit"
-                style={{ color: 'white' }}>
-                บันทึกข้อมูล
-              </Button>
+            {(props.editable || accStatus == 'valid') && (
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formPlaintextPassword">
+                <Form.Label column sm="3">
+                  ยืนยันรหัสผ่าน
+                </Form.Label>
+                <Col sm="9">
+                  <Form.Control
+                    type="password"
+                    placeholder="ยืนยันรหัสผ่าน"
+                    value={brConfirmPassword}
+                    onChange={e => setBrConfirmPassword(e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
             )}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {accStatus == 'valid' && (
+                <>
+                  <div style={{ flex: 4 }} />
+                  <Button
+                    variant="tertiary"
+                    type="submit"
+                    style={{ color: 'white', flex: 2 }}>
+                    เปิดใช้งาน
+                  </Button>
+                </>
+              )}
+              {accStatus == 'existed' && props.editable && (
+                <>
+                  <div style={{ flex: 4 }} />
+                  <Button
+                    variant="tertiary"
+                    type="submit"
+                    style={{ color: 'white', flex: 2 }}>
+                    บันทึกข้อมูล
+                  </Button>
+                </>
+              )}
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

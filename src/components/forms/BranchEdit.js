@@ -6,9 +6,6 @@ import { AlertList } from 'react-bs-notifier';
 // services
 import BranchesService from 'services/branches.service';
 
-// CSS
-import './index.css';
-
 // Modal
 import { BranchAccDetail } from 'components';
 
@@ -22,7 +19,7 @@ function BranchEditForm(props) {
           <div>
             {!props.editable ? (
               <Button
-                variant="secondary"
+                variant="tertiary"
                 onClick={() => {
                   props.setEditable(!props.editable);
                 }}
@@ -53,7 +50,7 @@ function BranchEditForm(props) {
           <div>
             {!props.editable ? (
               <Button
-                variant="secondary"
+                variant="danger"
                 onClick={() => {}}
                 style={{
                   borderRadius: '10px',
@@ -118,12 +115,15 @@ function BranchEditForm(props) {
             <div
               style={{
                 flex: 6,
+                justifyContent: 'center',
               }}>
               <Image
                 style={{
+                  flex: 1,
                   objectFit: 'contain',
                   width: '100%',
                   minHeight: '184px',
+                  height: '90%',
                   backgroundColor: 'grey',
                 }}
               />
@@ -172,6 +172,8 @@ function BranchEditForm(props) {
                     <Form.Control
                       disabled={!props.editable}
                       type="text"
+                      as="textarea"
+                      rows={3}
                       placeholder="ที่อยู่"
                       value={props.brAddr}
                       onChange={e => props.setBrAddr(e.target.value)}
@@ -409,7 +411,7 @@ const BranchEdit = props => {
             <Col sm={3} md={3}>
               <div>
                 <Button
-                  variant="secondary"
+                  variant="codesom"
                   style={{
                     borderRadius: '10px',
                     width: '100%',
@@ -432,6 +434,7 @@ const BranchEdit = props => {
           setModalShow(false);
         }}
         brId={props.brId}
+        editable={editable}
       />
     </>
   );

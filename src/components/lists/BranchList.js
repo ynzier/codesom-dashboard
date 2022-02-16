@@ -54,7 +54,7 @@ const BranchList = props => {
                   height: 114,
                   columnGap: '10px',
                 }}>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1.5 }}>
                   <Image
                     style={{
                       objectFit: 'contain',

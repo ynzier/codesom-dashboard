@@ -7,9 +7,6 @@ import { AlertList } from 'react-bs-notifier';
 import EmployeeService from 'services/employee.service';
 import UserService from 'services/users.service';
 
-// CSS
-import './index.css';
-
 const UserCreateForm = () => {
   const initialRecordState = {
     userName: '',
@@ -130,7 +127,7 @@ const UserCreateForm = () => {
                     />
                     <Button
                       variant="outline-codesom"
-                      style={{zIndex: 5,}}
+                      style={{ zIndex: 5 }}
                       onClick={e => {
                         EmployeeService.getEmployeeByIdForUserCreate(empId)
                           .then(response => {

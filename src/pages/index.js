@@ -4,8 +4,6 @@ export { default as ServerError } from './errors/ServerError';
 export { default as CustomerList } from './customer/CustomerList';
 export { default as Receipts } from './history/Receipts';
 export { default as Record } from './history/Record';
-export { default as ProductList } from './product/ProductList';
-export { default as AddItem } from './product/AddItem';
 export { default as Setting } from './setting/Setting';
 
 // Home
@@ -23,3 +21,10 @@ export { default as AddPermission } from './users/AddPermission';
 export { default as BranchLists } from './branch/BranchLists';
 export { default as AddBranch } from './branch/AddBranch';
 export { default as GetBranch } from './branch/GetBranch';
+
+// Ingredient
+export { default as IngrRequestPage } from './ingredient/IngrRequestPage';
+
+// Product
+export { default as ProductList } from './product/ProductList';
+export { default as AddProduct } from './product/AddProduct';

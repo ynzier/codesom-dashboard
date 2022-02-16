@@ -4,7 +4,7 @@ import { Routes } from 'routes';
 
 // Components
 import { Sidebar, Navbar, Preloader } from 'components';
-
+import './index.css';
 import AuthService from 'services/auth.service';
 
 // Error Pages
@@ -123,6 +123,21 @@ const App = () => {
           exact
           path={Routes.GetBranch.path}
           page={Page.GetBranch}
+        />
+        <RouteWithSidebar
+          exact
+          path={Routes.IngrRequestPage.path}
+          page={Page.IngrRequestPage}
+        />
+        <RouteWithSidebar
+          exact
+          path={Routes.ProductList.path}
+          page={Page.ProductList}
+        />
+        <RouteWithSidebar
+          exact
+          path={Routes.AddProduct.path}
+          page={Page.AddProduct}
         />
         <Redirect to={Routes.NotFound.path} />
       </Switch>

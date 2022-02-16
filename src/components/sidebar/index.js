@@ -83,8 +83,18 @@ const Sidebar = props => {
                 <Link to={Routes.BranchLists.path} />
               </MenuItem>
             </SubMenu>
+            <SubMenu title="สินค้า" icon={<FaWarehouse color="#9D7463" />}>
+              <MenuItem>
+                ข้อมูลสินค้า
+                <Link to={Routes.ProductList.path} />
+              </MenuItem>
+              <MenuItem>ข้อมูลโปรโมชั่น</MenuItem>
+            </SubMenu>
             <SubMenu title="วัตถุดิบ" icon={<FaWarehouse color="#9D7463" />}>
-              <MenuItem>คำร้องขอวัตถุดิบ</MenuItem>
+              <MenuItem>
+                คำร้องขอวัตถุดิบ
+                <Link to={Routes.IngrRequestPage.path} />
+              </MenuItem>
               <MenuItem>ประวัติการเบิกวัตถุดิบ</MenuItem>
             </SubMenu>
             <SubMenu
