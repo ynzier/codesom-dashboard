@@ -43,6 +43,9 @@
 @import 'volt/components';
 
 // write your custom styles here!
+.form-control::-webkit-input-placeholder {
+  color: $input-placeholder-color;
+}
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

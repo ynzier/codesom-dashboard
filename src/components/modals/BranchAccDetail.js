@@ -34,9 +34,7 @@ const BranchAccDetail = props => {
     });
   }, []);
   useEffect(async () => {
-    let mounted = true;
-    if (props.brId && mounted) {
-      console.log(props.brId);
+    if (props.brId) {
       await BranchesService.getBranchById(props.brId)
         .then(res => {
           if (res.data) {
@@ -56,7 +54,6 @@ const BranchAccDetail = props => {
       await BranchesService.checkExistAcc(props.brId)
         .then(res => {
           if (res) {
-            console.log(res.data.status);
             setAccStatus(res.data.status);
             setBrUsername('cs' + props.brId);
           }
@@ -139,10 +136,7 @@ const BranchAccDetail = props => {
         </Modal.Header>
         <Modal.Body className="px-4 mt-3">
           <Form onSubmit={handleSubmit}>
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextPassword">
+            <Form.Group as={Row} className="mb-3" controlId="branchName">
               <Form.Label column sm="3">
                 ชื่อสาขา
               </Form.Label>
@@ -162,10 +156,7 @@ const BranchAccDetail = props => {
                 </p>
               </div>
             )}
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextPassword">
+            <Form.Group as={Row} className="mb-3" controlId="branchUsername">
               <Form.Label column sm="3">
                 ชื่อผู้ใช้
               </Form.Label>
@@ -179,10 +170,7 @@ const BranchAccDetail = props => {
               </Col>
             </Form.Group>
             {(props.editable || accStatus == 'valid') && (
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="formPlaintextPassword">
+              <Form.Group as={Row} className="mb-3" controlId="branchPassword">
                 <Form.Label column sm="3">
                   รหัสผ่าน
                 </Form.Label>
@@ -200,7 +188,7 @@ const BranchAccDetail = props => {
               <Form.Group
                 as={Row}
                 className="mb-3"
-                controlId="formPlaintextPassword">
+                controlId="branchConfirmPassword">
                 <Form.Label column sm="3">
                   ยืนยันรหัสผ่าน
                 </Form.Label>

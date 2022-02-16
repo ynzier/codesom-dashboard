@@ -1,24 +1,16 @@
 import http from 'http-common';
 
+const prefix = '/product';
 const createProduct = data => {
-  return http.post('/product/createProduct', data, {
+  return http.post(prefix + '/createProduct', data, {
     headers: {
       'Content-type': 'application/json',
-    },
-  });
-};
-
-const remove = id => {
-  return http.delete('/product/deleteProduct/' + id, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
     },
   });
 };
 
 const getAllProducts = () => {
-  return http.get('/product/getAllProducts', {
+  return http.get(prefix + '/getAllProducts', {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
@@ -27,7 +19,7 @@ const getAllProducts = () => {
 };
 
 const getAllProductTypes = () => {
-  return http.get('/product/getAllProductTypes', {
+  return http.get(prefix + '/getAllProductTypes', {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
@@ -35,69 +27,48 @@ const getAllProductTypes = () => {
   });
 };
 const createType = data => {
-  return http.post('/product/createType', data, {
+  return http.post(
+    prefix + '/createType',
+    { typeName: data },
+    {
+      headers: {
+        'Content-type': 'application/json',
+        // 'x-access-token': user.accessToken,
+      },
+    },
+  );
+};
+const disableType = typeId => {
+  return http.delete(prefix + '/disableType', {
     headers: {
       'Content-type': 'application/json',
       // 'x-access-token': user.accessToken,
     },
+    params: { typeId: typeId },
   });
 };
-const deleteProductType = id => {
-  return http.delete('/product/deleteProductType/' + id, {
+const getProductById = prId => {
+  return http.get(prefix + '/getProductById', {
     headers: {
       'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
     },
+    params: { prId: prId },
   });
 };
-const addBrand = data => {
-  return http.post('/product/addBrand', data, {
+const updateProduct = (prId, data) => {
+  return http.put(prefix + '/updateProduct', data, {
     headers: {
       'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
     },
+    params: { prId: prId },
   });
 };
-const getBrand = () => {
-  return http.get('/product/getAllBrands', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-const deleteBrand = id => {
-  return http.delete('/product/deleteBrand/' + id, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-
-const getOne = id => {
-  return http.get(`/product/getOne/${id}`, {
-    headers: {
-      'Content-type': 'application/json',
-
-      // 'x-access-token': user.accessToken,
-    },
-  });
-};
-const update = (id, data) => {
-  return http.put(`/product/update/${id}`, data);
-};
-// eslint-disable-next-line
 export default {
   createProduct,
-  remove,
+  createType,
   getAllProducts,
   getAllProductTypes,
-  getBrand,
-  addBrand,
-  deleteBrand,
-  getOne,
-  update,
-  createType,
-  deleteProductType,
+  getProductById,
+  disableType,
+  updateProduct,
 };

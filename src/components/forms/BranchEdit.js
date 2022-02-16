@@ -298,22 +298,18 @@ const BranchEdit = props => {
 
   useEffect(async () => {
     document.title = 'ข้อมูลสาขา';
-    let mounted = true;
     await BranchesService.getBranchById(props.brId)
       .then(res => {
-        if (mounted) {
-          if (res.data) {
-            const getData = res.data;
-            setBrName(getData.brName);
-            setBrAddr(getData.brAddr);
-            setBrTel(getData.brTel);
-          }
+        if (res.data) {
+          const getData = res.data;
+          setBrName(getData.brName);
+          setBrAddr(getData.brAddr);
+          setBrTel(getData.brTel);
         }
       })
       .catch(e => {
         console.log(e);
       });
-    return () => (mounted = false);
   }, [props.brId]);
 
   const checkInput = e => {

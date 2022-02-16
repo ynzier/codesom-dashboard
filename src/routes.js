@@ -32,4 +32,5 @@ export const Routes = {
   // Products
   ProductList: { path: '/dashboard/product' },
   AddProduct: { path: '/dashboard/product/create' },
+  GetProduct: { path: '/dashboard/product/getProduct/:prId' },
 };

@@ -7,35 +7,55 @@ import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType } from 'components';
 
-var getData = [];
-
-const ProductCreate = () => {
+const ProductEdit = ({ prId }) => {
+  const [editable, setEditable] = useState(false);
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
   const [productType, setProductType] = useState('');
   const [productDetail, setProductDetail] = useState('');
-  const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
+  const [base64TextString, setBase64TextString] = useState();
   const blockInvalidChar = e =>
     ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    document.title = 'เพิ่มสินค้า';
-    fetchProductType();
-  }, []);
+  useEffect(async () => {
+    document.title = 'ข้อมูลสินค้า';
+    if (prId) {
+      await fetchProductData(prId);
+      await fetchProductType();
+    }
+  }, [prId]);
 
   const handleSubmit = e => {
     e.preventDefault();
     sendData();
   };
 
-  const fetchProductType = () => {
-    ProductService.getAllProductTypes()
+  const fetchProductData = async prId => {
+    await ProductService.getProductById(prId)
       .then(res => {
-        getData = res.data;
+        if (res.data) {
+          var getData = res.data;
+          setProductName(getData.prName);
+          setProductPrice(getData.prPrice);
+          setProductType(getData.prType);
+          setProductDetail(getData.prDetail);
+          setImgId(getData.prImg);
+          setBase64TextString(getData.image.imgObj);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  const fetchProductType = async () => {
+    await ProductService.getAllProductTypes()
+      .then(res => {
+        var getData = res.data;
         setTypeData(getData);
       })
       .catch(error => {
@@ -78,16 +98,9 @@ const ProductCreate = () => {
       prType: productType,
       prDetail: productDetail,
     };
-    ProductService.createProduct(data)
+    ProductService.updateProduct(prId, data)
       .then(res => {
         generate('success', res.data.message);
-        setProductName();
-        setProductPrice(0);
-        setProductType();
-        setProductDetail();
-        setBase64TextString();
-        setLoading(false);
-        setImgId();
       })
       .catch(error => {
         const resMessage =
@@ -124,7 +137,6 @@ const ProductCreate = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        // Make a fileInfo Object
         let fileInfo = {
           name: file.name,
           type: file.type,
@@ -137,12 +149,11 @@ const ProductCreate = () => {
     }
   };
   useEffect(async () => {
-    if (base64TextString) {
+    if (editable) {
       await FileService.upload(base64TextString)
         .then(res => {
           if (res && res.data) {
             setImgId(res.data.imgId);
-            console.log(res.data.imgId);
           }
         })
         .catch(error => {
@@ -178,6 +189,7 @@ const ProductCreate = () => {
               <Col md={6} className="mb-3">
                 <Upload
                   name="productImg"
+                  disabled={!editable}
                   listType="picture-card"
                   className="avatar-uploader"
                   showUploadList={false}
@@ -205,6 +217,7 @@ const ProductCreate = () => {
                       <Form.Label>ชื่อสินค้า</Form.Label>
                       <Form.Control
                         required
+                        disabled={!editable}
                         type="text"
                         placeholder="ชื่อสินค้า"
                         name="productName"
@@ -220,6 +233,7 @@ const ProductCreate = () => {
                       <Form.Label>ราคาทุน</Form.Label>
                       <Form.Control
                         required
+                        disabled={!editable}
                         type="number"
                         value={productPrice}
                         name="productPrice"
@@ -233,14 +247,17 @@ const ProductCreate = () => {
                     <Form.Group id="modelID">
                       <Form.Label>
                         ชนิดสินค้า{' '}
-                        <ManageProductType
-                          typeData={typeData}
-                          fetchProductType={fetchProductType}
-                          Alert={generate}
-                        />
+                        {editable && (
+                          <ManageProductType
+                            typeData={typeData}
+                            fetchProductType={fetchProductType}
+                            Alert={generate}
+                          />
+                        )}
                       </Form.Label>
                       <Form.Select
                         required
+                        disabled={!editable}
                         name="productType"
                         value={productType}
                         onChange={e => setProductType(e.target.value)}>
@@ -261,6 +278,7 @@ const ProductCreate = () => {
                 <Form.Group id="ItemNo">
                   <Form.Label>คำอธิบายของสินค้า</Form.Label>
                   <Form.Control
+                    disabled={!editable}
                     type="text"
                     as="textarea"
                     rows={4}
@@ -274,24 +292,76 @@ const ProductCreate = () => {
               </Col>
             </Row>
             <Row>
-              <Col md={{ span: 3, offset: 6 }}>
+              <Col md={{ span: 3 }}>
                 <div>
                   <Button
-                    variant="outline-danger"
+                    variant="outline-codesom"
                     onClick={() => history.back()}
                     style={{ width: '100%' }}>
                     ย้อนกลับ
                   </Button>
                 </div>
               </Col>
+              <Col md={{ span: 3, offset: 3 }}>
+                <div>
+                  {!editable ? (
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => {}}
+                      style={{
+                        borderRadius: '10px',
+                        width: '100%',
+                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                      }}>
+                      ลบ
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => {
+                        fetchProductData(prId);
+                        setEditable(!editable);
+                      }}
+                      style={{
+                        borderRadius: '10px',
+                        width: '100%',
+                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                        color: 'white',
+                      }}>
+                      ยกเลิก
+                    </Button>
+                  )}
+                </div>
+              </Col>
               <Col md={3}>
                 <div>
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{ width: '100%', color: 'white' }}>
-                    ยืนยัน
-                  </Button>
+                  {!editable ? (
+                    <Button
+                      variant="tertiary"
+                      onClick={() => {
+                        setEditable(!editable);
+                      }}
+                      style={{
+                        borderRadius: '10px',
+                        width: '100%',
+                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                        color: 'white',
+                      }}>
+                      แก้ไข
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSubmit}
+                      style={{
+                        borderRadius: '10px',
+                        width: '100%',
+                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                        color: 'white',
+                      }}>
+                      บันทึกข้อมูล
+                    </Button>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -302,4 +372,4 @@ const ProductCreate = () => {
   );
 };
 
-export default ProductCreate;
+export default ProductEdit;

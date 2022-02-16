@@ -139,6 +139,11 @@ const App = () => {
           path={Routes.AddProduct.path}
           page={Page.AddProduct}
         />
+        <RouteWithSidebar
+          exact
+          path={Routes.GetProduct.path}
+          page={Page.GetProduct}
+        />
         <Redirect to={Routes.NotFound.path} />
       </Switch>
     </>

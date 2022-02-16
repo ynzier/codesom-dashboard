@@ -25,3 +25,5 @@ export { default as IngrReqList } from './lists/IngrReqList';
 
 // Product
 export { default as ProductCreate } from './forms/ProductCreate';
+export { default as ProductEdit } from './forms/ProductEdit';
+export { default as ManageProductType } from './offcanvas/ManageProductType';

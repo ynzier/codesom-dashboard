@@ -28,3 +28,4 @@ export { default as IngrRequestPage } from './ingredient/IngrRequestPage';
 // Product
 export { default as ProductList } from './product/ProductList';
 export { default as AddProduct } from './product/AddProduct';
+export { default as GetProduct } from './product/GetProduct';
