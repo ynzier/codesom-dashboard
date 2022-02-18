@@ -19,7 +19,7 @@ import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
 
 import EmployeeService from 'services/employee.service';
-const EmployeeList = props => {
+const EmployeeList = () => {
   let history = useHistory();
   const [records, setRecord] = useState([]);
   const [deleteData, setDeleteData] = useState([]);

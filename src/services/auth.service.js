@@ -1,5 +1,4 @@
 import http from 'http-common';
-const user = JSON.parse(localStorage.getItem('user'));
 
 const signinDashboard = (userName, password) => {
   return http
