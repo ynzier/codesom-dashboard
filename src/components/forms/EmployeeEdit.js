@@ -67,34 +67,35 @@ const EmployeeEdit = ({ generate, ...props }) => {
         generate('danger', resMessage);
       });
     if (empId) {
-      await EmployeeService.getEmpById(empId)
-        .then(res => {
-          const resData = res.data.resData[0];
-          if (mounted) {
-            console.log(resData);
-            setFirstName(resData.first_name);
-            setLastName(resData.last_name);
-            setBirthDate(moment(resData.birth_date).format('DD/MM/YYYY'));
-            setTel(resData.tel);
-            setAddress(resData.address);
-            setRoleId(resData.role_id);
-            setBranchId(resData.branch_id);
-            setSalary(resData.salary);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          generate('danger', resMessage);
-        });
+      fetchEmployeeData(empId);
     }
     return () => (mounted = false);
   }, [empId]);
 
+  const fetchEmployeeData = async empId => {
+    await EmployeeService.getEmpById(empId)
+      .then(res => {
+        const resData = res.data.resData[0];
+        console.log(resData);
+        setFirstName(resData.first_name);
+        setLastName(resData.last_name);
+        setBirthDate(moment(resData.birth_date).format('DD/MM/YYYY'));
+        setTel(resData.tel);
+        setAddress(resData.address);
+        setRoleId(resData.role_id);
+        setBranchId(resData.branch_id);
+        setSalary(resData.salary);
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        generate('danger', resMessage);
+      });
+  };
   const handleSubmit = e => {
     e.preventDefault();
     sendData();
@@ -111,7 +112,6 @@ const EmployeeEdit = ({ generate, ...props }) => {
       branchId: selectedBranchId.toString(),
       salary: salary,
     };
-    console.log(data);
     EmployeeService.updateEmp(empId, data)
       .then(response => {
         generate('success', response.data.message);
@@ -310,37 +310,61 @@ const EmployeeEdit = ({ generate, ...props }) => {
               </Col>
             </Row>
             <Row>
-              <Col sm={9} md={9} />
-              <Col sm={3} md={3}>
+              <Col md={{ span: 3 }}>
                 <div>
-                  {!editable ? (
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        setEditable(!editable);
-                      }}
-                      style={{
-                        borderRadius: '10px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      แก้ไข
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="tertiary"
-                      onClick={handleSubmit}
-                      style={{
-                        borderRadius: '10px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}>
-                      บันทึกข้อมูล
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline-codesom"
+                    onClick={() => history.back()}
+                    style={{ width: '100%' }}>
+                    ย้อนกลับ
+                  </Button>
                 </div>
+              </Col>
+              <Col sm={{ span: 3, offset: 3 }}>
+                {editable && (
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => {
+                      fetchEmployeeData(empId);
+                      setEditable(!editable);
+                    }}
+                    style={{
+                      borderRadius: '10px',
+                      width: '100%',
+                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    }}>
+                    ยกเลิก
+                  </Button>
+                )}
+              </Col>
+              <Col sm={3}>
+                {!editable ? (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setEditable(!editable);
+                    }}
+                    style={{
+                      borderRadius: '10px',
+                      width: '100%',
+                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                      color: 'white',
+                    }}>
+                    แก้ไข
+                  </Button>
+                ) : (
+                  <Button
+                    variant="tertiary"
+                    onClick={handleSubmit}
+                    style={{
+                      borderRadius: '10px',
+                      width: '100%',
+                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                      color: 'white',
+                    }}>
+                    บันทึกข้อมูล
+                  </Button>
+                )}
               </Col>
             </Row>
           </Form>

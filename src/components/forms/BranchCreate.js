@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button } from 'react-bootstrap';
-
+import FileService from 'services/file.service';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Upload } from 'antd';
 
 // services
 import BranchService from 'services/branches.service';
@@ -9,6 +11,8 @@ const BranchCreate = ({ generate }) => {
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [tel, setTel] = useState('');
+  const [base64TextString, setBase64TextString] = useState();
+  const [imgId, setImgId] = useState();
   const checkInput = e => {
     const onlyDigits = e.target.value.replace(/\D/g, '');
     setTel(onlyDigits);
@@ -24,6 +28,7 @@ const BranchCreate = ({ generate }) => {
       brName: brName,
       brAddr: brAddr,
       brTel: tel, //on start
+      brImg: imgId,
     };
     await BranchService.createNewBranch(data)
       .then(response => {
@@ -42,7 +47,64 @@ const BranchCreate = ({ generate }) => {
         generate('danger', resMessage);
       });
   };
+  const [loading, setLoading] = useState(false);
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+  const beforeUpload = file => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      generate('danger', 'อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      generate('danger', 'ขนาดรูปจะต้องน้อยกว่า 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
 
+  const handleFileChange = e => {
+    setLoading(true);
+    let file = e.file.originFileObj;
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Make a fileInfo Object
+        let fileInfo = {
+          name: file.name,
+          type: file.type,
+          size: Math.round(file.size / 1000) + ' kB',
+          base64: reader.result,
+          file: file,
+        };
+        setBase64TextString(fileInfo.base64);
+      };
+    }
+  };
+  useEffect(async () => {
+    if (base64TextString) {
+      await FileService.upload(base64TextString)
+        .then(res => {
+          if (res && res.data) {
+            setImgId(res.data.imgId);
+            console.log(res.data.imgId);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          generate('danger', resMessage);
+        });
+    }
+  }, [base64TextString]);
   return (
     <>
       <Card
@@ -55,6 +117,31 @@ const BranchCreate = ({ generate }) => {
         <Card.Body>
           <Form onSubmit={handleSubmit}>
             <h2 className="mb-4">เพิ่มสาขา</h2>
+            <Row className="mb-3">
+              <Col sm={{ span: 6, offset: 3 }}>
+                <Upload
+                  name="branchImg"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  customRequest={() => {}}
+                  beforeUpload={beforeUpload}
+                  onChange={handleFileChange}>
+                  {base64TextString ? (
+                    <img
+                      src={base64TextString}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  ) : (
+                    uploadButton
+                  )}
+                </Upload>
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <Col md={12} xl={12} className="mb-3">
@@ -113,40 +200,38 @@ const BranchCreate = ({ generate }) => {
             <Row className="mt-3">
               <Col sm={6} md={6} />
               <Col sm={3} md={3}>
-                <div>
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      height: '50px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
-                    }}>
-                    บันทึกข้อมูล
-                  </Button>
-                </div>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => {
+                    setBrName('');
+                    setTel('');
+                    setBrAddr('');
+                    setImgId('');
+                    setBase64TextString('');
+                    setLoading(false);
+                  }}
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    height: '50px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  }}>
+                  ล้างข้อมูล
+                </Button>
               </Col>
               <Col sm={3} md={3}>
-                <div>
-                  <Button
-                    variant="danger"
-                    onClick={() => {
-                      setBrName('');
-                      setTel('');
-                      setBrAddr('');
-                    }}
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      height: '50px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
-                    }}>
-                    ล้างข้อมูล
-                  </Button>
-                </div>
+                <Button
+                  variant="tertiary"
+                  type="submit"
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    height: '50px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    color: 'white',
+                  }}>
+                  บันทึกข้อมูล
+                </Button>
               </Col>
             </Row>
           </Form>

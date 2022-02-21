@@ -304,7 +304,6 @@ const ProductEdit = ({ generate, prId }) => {
                         borderRadius: '10px',
                         width: '100%',
                         boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
                       }}>
                       ยกเลิก
                     </Button>

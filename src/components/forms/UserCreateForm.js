@@ -198,40 +198,35 @@ const UserCreateForm = ({ generate }) => {
             <Row>
               <Col sm={6} md={6} />
               <Col sm={3} md={3}>
-                <div>
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
-                    }}>
-                    บันทึกข้อมูล
-                  </Button>
-                </div>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => {
+                    setEmpId('');
+                    setValidEmpId('');
+                    setFirstName('');
+                    setLastName('');
+                    form.reset();
+                  }}
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  }}>
+                  ล้างข้อมูล
+                </Button>
               </Col>
               <Col sm={3} md={3}>
-                <div>
-                  <Button
-                    variant="danger"
-                    onClick={() => {
-                      setEmpId('');
-                      setValidEmpId('');
-                      setFirstName('');
-                      setLastName('');
-                      form.reset();
-                    }}
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
-                    }}>
-                    ล้างข้อมูล
-                  </Button>
-                </div>
+                <Button
+                  variant="tertiary"
+                  type="submit"
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    color: 'white',
+                  }}>
+                  บันทึกข้อมูล
+                </Button>
               </Col>
             </Row>
           </Form>

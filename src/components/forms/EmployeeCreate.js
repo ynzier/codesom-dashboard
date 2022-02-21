@@ -279,21 +279,35 @@ const CreateEmployeeForm = ({ generate }) => {
               </Col>
             </Row>
             <Row>
-              <Col sm={9} md={9} />
-              <Col sm={3} md={3}>
-                <div>
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{
-                      borderRadius: '36px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
-                    }}>
-                    บันทึกข้อมูล
-                  </Button>
-                </div>
+              <Col sm={6} />
+              <Col sm={3}>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => {
+                    form.reset();
+                    setBirthDate('');
+                    setTel('');
+                  }}
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  }}>
+                  ล้างข้อมูล
+                </Button>
+              </Col>
+              <Col sm={3}>
+                <Button
+                  variant="tertiary"
+                  type="submit"
+                  style={{
+                    borderRadius: '10px',
+                    width: '100%',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    color: 'white',
+                  }}>
+                  บันทึกข้อมูล
+                </Button>
               </Col>
             </Row>
           </Form>
