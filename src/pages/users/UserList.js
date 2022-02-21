@@ -14,11 +14,10 @@ import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table } from 'antd';
 
-import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
 
 import UserService from 'services/users.service';
-const UserList = props => {
+const UserList = ({ generate, ...props }) => {
   const [records, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const search = value => {
@@ -65,27 +64,6 @@ const UserList = props => {
         console.log(e);
       });
     return () => (mounted = false);
-  }, []);
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'พบข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
   }, []);
 
   // const deleteRecord = () => {
@@ -176,12 +154,6 @@ const UserList = props => {
   // };
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb

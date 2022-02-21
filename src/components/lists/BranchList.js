@@ -5,7 +5,7 @@ import BranchesService from 'services/branches.service';
 import { useHistory } from 'react-router-dom';
 
 var getBranchData = [];
-const BranchList = props => {
+const BranchList = ({ generate }) => {
   const [record, setRecord] = useState([]);
   const [loading, setLoading] = useState(true);
   let history = useHistory();
@@ -21,8 +21,14 @@ const BranchList = props => {
           setLoading(false);
         }
       })
-      .catch(e => {
-        console.log(e);
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        generate('danger', resMessage);
       });
     return () => (mounted = false);
   }, []);

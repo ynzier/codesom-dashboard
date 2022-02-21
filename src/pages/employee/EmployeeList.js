@@ -15,11 +15,10 @@ import { Link, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table } from 'antd';
 
-import { AlertList } from 'react-bs-notifier';
 import 'antd/dist/antd.min.css';
 
 import EmployeeService from 'services/employee.service';
-const EmployeeList = () => {
+const EmployeeList = ({ generate }) => {
   let history = useHistory();
   const [records, setRecord] = useState([]);
   const [deleteData, setDeleteData] = useState([]);
@@ -36,7 +35,6 @@ const EmployeeList = () => {
   };
 
   const openRecord = empId => {
-    console.log(empId);
     history.push('/dashboard/employee/getEmployee/' + empId);
   };
   const refreshList = () => {
@@ -61,35 +59,17 @@ const EmployeeList = () => {
     EmployeeService.getEmployeeList()
       .then(res => {
         if (mounted) {
-          console.log(res.data);
           setRecord(res.data);
         }
       })
       .catch(e => {
-        console.log(e);
+        const resMessage =
+          (e.response && e.response.data && e.response.data.message) ||
+          e.message ||
+          e.toString();
+        generate('danger', resMessage);
       });
     return () => (mounted = false);
-  }, []);
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'พบข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
   }, []);
 
   const deleteRecord = () => {
@@ -196,12 +176,6 @@ const EmployeeList = () => {
   };
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb

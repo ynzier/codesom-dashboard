@@ -5,7 +5,7 @@ import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { EmployeeEdit } from 'components';
 import { Routes } from 'routes';
 import { Link } from 'react-router-dom';
-const GetEmployee = props => {
+const GetEmployee = ({ generate, ...props }) => {
   const [empId, setEmpId] = useState();
   useEffect(() => {
     document.title = 'ข้อมูลพนักงาน';
@@ -32,7 +32,7 @@ const GetEmployee = props => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <EmployeeEdit empId={empId} />
+          <EmployeeEdit generate={generate} empId={empId} />
         </Col>
       </Row>
     </>

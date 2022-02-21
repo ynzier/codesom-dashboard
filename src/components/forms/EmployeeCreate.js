@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import Datetime from 'react-datetime';
-import { AlertList } from 'react-bs-notifier';
 import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
@@ -11,7 +10,7 @@ import EmployeeService from 'services/employee.service';
 var getRoleData = [];
 var getBranchData = [];
 
-const CreateEmployeeForm = () => {
+const CreateEmployeeForm = ({ generate }) => {
   const initialRecordState = {
     firstName: '',
     lastName: '',
@@ -40,27 +39,6 @@ const CreateEmployeeForm = () => {
     });
   };
 
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
   useEffect(() => {
     let mounted = true;
     RolesService.getAllRoles()
@@ -117,7 +95,6 @@ const CreateEmployeeForm = () => {
       salary: salary,
       recruitDate: moment().format('YYYY-MM-DD'),
     };
-    console.log(data);
     EmployeeService.createNewEmployee(data)
       .then(response => {
         generate('success', response.data.message);
@@ -138,12 +115,6 @@ const CreateEmployeeForm = () => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

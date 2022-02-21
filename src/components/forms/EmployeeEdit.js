@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import Datetime from 'react-datetime';
-import { AlertList } from 'react-bs-notifier';
 import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
@@ -11,7 +10,7 @@ import EmployeeService from 'services/employee.service';
 var getRoleData = [];
 var getBranchData = [];
 
-const EmployeeEdit = props => {
+const EmployeeEdit = ({ generate, ...props }) => {
   const [editable, setEditable] = useState(false);
   const [empId, setEmpId] = useState('');
 
@@ -32,27 +31,6 @@ const EmployeeEdit = props => {
     setTel(onlyDigits);
   };
 
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
   useEffect(async () => {
     let mounted = true;
     setEmpId(props.empId);
@@ -117,8 +95,6 @@ const EmployeeEdit = props => {
     return () => (mounted = false);
   }, [empId]);
 
-  const form = document.forms[0];
-
   const handleSubmit = e => {
     e.preventDefault();
     sendData();
@@ -154,12 +130,6 @@ const EmployeeEdit = props => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

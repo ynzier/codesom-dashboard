@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
+import { Col, Row, Card, Form, Button } from 'react-bootstrap';
 
-import { AlertList } from 'react-bs-notifier';
 
 // services
 import BranchService from 'services/branches.service';
 
-const BranchCreate = () => {
+const BranchCreate = ({ generate }) => {
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [tel, setTel] = useState('');
@@ -14,36 +13,6 @@ const BranchCreate = () => {
     const onlyDigits = e.target.value.replace(/\D/g, '');
     setTel(onlyDigits);
   };
-
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger'
-        ? 'ข้อผิดพลาด'
-        : type === 'success'
-        ? 'สำเร็จ'
-        : type === 'warning'
-        ? 'คำเตือน'
-        : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
-
-  const form = document.forms[0];
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -56,7 +25,6 @@ const BranchCreate = () => {
       brAddr: brAddr,
       brTel: tel, //on start
     };
-    console.log(data);
     await BranchService.createNewBranch(data)
       .then(response => {
         setTel('');
@@ -77,12 +45,6 @@ const BranchCreate = () => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

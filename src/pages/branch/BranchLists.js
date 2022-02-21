@@ -7,7 +7,7 @@ import { FaPlus } from 'react-icons/fa';
 import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchList } from 'components';
-const BranchLists = props => {
+const BranchLists = ({ generate }) => {
   useEffect(() => {
     document.title = 'จัดการข้อมูลสาขา';
   }, []);
@@ -65,7 +65,7 @@ const BranchLists = props => {
               </div>
             </Button>
           </div>
-          <BranchList />
+          <BranchList generate={generate} />
         </Card.Body>
       </Card>
     </>

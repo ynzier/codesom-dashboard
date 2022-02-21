@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
+import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchEdit } from 'components';
-const GetBranch = props => {
+const GetBranch = ({ generate, ...props }) => {
   const [brId, setbrId] = useState();
   useEffect(() => {
     document.title = 'ข้อมูลสาขา';
@@ -34,7 +34,7 @@ const GetBranch = props => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={10}>
-          <BranchEdit brId={brId} />
+          <BranchEdit generate={generate} brId={brId} />
         </Col>
       </Row>
     </>

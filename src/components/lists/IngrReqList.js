@@ -12,7 +12,6 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 
 import { IoIosTrash } from 'react-icons/io';
-import { AlertList } from 'react-bs-notifier';
 
 // services
 import BranchesService from 'services/branches.service';
@@ -20,12 +19,12 @@ import BranchesService from 'services/branches.service';
 var getBranchData = [];
 const { Option } = Select;
 
-const AddReqList = props => {
+const AddReqList = ({ generate, props }) => {
   const onFinish = values => {
     if (props.selectedBranchId) {
       props.setReqData(values.product);
     } else {
-      props.generate('danger', 'เลือกสาขาก่อนทำการยืนยัน');
+      generate('danger', 'เลือกสาขาก่อนทำการยืนยัน');
     }
   };
 
@@ -129,37 +128,9 @@ const AddReqList = props => {
   );
 };
 
-const IngrReqList = props => {
+const IngrReqList = ({ generate, ...props }) => {
   const [branchData, setbranchData] = useState([]);
   const [selectedBranchId, setBranchId] = useState('');
-
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger'
-        ? 'ข้อผิดพลาด'
-        : type === 'success'
-        ? 'สำเร็จ'
-        : type === 'warning'
-        ? 'คำเตือน'
-        : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -193,7 +164,7 @@ const IngrReqList = props => {
       dataIndex: 'reqNo',
       align: 'center',
       width: 300,
-      defaultValue:'none'
+      defaultValue: 'none',
     },
     {
       title: 'รายการสินค้า',
@@ -217,12 +188,6 @@ const IngrReqList = props => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

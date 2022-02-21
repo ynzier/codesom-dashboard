@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 
+import { AlertList } from 'react-bs-notifier';
 // Components
 import { Sidebar, Navbar, Preloader } from 'components';
 import './index.css';
@@ -20,7 +21,27 @@ const App = () => {
       setCurrentUser(user);
     }
   }, []);
-
+  const [alerts, setAlerts] = React.useState([]);
+  const generate = React.useCallback((type, message) => {
+    const headline =
+      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
+    setAlerts(alerts => [
+      ...alerts,
+      {
+        id: new Date().getTime(),
+        type: type,
+        headline: `${headline}!`,
+        message: message,
+      },
+    ]);
+  }, []);
+  const onDismissed = React.useCallback(alert => {
+    setAlerts(alerts => {
+      const idx = alerts.indexOf(alert);
+      if (idx < 0) return alerts;
+      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
+    });
+  }, []);
   const RouteWithLoader = ({ page: Component, ...rest }) => {
     const [loaded, setLoaded] = useState(false);
 
@@ -35,7 +56,14 @@ const App = () => {
         render={props => (
           <>
             {currentUser && history.push('/dashboard')}
-            <Preloader show={loaded ? false : true} /> <Component {...props} />
+            <Preloader show={loaded ? false : true} />
+            <AlertList
+              position="top-right"
+              alerts={alerts}
+              onDismiss={onDismissed}
+              timeout={1500}
+            />
+            <Component generate={generate} {...props} />
           </>
         )}
       />
@@ -49,7 +77,6 @@ const App = () => {
           <>
             {!currentUser && history.push('/')}
             <Sidebar />
-
             <main
               className="content"
               style={{
@@ -57,7 +84,13 @@ const App = () => {
                 minHeight: '100vh',
               }}>
               <Navbar />
-              <Component {...props} />
+              <AlertList
+                position="top-right"
+                alerts={alerts}
+                onDismiss={onDismissed}
+                timeout={1500}
+              />
+              <Component generate={generate} {...props} />
             </main>
           </>
         )}

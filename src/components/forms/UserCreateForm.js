@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
 
-import { AlertList } from 'react-bs-notifier';
-
 // services
 import EmployeeService from 'services/employee.service';
 import UserService from 'services/users.service';
 
-const UserCreateForm = () => {
+const UserCreateForm = ({ generate }) => {
   const initialRecordState = {
     userName: '',
     password: '',
@@ -31,34 +29,6 @@ const UserCreateForm = () => {
       [name]: value,
     });
   };
-
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger'
-        ? 'ข้อผิดพลาด'
-        : type === 'success'
-        ? 'สำเร็จ'
-        : type === 'warning'
-        ? 'คำเตือน'
-        : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
 
   const form = document.forms[0];
 
@@ -96,12 +66,6 @@ const UserCreateForm = () => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

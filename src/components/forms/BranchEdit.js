@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button, Image } from 'react-bootstrap';
 
-import { AlertList } from 'react-bs-notifier';
-
 // services
 import BranchesService from 'services/branches.service';
 
 // Modal
 import { BranchAccDetail } from 'components';
 
-function BranchEditForm(props) {
+function BranchEditForm({ ...props }) {
   return (
     <Form>
       <h2 className="mb-4">ข้อมูลสาขา</h2>
@@ -289,7 +287,7 @@ function BranchEditForm(props) {
   );
 }
 
-const BranchEdit = props => {
+const BranchEdit = ({ generate, ...props }) => {
   const [editable, setEditable] = useState(false);
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
@@ -316,34 +314,6 @@ const BranchEdit = props => {
     const onlyDigits = e.target.value.replace(/\D/g, '');
     setBrTel(onlyDigits);
   };
-
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger'
-        ? 'ข้อผิดพลาด'
-        : type === 'success'
-        ? 'สำเร็จ'
-        : type === 'warning'
-        ? 'คำเตือน'
-        : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -374,12 +344,6 @@ const BranchEdit = props => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"

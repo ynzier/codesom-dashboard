@@ -19,7 +19,7 @@ import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import ProductService from 'services/product.service';
 
-const ProductList = () => {
+const ProductList = ({ generate }) => {
   let history = useHistory();
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
@@ -57,8 +57,14 @@ const ProductList = () => {
           setRecord(res.data);
         }
       })
-      .catch(e => {
-        console.log(e);
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        generate('danger', resMessage);
       });
     await ProductService.getAllProductTypes()
       .then(res => {
@@ -75,7 +81,7 @@ const ProductList = () => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        alert(resMessage);
+        generate('danger', resMessage);
       });
     return () => (mounted = false);
   }, []);

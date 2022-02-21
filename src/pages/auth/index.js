@@ -11,35 +11,13 @@ import {
   InputGroup,
   Image,
 } from 'react-bootstrap';
-import { AlertList } from 'react-bs-notifier';
 import Logo from 'assets/Codesom-Logo-x400.png';
 import AuthService from 'services/auth.service';
 import './index.css';
 
-const Login = props => {
+const Login = ({ generate, ...props }) => {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'พบข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
   useEffect(() => {
     document.title = 'Log In';
   }, []);
@@ -65,12 +43,6 @@ const Login = props => {
 
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Container className="d-flex container">
         <Row
           className="justify-content-center  align-items-center w-100"
@@ -89,7 +61,10 @@ const Login = props => {
           <Col
             xs={6}
             className="d-flex justify-content-center align-items-center"
-            style={{ minHeight: '100vh', backgroundColor: 'rgba(249, 220, 194, 0.5)' }}>
+            style={{
+              minHeight: '100vh',
+              backgroundColor: 'rgba(249, 220, 194, 0.5)',
+            }}>
             <div className="loginBox">
               <div className="text-center text-md-center mb-4 mt-md-3">
                 <h3 className="mb-0">เข้าสู่ระบบเพื่อใช้งาน</h3>

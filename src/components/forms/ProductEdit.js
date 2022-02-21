@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button } from 'react-bootstrap';
-import { AlertList } from 'react-bs-notifier';
 import ProductService from 'services/product.service';
 import FileService from 'services/file.service';
 import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType } from 'components';
 
-const ProductEdit = ({ prId }) => {
+const ProductEdit = ({ generate, prId }) => {
   const [editable, setEditable] = useState(false);
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
@@ -47,8 +46,14 @@ const ProductEdit = ({ prId }) => {
           setBase64TextString(getData.image.imgObj);
         }
       })
-      .catch(e => {
-        console.log(e);
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        generate('danger', resMessage);
       });
   };
 
@@ -69,27 +74,6 @@ const ProductEdit = ({ prId }) => {
       });
   };
 
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
   const sendData = () => {
     var data = {
       prName: productName,
@@ -169,12 +153,6 @@ const ProductEdit = ({ prId }) => {
   }, [base64TextString]);
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"
@@ -251,7 +229,7 @@ const ProductEdit = ({ prId }) => {
                           <ManageProductType
                             typeData={typeData}
                             fetchProductType={fetchProductType}
-                            Alert={generate}
+                            generate={generate}
                           />
                         )}
                       </Form.Label>

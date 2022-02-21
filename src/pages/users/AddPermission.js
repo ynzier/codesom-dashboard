@@ -6,7 +6,7 @@ import { UserCreateForm } from 'components';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 
-const AddPermission = () => {
+const AddPermission = ({ generate }) => {
   useEffect(() => {
     document.title = 'เพิ่มสิทธิ์ผู้ใช้งาน';
   }, []);
@@ -31,7 +31,7 @@ const AddPermission = () => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <UserCreateForm />
+          <UserCreateForm generate={generate} />
         </Col>
       </Row>
     </>

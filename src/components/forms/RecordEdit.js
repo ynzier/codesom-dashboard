@@ -13,7 +13,6 @@ import {
   Modal,
   Alert,
 } from 'react-bootstrap';
-// import CustomerDataService from 'services/customer.service';
 
 import ProductService from 'services/product.service';
 

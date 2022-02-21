@@ -3,7 +3,7 @@ import { AlertList } from 'react-bs-notifier';
 import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 
-const BranchAccDetail = props => {
+const BranchAccDetail = ({ generate, ...props }) => {
   const [brId, setBrId] = useState();
   const [authData, setAuthData] = useState();
   const [brName, setBrName] = useState('');
@@ -12,27 +12,7 @@ const BranchAccDetail = props => {
   const [brPassword, setBrPassword] = useState('');
   const [brConfirmPassword, setBrConfirmPassword] = useState('');
   const [accStatus, setAccStatus] = useState('');
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
+
   useEffect(async () => {
     if (props.brId) {
       await BranchesService.getBranchById(props.brId)
@@ -124,12 +104,6 @@ const BranchAccDetail = props => {
   };
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Modal {...props} onShow={() => {}}>
         <Modal.Header closeButton>
           <Modal.Title>ข้อมูลสำหรับ App User</Modal.Title>

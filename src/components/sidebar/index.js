@@ -33,9 +33,6 @@ const Sidebar = props => {
     root?.style.setProperty('--contentMargin', collapsed ? '80px' : '270px');
   }, [collapsed]);
 
-  const logOut = () => {
-    AuthService.logout();
-  };
   return (
     <>
       <ProSidebar

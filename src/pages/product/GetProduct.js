@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { ProductEdit } from 'components';
-const GetProduct = props => {
+const GetProduct = ({ generate, ...props }) => {
   const [prId, setPrId] = useState();
   useEffect(() => {
     document.title = 'ข้อมูลสินค้า';
@@ -35,7 +35,7 @@ const GetProduct = props => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <ProductEdit prId={prId} />
+          <ProductEdit generate={generate} prId={prId} />
         </Col>
       </Row>
     </>

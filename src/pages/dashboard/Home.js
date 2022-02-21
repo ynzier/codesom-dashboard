@@ -4,7 +4,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Row, Card, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 
-const Home = props => {
+const Home = ({ generate }) => {
   useEffect(() => {
     document.title = 'Admin Dashboard / ข้อมูลผู้ดูแล';
   }, []);

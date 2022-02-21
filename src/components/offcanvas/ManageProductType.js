@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import ProductService from 'services/product.service';
 import { Col, Form, Button, Offcanvas, InputGroup } from 'react-bootstrap';
 import { Table } from 'antd';
-const ManageProductType = ({ fetchProductType, typeData, Alert, ...props }) => {
+const ManageProductType = ({
+  generate,
+  fetchProductType,
+  typeData,
+  ...props
+}) => {
   const [show, setShow] = useState(false);
   const [newType, setNewType] = useState();
 
@@ -27,7 +32,7 @@ const ManageProductType = ({ fetchProductType, typeData, Alert, ...props }) => {
                 ProductService.disableType(record.typeId)
                   .then(response => {
                     fetchProductType();
-                    Alert('success', response.data.message);
+                    generate('success', response.data.message);
                   })
                   .catch(error => {
                     const resMessage =
@@ -36,7 +41,7 @@ const ManageProductType = ({ fetchProductType, typeData, Alert, ...props }) => {
                         error.response.data.message) ||
                       error.message ||
                       error.toString();
-                    Alert('danger', resMessage);
+                    generate('danger', resMessage);
                   });
               }}>
               <i className="fas fa-trash action"></i>
@@ -73,7 +78,7 @@ const ManageProductType = ({ fetchProductType, typeData, Alert, ...props }) => {
                     ProductService.createType(newType)
                       .then(response => {
                         fetchProductType();
-                        Alert('success', response.data.message);
+                        generate('success', response.data.message);
                         e.disabled = true;
                       })
                       .catch(error => {
@@ -83,7 +88,7 @@ const ManageProductType = ({ fetchProductType, typeData, Alert, ...props }) => {
                             error.response.data.message) ||
                           error.message ||
                           error.toString();
-                        Alert('danger', resMessage);
+                          generate('danger', resMessage);
                       });
                   }}>
                   เพิ่ม

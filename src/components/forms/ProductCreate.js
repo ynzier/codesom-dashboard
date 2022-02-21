@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, Form, Button } from 'react-bootstrap';
-import { AlertList } from 'react-bs-notifier';
 import ProductService from 'services/product.service';
 import FileService from 'services/file.service';
 import { Upload } from 'antd';
@@ -9,7 +8,7 @@ import { ManageProductType } from 'components';
 
 var getData = [];
 
-const ProductCreate = () => {
+const ProductCreate = ({ generate }) => {
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
@@ -49,27 +48,6 @@ const ProductCreate = () => {
       });
   };
 
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
   const sendData = () => {
     var data = {
       prName: productName,
@@ -158,12 +136,6 @@ const ProductCreate = () => {
   }, [base64TextString]);
   return (
     <>
-      <AlertList
-        position="top-right"
-        alerts={alerts}
-        onDismiss={onDismissed}
-        timeout={1500}
-      />
       <Card
         border="light"
         className="bg-white px-6 py-4"
@@ -236,7 +208,7 @@ const ProductCreate = () => {
                         <ManageProductType
                           typeData={typeData}
                           fetchProductType={fetchProductType}
-                          Alert={generate}
+                          generate={generate}
                         />
                       </Form.Label>
                       <Form.Select

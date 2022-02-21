@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { ImPlus } from 'react-icons/im';
-import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
+import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchCreate } from 'components';
-const AddBranch = props => {
+const AddBranch = ({ generate }) => {
   useEffect(() => {
     document.title = 'เพิ่มข้อมูลสาขา';
   }, []);
@@ -33,7 +32,7 @@ const AddBranch = props => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <BranchCreate />
+          <BranchCreate generate={generate} />
         </Col>
       </Row>
     </>
