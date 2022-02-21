@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Row, Col, Breadcrumb, Button } from 'react-bootstrap';
+import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { IngrReqList } from 'components';
-const IngrRequestPage = () => {
+const IngrRequestPage = ({ generate }) => {
   const [selectedBranchId, setBranchId] = useState('');
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
@@ -45,6 +45,7 @@ const IngrRequestPage = () => {
             setBranchId={setBranchId}
             reqData={reqData}
             setReqData={setReqData}
+            generate={generate}
           />
         </Col>
       </Row>

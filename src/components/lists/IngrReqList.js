@@ -19,7 +19,7 @@ import BranchesService from 'services/branches.service';
 var getBranchData = [];
 const { Option } = Select;
 
-const AddReqList = ({ generate, props }) => {
+const AddReqList = ({ generate, ...props }) => {
   const onFinish = values => {
     if (props.selectedBranchId) {
       props.setReqData(values.product);
