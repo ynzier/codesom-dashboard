@@ -150,3 +150,8 @@
   width: 100%;
   min-height: 176px;
 }
+
+.react-switch {
+  vertical-align: middle;
+  margin-left: 4px;
+}

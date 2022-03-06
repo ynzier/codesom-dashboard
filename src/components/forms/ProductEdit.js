@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, Card, Form, Button } from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import ProductService from 'services/product.service';
 import FileService from 'services/file.service';
 import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { ManageProductType } from 'components';
+import { ManageProductType, ProductBranchSetting } from 'components';
+import Switch from 'react-switch';
 
 const ProductEdit = ({ generate, prId }) => {
   const [editable, setEditable] = useState(false);
@@ -13,6 +14,7 @@ const ProductEdit = ({ generate, prId }) => {
   const [productPrice, setProductPrice] = useState(0);
   const [productType, setProductType] = useState('');
   const [productDetail, setProductDetail] = useState('');
+  const [productStatus, setProductStatus] = useState('');
   const [imgId, setImgId] = useState();
   const [base64TextString, setBase64TextString] = useState();
   const blockInvalidChar = e =>
@@ -44,6 +46,7 @@ const ProductEdit = ({ generate, prId }) => {
           setProductDetail(getData.prDetail);
           setImgId(getData.prImg);
           setBase64TextString(getData.image.imgObj);
+          setProductStatus(getData.prStatus);
         }
       })
       .catch(error => {
@@ -81,6 +84,7 @@ const ProductEdit = ({ generate, prId }) => {
       prImg: imgId,
       prType: productType,
       prDetail: productDetail,
+      prStatus: productStatus,
     };
     ProductService.updateProduct(prId, data)
       .then(res => {
@@ -249,10 +253,77 @@ const ProductEdit = ({ generate, prId }) => {
                     </Form.Group>
                   </Col>
                 </Row>
+                <Row>
+                  <Col md={6} className="mb-3">
+                    <Form.Group id="modelID">
+                      <Form.Label>รหัสเมนู</Form.Label>
+                      <Form.Control
+                        required
+                        disabled
+                        type="number"
+                        value={prId}
+                        name="productId"
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6} className="mb-3" style={{ alignItems: 'center' }}>
+                    <Form.Label>สถานะ</Form.Label>
+                    <InputGroup>
+                      <Switch
+                        disabled={!editable}
+                        onChange={() => {
+                          if (productStatus == 'AVAILABLE')
+                            return setProductStatus('UNAVAILABLE');
+                          setProductStatus('AVAILABLE');
+                        }}
+                        checked={productStatus == 'AVAILABLE' ? true : false}
+                        className="react-switch"
+                        width={98}
+                        height={42}
+                        handleDiameter={42}
+                        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                        offColor="#D8434B"
+                        onColor="#2DC678"
+                        checkedIcon={
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              height: '100%',
+                              fontSize: 15,
+                              color: '#fffdfa',
+                              fontFamily: 'Prompt',
+                              paddingRight: 2,
+                            }}>
+                            พร้อม
+                          </div>
+                        }
+                        uncheckedIcon={
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              height: '100%',
+                              fontSize: 15,
+                              fontFamily: 'Prompt',
+                              color: '#fffdfa',
+                              paddingRight: 2,
+                            }}>
+                            ระงับ
+                          </div>
+                        }
+                      />
+                    </InputGroup>
+                  </Col>
+                </Row>
               </Col>
             </Row>
+
             <Row>
-              <Col className="mb-4">
+              <Col>
                 <Form.Group id="ItemNo">
                   <Form.Label>คำอธิบายของสินค้า</Form.Label>
                   <Form.Control
@@ -267,6 +338,16 @@ const ProductEdit = ({ generate, prId }) => {
                     onChange={e => setProductDetail(e.target.value)}
                   />
                 </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-2">
+              <Col md={{ span: 2, offset: 10 }}>
+                <ProductBranchSetting
+                  typeData={typeData}
+                  fetchProductType={fetchProductType}
+                  generate={generate}
+                  editable={editable}
+                />
               </Col>
             </Row>
             <Row>
