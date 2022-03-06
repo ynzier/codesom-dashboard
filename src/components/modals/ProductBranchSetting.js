@@ -6,69 +6,38 @@ import Select from 'react-select';
 
 const ProductBranchSetting = ({ editable, generate, ...props }) => {
   const [show, setShow] = useState(false);
-  const [brId, setBrId] = useState();
-  const [authData, setAuthData] = useState();
-  const [brName, setBrName] = useState('');
-  const [brTel, setBrTel] = useState('');
-  const [brUsername, setBrUsername] = useState('');
-  const [brPassword, setBrPassword] = useState('');
-  const [brConfirmPassword, setBrConfirmPassword] = useState('');
-  const [accStatus, setAccStatus] = useState('');
-
-  useEffect(async () => {
-    if (props.brId) {
-      await BranchesService.getBranchById(props.brId)
-        .then(res => {
-          if (res.data) {
-            const getData = res.data;
-            setBrName(getData.brName);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          generate('danger', resMessage);
-        });
-      await BranchesService.checkExistAcc(props.brId)
-        .then(res => {
-          if (res) {
-            setAccStatus(res.data.status);
-            setBrUsername('cs' + props.brId);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          generate('danger', resMessage);
-        });
-    }
-    return () => {};
-  }, [props.brId, accStatus]);
 
   const branchSelectStyle = {
     control: styles => ({
       ...styles,
       backgroundColor: editable ? 'white' : '#E8E8E8',
       borderRadius: 20,
+      paddingBlock: 2,
+      boxShadow: '0 0 0 1px #C96480',
+
+      borderColor: '##e09fb2',
+      ':hover': {
+        borderColor: '#C96480',
+      },
+      ':focus': {
+        borderColor: '#C96480',
+      },
     }),
     multiValue: styles => {
       return {
         ...styles,
+        backgroundColor: 'rgba(196, 196, 196, 0.5)',
         borderRadius: 20,
+        paddingLeft: 4,
+        paddingRight: 2,
       };
     },
     multiValueLabel: styles => {
       return {
         ...styles,
         marginRight: 8,
+        color: '#696969',
+        fontFamily: 'Prompt',
       };
     },
     multiValueRemove: styles => ({
@@ -89,8 +58,8 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
         style={{
           fontFamily: 'Prompt',
           color: '#c4c4c4',
-          fontSize: 12,
-          textAlign: 'right',
+          fontSize: 14,
+          textDecoration: 'underline',
         }}
         onClick={() => setShow(true)}>
         แสดงรายชื่อสาขา
@@ -105,8 +74,15 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
         <Modal.Header closeButton>
           <Modal.Title>รายชื่อสาขา</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="px-4 mt-3">
-          <div>สาขาที่เลือก</div>
+        <Modal.Body className="px-4 mt-1">
+          <div
+            className="mb-2"
+            style={{
+              fontFamily: 'Prompt',
+              fontWeight: 600,
+            }}>
+            สาขาที่เลือก
+          </div>
           <Select
             isMulti
             closeMenuOnSelect={false}
@@ -114,6 +90,10 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
             defaultValue={[{ value: 'test', label: 'testest' }]}
             isDisabled={!editable}
             styles={branchSelectStyle}
+            minMenuHeight="500"
+            noOptionsMessage={() => (
+              <div style={{ fontFamily: 'Prompt' }}>ไม่พบสาขาอื่น</div>
+            )}
           />
         </Modal.Body>
       </Modal>

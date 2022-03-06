@@ -341,7 +341,7 @@ const ProductEdit = ({ generate, prId }) => {
               </Col>
             </Row>
             <Row className="mb-2">
-              <Col md={{ span: 2, offset: 10 }}>
+              <Col md={{ span: 3, offset: 9 }}>
                 <ProductBranchSetting
                   typeData={typeData}
                   fetchProductType={fetchProductType}
