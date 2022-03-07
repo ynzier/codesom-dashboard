@@ -1,11 +1,11 @@
 import http from 'http-common';
 const prefix = '/employee';
+import authHeader from './auth-header';
+
 
 const getAllRoles = () => {
   return http.get(prefix + '/getAllRoles', {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
   });
 };
 

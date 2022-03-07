@@ -7,9 +7,7 @@ const upload = base64TextString => {
     prefix + '/upload',
     { image: base64TextString },
     {
-      headers: {
-        'Content-type': 'application/json',
-      },
+      headers: authHeader(),
     },
   );
 };

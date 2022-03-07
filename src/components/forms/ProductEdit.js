@@ -343,10 +343,9 @@ const ProductEdit = ({ generate, prId }) => {
             <Row className="mb-2">
               <Col md={{ span: 3, offset: 9 }}>
                 <ProductBranchSetting
-                  typeData={typeData}
-                  fetchProductType={fetchProductType}
                   generate={generate}
                   editable={editable}
+                  prId={prId}
                 />
               </Col>
             </Row>

@@ -4,31 +4,28 @@ import authHeader from './auth-header';
 
 const getAllBranch = () => {
   return http.get(prefix + '/getAllBranch', {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
+  });
+};
+const getAllBranchName = () => {
+  return http.get(prefix + '/getAllBranchName', {
+    headers: authHeader(),
   });
 };
 const createNewBranch = data => {
   return http.post(prefix + '/createNewBranch', data, {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
   });
 };
 const updateBranch = (brId, data) => {
   return http.put(prefix + '/updateBranch', data, {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
     params: { brId: brId },
   });
 };
 const getBranchById = brId => {
   return http.get(prefix + '/getBranchById', {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
     params: { brId: brId },
   });
 };
@@ -46,14 +43,13 @@ const updateBrAcc = (brId, data) => {
 };
 const checkExistAcc = brId => {
   return http.get(prefix + '/checkExistAcc', {
-    headers: {
-      'Content-type': 'application/json',
-    },
+    headers: authHeader(),
     params: { brId: brId },
   });
 };
 export default {
   getAllBranch,
+  getAllBranchName,
   createNewBranch,
   getBranchById,
   updateBranch,

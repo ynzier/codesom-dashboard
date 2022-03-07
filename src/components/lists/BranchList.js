@@ -29,6 +29,7 @@ const BranchList = ({ generate }) => {
           error.message ||
           error.toString();
         generate('danger', resMessage);
+        setLoading(false);
       });
     return () => (mounted = false);
   }, []);

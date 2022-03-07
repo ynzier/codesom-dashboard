@@ -1,57 +1,40 @@
 import http from 'http-common';
 const prefix = '/employee';
+import authHeader from './auth-header';
 
 const getEmployeeList = () => {
   return http.get(prefix + '/getEmployeeList', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
   });
 };
 
 const createNewEmployee = data => {
   return http.post(prefix + '/createNewEmployee', data, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
   });
 };
 
 const updateEmp = (empId, data) => {
   return http.put(prefix + `/updateEmp`, data, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
     params: { empId: empId },
   });
 };
 
 const deleteEmp = empId => {
   return http.delete(`${prefix}/deleteEmp/${empId}`, {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
   });
 };
 const getEmpById = empId => {
   return http.get(prefix + '/getEmpById', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
     params: { empId: empId },
   });
 };
 const getEmployeeByIdForUserCreate = empId => {
   return http.get(prefix + '/getEmployeeByIdForUserCreate', {
-    headers: {
-      'Content-type': 'application/json',
-      // 'x-access-token': user.accessToken,
-    },
+    headers: authHeader(),
     params: { empId: empId },
   });
 };

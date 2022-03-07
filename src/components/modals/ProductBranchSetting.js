@@ -1,21 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import { AlertList } from 'react-bs-notifier';
 import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
-import BranchesService from 'services/branches.service';
 import Select from 'react-select';
+import productService from 'services/product.service';
+import branchesService from 'services/branches.service';
 
-const ProductBranchSetting = ({ editable, generate, ...props }) => {
+const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
   const [show, setShow] = useState(false);
+  const [branchList, setBranchList] = useState([]);
+  const [optionList, setOptionList] = useState([]);
+  useEffect(async () => {
+    if (prId) {
+      await productService
+        .getAllPairByProductId(prId)
+        .then(async res => {
+          if (res.data.length > 0) {
+            var tempData = [];
+            await res.data.forEach(entry => {
+              tempData.push({
+                value: entry.branchId,
+                label: entry.branch.brName,
+              });
+            });
+            setBranchList(tempData);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          generate('danger', resMessage);
+        });
+      await branchesService.getAllBranchName().then(async res => {
+        if (res.data.length > 0) {
+          var tempData = [];
+          await res.data.forEach(entry => {
+            tempData.push({
+              value: entry.brId,
+              label: entry.brName,
+            });
+          });
+          setOptionList(tempData);
+        }
+      });
+    }
+    return () => {};
+  }, [prId]);
 
   const branchSelectStyle = {
     control: styles => ({
       ...styles,
       backgroundColor: editable ? 'white' : '#E8E8E8',
       borderRadius: 20,
-      paddingBlock: 2,
-      boxShadow: '0 0 0 1px #C96480',
-
-      borderColor: '##e09fb2',
+      paddingBlock: 4,
+      boxShadow: '0 0 0 1px #ffe9f1',
+      fontFamily: 'Prompt',
+      borderColor: '#ffe9f1',
       ':hover': {
         borderColor: '#C96480',
       },
@@ -23,6 +66,16 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
         borderColor: '#C96480',
       },
     }),
+    option: (provided, state) => {
+      return {
+        ...provided,
+        fontFamily: 'Prompt',
+        color: state.isFocused || state.isSelected ? 'white' : '#a4a4a4',
+        backgroundColor:
+          state.isFocused || state.isSelected ? '#C96480' : 'white',
+        ':active': { backgroundColor: '#c55474' },
+      };
+    },
     multiValue: styles => {
       return {
         ...styles,
@@ -36,7 +89,7 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
       return {
         ...styles,
         marginRight: 8,
-        color: '#696969',
+        fontSize: 14,
         fontFamily: 'Prompt',
       };
     },
@@ -47,11 +100,32 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
       },
     }),
   };
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
+  const sendData = async () => {
+    if (branchList.length) {
+      var preArray;
+      preArray = branchList.map(item => {
+        return {
+          branchId: item.value,
+        };
+      });
+      setBranchList(preArray);
+    }
+    await productService
+      .updatePairProductBranch(prId, preArray)
+      .then(response => {
+        generate('success', response.data.message);
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        generate('danger', resMessage);
+      });
+  };
+
   return (
     <>
       <a
@@ -69,12 +143,11 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={show}
-        onHide={() => setShow(false)}
-        onShow={() => {}}>
+        onHide={() => setShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>รายชื่อสาขา</Modal.Title>
+          <Modal.Title>รายชื่อสาขาที่จำหน่าย</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="px-4 mt-1">
+        <Modal.Body className="px-4 mt-1 mb-2">
           <div
             className="mb-2"
             style={{
@@ -84,17 +157,37 @@ const ProductBranchSetting = ({ editable, generate, ...props }) => {
             สาขาที่เลือก
           </div>
           <Select
+            className="mb-2"
             isMulti
+            isSearchable
             closeMenuOnSelect={false}
-            options={options}
-            defaultValue={[{ value: 'test', label: 'testest' }]}
+            options={optionList}
             isDisabled={!editable}
+            isClearable={false}
             styles={branchSelectStyle}
+            defaultValue={branchList}
             minMenuHeight="500"
             noOptionsMessage={() => (
               <div style={{ fontFamily: 'Prompt' }}>ไม่พบสาขาอื่น</div>
             )}
+            onChange={list => {
+              setBranchList(list);
+            }}
+            placeholder="ไม่มีสาขาที่เลือก"
           />
+          {editable && (
+            <Row className="mt-3">
+              <Col md={{ span: 3, offset: 9 }}>
+                <Button
+                  className="px-4 py-2"
+                  variant="tertiary"
+                  style={{ color: 'white' }}
+                  onClick={sendData}>
+                  ยืนยัน
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Modal.Body>
       </Modal>
     </>
