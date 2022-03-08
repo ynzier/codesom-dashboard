@@ -53,12 +53,6 @@ const getAllPairByProductId = productId => {
     params: { productId: productId },
   });
 };
-const createPairProductBranch = (productId, data) => {
-  return http.post(prefix + '/pairProductBranch', data, {
-    headers: authHeader(),
-    params: { productId: productId },
-  });
-};
 const updatePairProductBranch = (productId, data) => {
   return http.put(
     prefix + '/pairProductBranch',
@@ -78,6 +72,5 @@ export default {
   disableType,
   updateProduct,
   getAllPairByProductId,
-  createPairProductBranch,
   updatePairProductBranch,
 };

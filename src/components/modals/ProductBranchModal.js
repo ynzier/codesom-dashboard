@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AlertList } from 'react-bs-notifier';
 import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
+import { ListProductBranch } from 'components';
 import Select from 'react-select';
 import productService from 'services/product.service';
 import branchesService from 'services/branches.service';
 
-const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
+const ProductBranchModal = ({ editable, prId, generate, ...props }) => {
   const [show, setShow] = useState(false);
   const [branchList, setBranchList] = useState([]);
   const [optionList, setOptionList] = useState([]);
+  const [edited, setEdited] = useState(false);
   useEffect(async () => {
     if (prId) {
       await productService
@@ -47,7 +49,9 @@ const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
         }
       });
     }
-    return () => {};
+    return () => {
+      setEdited(false);
+    };
   }, [prId]);
 
   const branchSelectStyle = {
@@ -101,29 +105,33 @@ const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
     }),
   };
   const sendData = async () => {
-    if (branchList.length) {
-      var preArray;
-      preArray = branchList.map(item => {
-        return {
-          branchId: item.value,
-        };
-      });
-      setBranchList(preArray);
+    if (edited) {
+      if (branchList.length) {
+        var preArray;
+        preArray = branchList.map(item => {
+          return {
+            branchId: item.value,
+          };
+        });
+        setBranchList(preArray);
+      }
+      await productService
+        .updatePairProductBranch(prId, preArray)
+        .then(response => {
+          setEdited(false);
+          generate('success', response.data.message);
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          generate('danger', resMessage);
+        });
     }
-    await productService
-      .updatePairProductBranch(prId, preArray)
-      .then(response => {
-        generate('success', response.data.message);
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        generate('danger', resMessage);
-      });
+    setShow(false);
   };
 
   return (
@@ -143,11 +151,21 @@ const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={show}
+        style={{ borderRadius: 40 }}
         onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>รายชื่อสาขาที่จำหน่าย</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="px-4 mt-1 mb-2">
+        <Modal.Body className="px-5 mt-2 mb-4">
+          <div
+            className="mb-2"
+            style={{
+              fontFamily: 'Prompt',
+              fontWeight: 600,
+            }}>
+            ยอดคงเหลือแต่ละสาขา
+          </div>
+          <ListProductBranch prId={prId} editable={editable} />
           <div
             className="mb-2"
             style={{
@@ -171,6 +189,7 @@ const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
               <div style={{ fontFamily: 'Prompt' }}>ไม่พบสาขาอื่น</div>
             )}
             onChange={list => {
+              setEdited(true);
               setBranchList(list);
             }}
             placeholder="ไม่มีสาขาที่เลือก"
@@ -194,4 +213,4 @@ const ProductBranchSetting = ({ editable, prId, generate, ...props }) => {
   );
 };
 
-export default ProductBranchSetting;
+export default ProductBranchModal;

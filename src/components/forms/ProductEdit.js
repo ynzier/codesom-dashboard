@@ -4,7 +4,7 @@ import ProductService from 'services/product.service';
 import FileService from 'services/file.service';
 import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { ManageProductType, ProductBranchSetting } from 'components';
+import { ManageProductType, ProductBranchModal } from 'components';
 import Switch from 'react-switch';
 
 const ProductEdit = ({ generate, prId }) => {
@@ -342,7 +342,7 @@ const ProductEdit = ({ generate, prId }) => {
             </Row>
             <Row className="mb-2">
               <Col md={{ span: 3, offset: 9 }}>
-                <ProductBranchSetting
+                <ProductBranchModal
                   generate={generate}
                   editable={editable}
                   prId={prId}
