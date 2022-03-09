@@ -23,7 +23,6 @@ import {
   SidebarContent,
   SidebarFooter,
 } from 'react-pro-sidebar';
-import AuthService from 'services/auth.service';
 
 const Sidebar = props => {
   const [collapsed, setCollapsed] = useState(false);
