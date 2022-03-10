@@ -128,7 +128,7 @@ const CreateEmployeeForm = ({ generate }) => {
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Form.Group id="firstname">
-                  <Form.Label>ชื่อ</Form.Label>
+                  <Form.Label>ชื่อ (1-40 ตัวอักษร)</Form.Label>
                   <Form.Control
                     required
                     type="text"
@@ -142,7 +142,7 @@ const CreateEmployeeForm = ({ generate }) => {
               </Col>
               <Col md={6} xl={6} className="mb-3">
                 <Form.Group id="lastname">
-                  <Form.Label>นามสกุล</Form.Label>
+                  <Form.Label>นามสกุล (1-40 ตัวอักษร)</Form.Label>
                   <Form.Control
                     required
                     type="text"
