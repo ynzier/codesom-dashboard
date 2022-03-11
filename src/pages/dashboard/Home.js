@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { Preloader } from 'components';
 import { Row, Card, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 
-const Home = ({ generate }) => {
-  useEffect(() => {
-    document.title = 'Admin Dashboard / ข้อมูลผู้ดูแล';
-  }, []);
+const Home = () => {
 
   return (
     <>

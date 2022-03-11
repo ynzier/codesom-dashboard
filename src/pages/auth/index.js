@@ -14,8 +14,17 @@ import {
 import Logo from 'assets/Codesom-Logo-x400.png';
 import AuthService from 'services/auth.service';
 import './index.css';
+import { useAlert } from 'react-alert';
+import { Oval } from 'react-loader-spinner';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 
-const Login = ({ generate, ...props }) => {
+const Login = ({ ...props }) => {
+  const alert = useAlert();
+  const { promiseInProgress } = usePromiseTracker({
+    area: AuthService.area.signinDashboard,
+    delay: 300000,
+  });
+
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
   useEffect(() => {
@@ -25,20 +34,23 @@ const Login = ({ generate, ...props }) => {
   const handleLogin = async e => {
     e.preventDefault();
 
-    await AuthService.signinDashboard(Username, Password)
-      .then(() => {
-        props.history.push('/dashboard');
-        window.location.reload();
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        generate('danger', resMessage);
-      });
+    await trackPromise(
+      AuthService.signinDashboard(Username, Password)
+        .then(() => {
+          props.history.push('/dashboard');
+          window.location.reload();
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        }),
+      AuthService.area.signinDashboard,
+    );
   };
 
   return (
@@ -116,7 +128,11 @@ const Login = ({ generate, ...props }) => {
 
                     borderWidth: 0,
                   }}>
-                  เข้าสู่ระบบ
+                  {promiseInProgress ? (
+                    <Oval color="#00BFFF" height={80} width={80} />
+                  ) : (
+                    'เข้าสู่ระบบ'
+                  )}
                 </Button>
               </Form>
             </div>

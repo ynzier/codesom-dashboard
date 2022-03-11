@@ -2,8 +2,9 @@ import http from 'http-common';
 const prefix = '/branch';
 import authHeader from './auth-header';
 
-const getAllBranch = () => {
-  return http.get(prefix + '/getAllBranch', {
+const area = { getAllBranch: 'getAllBranch' };
+const getAllBranch = async () => {
+  return await http.get(prefix + '/getAllBranch', {
     headers: authHeader(),
   });
 };
@@ -47,6 +48,7 @@ const checkExistAcc = brId => {
     params: { brId: brId },
   });
 };
+
 export default {
   getAllBranch,
   getAllBranchName,
@@ -56,4 +58,5 @@ export default {
   createBranchAcc,
   checkExistAcc,
   updateBrAcc,
+  area,
 };

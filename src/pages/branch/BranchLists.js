@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { FaPlus } from 'react-icons/fa';
 import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchList } from 'components';
-const BranchLists = ({ generate }) => {
+const BranchLists = () => {
   useEffect(() => {
     document.title = 'จัดการข้อมูลสาขา';
   }, []);
@@ -65,7 +65,7 @@ const BranchLists = ({ generate }) => {
               </div>
             </Button>
           </div>
-          <BranchList generate={generate} />
+          <BranchList />
         </Card.Body>
       </Card>
     </>

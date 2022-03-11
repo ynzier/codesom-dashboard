@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import { AlertTemplate } from 'components';
 
-import { AlertList } from 'react-bs-notifier';
 // Components
 import { Sidebar, Navbar, Preloader } from 'components';
 import './index.css';
@@ -10,6 +11,15 @@ import AuthService from 'services/auth.service';
 
 // Error Pages
 import * as Page from 'pages';
+
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.TOP_RIGHT,
+  timeout: 5000,
+  offset: '10px',
+  // you can also just use 'scale'
+  transition: transitions.FADE,
+};
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
@@ -21,27 +31,7 @@ const App = () => {
       setCurrentUser(user);
     }
   }, []);
-  const [alerts, setAlerts] = React.useState([]);
-  const generate = React.useCallback((type, message) => {
-    const headline =
-      type === 'danger' ? 'ข้อผิดพลาด' : type === 'success' ? 'สำเร็จ' : null;
-    setAlerts(alerts => [
-      ...alerts,
-      {
-        id: new Date().getTime(),
-        type: type,
-        headline: `${headline}!`,
-        message: message,
-      },
-    ]);
-  }, []);
-  const onDismissed = React.useCallback(alert => {
-    setAlerts(alerts => {
-      const idx = alerts.indexOf(alert);
-      if (idx < 0) return alerts;
-      return [...alerts.slice(0, idx), ...alerts.slice(idx + 1)];
-    });
-  }, []);
+
   const RouteWithLoader = ({ page: Component, ...rest }) => {
     const [loaded, setLoaded] = useState(false);
 
@@ -57,13 +47,8 @@ const App = () => {
           <>
             {currentUser && history.push('/dashboard')}
             <Preloader show={loaded ? false : true} />
-            <AlertList
-              position="top-right"
-              alerts={alerts}
-              onDismiss={onDismissed}
-              timeout={1500}
-            />
-            <Component generate={generate} {...props} />
+
+            <Component {...props} />
           </>
         )}
       />
@@ -84,13 +69,8 @@ const App = () => {
                 minHeight: '100vh',
               }}>
               <Navbar />
-              <AlertList
-                position="top-right"
-                alerts={alerts}
-                onDismiss={onDismissed}
-                timeout={1500}
-              />
-              <Component generate={generate} {...props} />
+
+              <Component {...props} />
             </main>
           </>
         )}
@@ -100,85 +80,87 @@ const App = () => {
 
   return (
     <>
-      <Switch>
-        <RouteWithLoader
-          exact
-          path={Routes.NotFound.path}
-          page={Page.NotFound}
-        />
-        <RouteWithLoader
-          exact
-          path={Routes.ServerError.path}
-          page={Page.ServerError}
-        />
-        {/* deploy */}
-        <RouteWithLoader exact path="/" page={Page.Login} />
-        <RouteWithSidebar exact path={Routes.Home.path} page={Page.Home} />
-        {/* Employee */}
-        <RouteWithSidebar
-          exact
-          path={Routes.EmployeeList.path}
-          page={Page.EmployeeList}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.GetEmployee.path}
-          page={Page.GetEmployee}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.CreateNewEmployee.path}
-          page={Page.CreateNewEmployee}
-        />
-        {/* User */}
-        <RouteWithSidebar
-          exact
-          path={Routes.UserList.path}
-          page={Page.UserList}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.AddPermission.path}
-          page={Page.AddPermission}
-        />
-        {/* Branch */}
-        <RouteWithSidebar
-          exact
-          path={Routes.BranchLists.path}
-          page={Page.BranchLists}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.AddBranch.path}
-          page={Page.AddBranch}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.GetBranch.path}
-          page={Page.GetBranch}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.IngrRequestPage.path}
-          page={Page.IngrRequestPage}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.ProductList.path}
-          page={Page.ProductList}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.AddProduct.path}
-          page={Page.AddProduct}
-        />
-        <RouteWithSidebar
-          exact
-          path={Routes.GetProduct.path}
-          page={Page.GetProduct}
-        />
-        <Redirect to={Routes.NotFound.path} />
-      </Switch>
+      <AlertProvider template={AlertTemplate} {...options}>
+        <Switch>
+          <RouteWithLoader
+            exact
+            path={Routes.NotFound.path}
+            page={Page.NotFound}
+          />
+          <RouteWithLoader
+            exact
+            path={Routes.ServerError.path}
+            page={Page.ServerError}
+          />
+          {/* deploy */}
+          <RouteWithLoader exact path="/" page={Page.Login} />
+          <RouteWithSidebar exact path={Routes.Home.path} page={Page.Home} />
+          {/* Employee */}
+          <RouteWithSidebar
+            exact
+            path={Routes.EmployeeList.path}
+            page={Page.EmployeeList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.GetEmployee.path}
+            page={Page.GetEmployee}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.CreateNewEmployee.path}
+            page={Page.CreateNewEmployee}
+          />
+          {/* User */}
+          <RouteWithSidebar
+            exact
+            path={Routes.UserList.path}
+            page={Page.UserList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.AddPermission.path}
+            page={Page.AddPermission}
+          />
+          {/* Branch */}
+          <RouteWithSidebar
+            exact
+            path={Routes.BranchLists.path}
+            page={Page.BranchLists}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.AddBranch.path}
+            page={Page.AddBranch}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.GetBranch.path}
+            page={Page.GetBranch}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.IngrRequestPage.path}
+            page={Page.IngrRequestPage}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.ProductList.path}
+            page={Page.ProductList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.AddProduct.path}
+            page={Page.AddProduct}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.GetProduct.path}
+            page={Page.GetProduct}
+          />
+          <Redirect to={Routes.NotFound.path} />
+        </Switch>
+      </AlertProvider>
     </>
   );
 };

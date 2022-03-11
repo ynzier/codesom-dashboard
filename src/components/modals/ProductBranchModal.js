@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { AlertList } from 'react-bs-notifier';
+import { useAlert } from 'react-alert';
 import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
 import { ListProductBranch } from 'components';
 import Select from 'react-select';
 import productService from 'services/product.service';
 import branchesService from 'services/branches.service';
 
-const ProductBranchModal = ({ editable, prId, generate, ...props }) => {
+const ProductBranchModal = ({ editable, prId }) => {
   const [show, setShow] = useState(false);
+  const alert = useAlert();
   const [branchList, setBranchList] = useState([]);
   const [optionList, setOptionList] = useState([]);
   const [edited, setEdited] = useState(false);
@@ -34,7 +35,7 @@ const ProductBranchModal = ({ editable, prId, generate, ...props }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
       await branchesService.getAllBranchName().then(async res => {
         if (res.data.length > 0) {
@@ -119,7 +120,7 @@ const ProductBranchModal = ({ editable, prId, generate, ...props }) => {
         .updatePairProductBranch(prId, preArray)
         .then(response => {
           setEdited(false);
-          generate('success', response.data.message);
+          alert.show(response.data.message, { type: 'success' });
         })
         .catch(error => {
           const resMessage =
@@ -128,7 +129,7 @@ const ProductBranchModal = ({ editable, prId, generate, ...props }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
     }
     setShow(false);

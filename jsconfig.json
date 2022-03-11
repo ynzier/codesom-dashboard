@@ -1,6 +1,11 @@
 {
-    "compilerOptions": {
-      "baseUrl": "src"
-    },
-    "include": ["src"]
-  }
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": "src"
+  },
+  "include": ["src"]
+}

@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NumberFormat from 'react-number-format';
 import { Table } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { useAlert } from 'react-alert';
+
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {
   Col,
@@ -19,8 +21,10 @@ import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import ProductService from 'services/product.service';
 
-const ProductList = ({ generate }) => {
+const ProductList = () => {
   let history = useHistory();
+  const alert = useAlert();
+
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const [typeData, setTypeData] = useState([]);
@@ -64,7 +68,7 @@ const ProductList = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     await ProductService.getAllProductTypes()
       .then(res => {
@@ -81,7 +85,7 @@ const ProductList = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     return () => (mounted = false);
   }, []);

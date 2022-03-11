@@ -5,7 +5,7 @@ import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { EmployeeCreate } from 'components';
 import { Routes } from 'routes';
 import { Link } from 'react-router-dom';
-const AddAdmin = ({ generate }) => {
+const AddAdmin = () => {
   useEffect(() => {
     document.title = 'เพิ่มข้อมูลพนักงาน';
   }, []);
@@ -30,7 +30,7 @@ const AddAdmin = ({ generate }) => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <EmployeeCreate generate={generate} />
+          <EmployeeCreate  />
         </Col>
       </Row>
     </>

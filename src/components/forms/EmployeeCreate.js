@@ -6,11 +6,13 @@ import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
+import { useAlert } from 'react-alert';
 
 var getRoleData = [];
 var getBranchData = [];
 
-const CreateEmployeeForm = ({ generate }) => {
+const CreateEmployeeForm = () => {
+  const alert = useAlert();
   const initialRecordState = {
     firstName: '',
     lastName: '',
@@ -55,7 +57,7 @@ const CreateEmployeeForm = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     BranchesService.getAllBranch()
       .then(res => {
@@ -71,7 +73,7 @@ const CreateEmployeeForm = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     return () => (mounted = false);
   }, []);
@@ -97,7 +99,7 @@ const CreateEmployeeForm = ({ generate }) => {
     };
     EmployeeService.createNewEmployee(data)
       .then(response => {
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
         form.reset();
         setBirthDate('');
         setTel('');
@@ -109,7 +111,7 @@ const CreateEmployeeForm = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 

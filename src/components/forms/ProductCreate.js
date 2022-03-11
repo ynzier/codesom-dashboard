@@ -5,10 +5,12 @@ import FileService from 'services/file.service';
 import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType } from 'components';
+import { useAlert } from 'react-alert';
 
 var getData = [];
 
-const ProductCreate = ({ generate }) => {
+const ProductCreate = () => {
+  const alert = useAlert();
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
@@ -44,7 +46,7 @@ const ProductCreate = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -58,7 +60,7 @@ const ProductCreate = ({ generate }) => {
     };
     ProductService.createProduct(data)
       .then(res => {
-        generate('success', res.data.message);
+        alert.show(res.data.message, { type: 'success' });
         setProductName();
         setProductPrice(0);
         setProductType();
@@ -74,7 +76,8 @@ const ProductCreate = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -87,11 +90,11 @@ const ProductCreate = ({ generate }) => {
   const beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      generate('danger', 'อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!');
+      alert.show('อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!', { type: 'error' });
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      generate('danger', 'ขนาดรูปจะต้องน้อยกว่า 2MB!');
+      alert.show('ขนาดรูปจะต้องน้อยกว่า 2MB!', { type: 'error' });
     }
     return isJpgOrPng && isLt2M;
   };
@@ -130,7 +133,7 @@ const ProductCreate = ({ generate }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
     }
   }, [base64TextString]);
@@ -208,7 +211,6 @@ const ProductCreate = ({ generate }) => {
                         <ManageProductType
                           typeData={typeData}
                           fetchProductType={fetchProductType}
-                          generate={generate}
                         />
                       </Form.Label>
                       <Form.Select

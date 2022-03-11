@@ -12,11 +12,16 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react'],
+  plugins: ['react', 'react-hooks'],
   rules: {
     'import/no-anonymous-default-export': 'off',
     'react/prop-types': 'off',
     'react/no-unescaped-entities': 'off',
     'no-unused-vars': 'warn',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };

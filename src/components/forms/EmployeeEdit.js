@@ -6,11 +6,13 @@ import RolesService from 'services/roles.service';
 import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
+import { useAlert } from 'react-alert';
 
 var getRoleData = [];
 var getBranchData = [];
 
-const EmployeeEdit = ({ generate, ...props }) => {
+const EmployeeEdit = ({ ...props }) => {
+  const alert = useAlert();
   const [editable, setEditable] = useState(false);
   const [empId, setEmpId] = useState('');
 
@@ -48,7 +50,8 @@ const EmployeeEdit = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+
+        alert.show(resMessage, { type: 'error' });
       });
     await BranchesService.getAllBranch()
       .then(res => {
@@ -64,7 +67,7 @@ const EmployeeEdit = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     if (empId) {
       fetchEmployeeData(empId);
@@ -93,7 +96,7 @@ const EmployeeEdit = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
   const handleSubmit = e => {
@@ -114,7 +117,7 @@ const EmployeeEdit = ({ generate, ...props }) => {
     };
     EmployeeService.updateEmp(empId, data)
       .then(response => {
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
         setEditable(!editable);
       })
       .catch(error => {
@@ -124,7 +127,7 @@ const EmployeeEdit = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 

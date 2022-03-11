@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import ProductService from 'services/product.service';
 import { Col, Form, Button, Offcanvas, InputGroup } from 'react-bootstrap';
 import { Table } from 'antd';
-const ManageProductType = ({
-  generate,
-  fetchProductType,
-  typeData,
-  ...props
-}) => {
+import { useAlert } from 'react-alert';
+const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
   const [show, setShow] = useState(false);
+  const alert = useAlert();
   const [newType, setNewType] = useState();
 
   const handleClose = () => setShow(false);
@@ -32,7 +29,8 @@ const ManageProductType = ({
                 ProductService.disableType(record.typeId)
                   .then(response => {
                     fetchProductType();
-                    generate('success', response.data.message);
+
+                    alert.show(response.data.message, { type: 'success' });
                   })
                   .catch(error => {
                     const resMessage =
@@ -41,7 +39,7 @@ const ManageProductType = ({
                         error.response.data.message) ||
                       error.message ||
                       error.toString();
-                    generate('danger', resMessage);
+                    alert.show(resMessage, { type: 'error' });
                   });
               }}>
               <i className="fas fa-trash action"></i>
@@ -78,7 +76,8 @@ const ManageProductType = ({
                     ProductService.createType(newType)
                       .then(response => {
                         fetchProductType();
-                        generate('success', response.data.message);
+                        alert.show(response.data.message, { type: 'success' });
+
                         e.disabled = true;
                       })
                       .catch(error => {
@@ -88,7 +87,7 @@ const ManageProductType = ({
                             error.response.data.message) ||
                           error.message ||
                           error.toString();
-                          generate('danger', resMessage);
+                        alert.show(resMessage, { type: 'error' });
                       });
                   }}>
                   เพิ่ม

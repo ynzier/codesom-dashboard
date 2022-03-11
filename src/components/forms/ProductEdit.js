@@ -6,8 +6,10 @@ import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType, ProductBranchModal } from 'components';
 import Switch from 'react-switch';
+import { useAlert } from 'react-alert';
 
-const ProductEdit = ({ generate, prId }) => {
+const ProductEdit = ({ prId }) => {
+  const alert = useAlert();
   const [editable, setEditable] = useState(false);
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
@@ -56,7 +58,7 @@ const ProductEdit = ({ generate, prId }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -73,7 +75,7 @@ const ProductEdit = ({ generate, prId }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -88,7 +90,7 @@ const ProductEdit = ({ generate, prId }) => {
     };
     ProductService.updateProduct(prId, data)
       .then(res => {
-        generate('success', res.data.message);
+        if (res) alert.show(res.data.message, { type: 'success' });
       })
       .catch(error => {
         const resMessage =
@@ -97,7 +99,7 @@ const ProductEdit = ({ generate, prId }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -110,11 +112,11 @@ const ProductEdit = ({ generate, prId }) => {
   const beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      generate('danger', 'อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!');
+      alert.show('อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!', { type: 'error' });
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      generate('danger', 'ขนาดรูปจะต้องน้อยกว่า 2MB!');
+      alert.show('ขนาดรูปจะต้องน้อยกว่า 2MB!', { type: 'error' });
     }
     return isJpgOrPng && isLt2M;
   };
@@ -151,7 +153,8 @@ const ProductEdit = ({ generate, prId }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+
+          alert.show(resMessage, { type: 'error' });
         });
     }
   }, [base64TextString]);
@@ -233,7 +236,6 @@ const ProductEdit = ({ generate, prId }) => {
                           <ManageProductType
                             typeData={typeData}
                             fetchProductType={fetchProductType}
-                            generate={generate}
                           />
                         )}
                       </Form.Label>
@@ -343,7 +345,6 @@ const ProductEdit = ({ generate, prId }) => {
             <Row className="mb-2">
               <Col md={{ span: 3, offset: 9 }}>
                 <ProductBranchModal
-                  generate={generate}
                   editable={editable}
                   prId={prId}
                 />

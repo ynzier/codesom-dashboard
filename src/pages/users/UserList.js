@@ -10,6 +10,8 @@ import {
   InputGroup,
   Button,
 } from 'react-bootstrap';
+import { useAlert } from 'react-alert';
+
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table } from 'antd';
@@ -17,7 +19,9 @@ import { Table } from 'antd';
 import 'antd/dist/antd.min.css';
 
 import UserService from 'services/users.service';
-const UserList = ({ generate, ...props }) => {
+const UserList = ({ ...props }) => {
+  const alert = useAlert();
+
   const [records, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const search = value => {
@@ -46,7 +50,7 @@ const UserList = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 

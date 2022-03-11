@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { AlertList } from 'react-bs-notifier';
+import { useAlert } from 'react-alert';
 import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 
-const BranchAccDetail = ({ generate, ...props }) => {
+const BranchAccDetail = ({ ...props }) => {
+  const alert = useAlert();
+
   const [brId, setBrId] = useState();
   const [authData, setAuthData] = useState();
   const [brName, setBrName] = useState('');
@@ -29,7 +31,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
       await BranchesService.checkExistAcc(props.brId)
         .then(res => {
@@ -45,7 +47,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
     }
     return () => {};
@@ -69,7 +71,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
     console.log(data);
     await BranchesService.createBranchAcc(props.brId, data)
       .then(response => {
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
       })
       .catch(error => {
         const resMessage =
@@ -78,7 +80,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
   const sendUpdatePassword = async () => {
@@ -90,7 +92,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
     console.log(data);
     await BranchesService.updateBrAcc(props.brId, data)
       .then(response => {
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
       })
       .catch(error => {
         const resMessage =
@@ -99,7 +101,7 @@ const BranchAccDetail = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
   return (

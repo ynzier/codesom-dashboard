@@ -3,6 +3,7 @@ import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Row, Card, Form, Button } from 'react-bootstrap';
 import { Upload } from 'antd';
+import { useAlert } from 'react-alert';
 
 // services
 import BranchesService from 'services/branches.service';
@@ -10,7 +11,8 @@ import BranchesService from 'services/branches.service';
 // Modal
 import { BranchAccDetail } from 'components';
 
-function BranchEditForm({ generate, ...props }) {
+function BranchEditForm({ ...props }) {
+  const alert = useAlert();
   const [loading, setLoading] = useState(false);
   const uploadButton = (
     <div>
@@ -21,11 +23,11 @@ function BranchEditForm({ generate, ...props }) {
   const beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      generate('danger', 'อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!');
+      alert.show('อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!', { type: 'error' });
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      generate('danger', 'ขนาดรูปจะต้องน้อยกว่า 2MB!');
+      alert.show('ขนาดรูปจะต้องน้อยกว่า 2MB!', { type: 'error' });
     }
     return isJpgOrPng && isLt2M;
   };
@@ -311,7 +313,8 @@ function BranchEditForm({ generate, ...props }) {
                             error.response.data.message) ||
                           error.message ||
                           error.toString();
-                        generate('danger', resMessage);
+
+                        alert.show(resMessage, { type: 'error' });
                       });
                   }}
                   style={{
@@ -359,7 +362,7 @@ function BranchEditForm({ generate, ...props }) {
   );
 }
 
-const BranchEdit = ({ generate, ...props }) => {
+const BranchEdit = ({ ...props }) => {
   const [editable, setEditable] = useState(false);
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
@@ -398,8 +401,7 @@ const BranchEdit = ({ generate, ...props }) => {
               error.response.data &&
               error.response.data.message) ||
             error.message ||
-            error.toString();
-          generate('danger', resMessage);
+            alert.show(resMessage, { type: 'error' });
         });
     }
   }, [base64TextString]);
@@ -422,7 +424,7 @@ const BranchEdit = ({ generate, ...props }) => {
     };
     await BranchesService.updateBranch(props.brId, data)
       .then(response => {
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
         setEditable(!editable);
       })
       .catch(error => {
@@ -432,7 +434,8 @@ const BranchEdit = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+
+        alert.show(resMessage, { type: 'error' });
       });
   };
 

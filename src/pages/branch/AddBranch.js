@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchCreate } from 'components';
-const AddBranch = ({ generate }) => {
+const AddBranch = () => {
   useEffect(() => {
     document.title = 'เพิ่มข้อมูลสาขา';
   }, []);
@@ -32,7 +32,7 @@ const AddBranch = ({ generate }) => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <BranchCreate generate={generate} />
+          <BranchCreate  />
         </Col>
       </Row>
     </>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
-
+import { useAlert } from 'react-alert';
 // services
 import EmployeeService from 'services/employee.service';
 import UserService from 'services/users.service';
 
-const UserCreateForm = ({ generate }) => {
+const UserCreateForm = () => {
+  const alert = useAlert();
   const initialRecordState = {
     userName: '',
     password: '',
@@ -49,9 +50,11 @@ const UserCreateForm = ({ generate }) => {
     };
     console.log(data);
     await UserService.createNewUser(data)
-      .then(response => {
-        generate('success', response.data.message);
-        form.reset();
+      .then(res => {
+        if (res) {
+          alert.show(res.data.message, { type: 'success' });
+          form.reset();
+        }
       })
       .catch(error => {
         const resMessage =
@@ -60,7 +63,7 @@ const UserCreateForm = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -96,7 +99,9 @@ const UserCreateForm = ({ generate }) => {
                         EmployeeService.getEmployeeByIdForUserCreate(empId)
                           .then(response => {
                             const RecievedData = response && response.data;
-                            generate('success', response.data.message);
+                            alert.show(response.data.message, {
+                              type: 'success',
+                            });
                             setFirstName(RecievedData.resData[0].first_name);
                             setLastName(RecievedData.resData[0].last_name);
                             setValidEmpId(empId);
@@ -111,7 +116,7 @@ const UserCreateForm = ({ generate }) => {
                               error.toString();
                             setFirstName('');
                             setLastName('');
-                            generate('danger', resMessage);
+                            alert.show(resMessage, { type: 'error' });
                           });
                       }}>
                       ค้นหา

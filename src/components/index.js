@@ -6,6 +6,8 @@ export { default as SettingForm } from './forms/SettingForm';
 export { default as Navbar } from './navbar';
 export { default as Preloader } from './preloader';
 export { default as Sidebar } from './sidebar';
+export { default as Spinner } from './spinner';
+export { default as AlertTemplate } from './alert';
 
 // employee
 export { default as EmployeeCreate } from './forms/EmployeeCreate';

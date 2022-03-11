@@ -10,7 +10,7 @@ import {
   Table,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
+import { useAlert } from 'react-alert';
 import { IoIosTrash } from 'react-icons/io';
 
 // services
@@ -19,12 +19,14 @@ import BranchesService from 'services/branches.service';
 var getBranchData = [];
 const { Option } = Select;
 
-const AddReqList = ({ generate, ...props }) => {
+const AddReqList = ({ ...props }) => {
+  const alert = useAlert();
+
   const onFinish = values => {
     if (props.selectedBranchId) {
       props.setReqData(values.product);
     } else {
-      generate('danger', 'เลือกสาขาก่อนทำการยืนยัน');
+      alert.show('เลือกสาขาก่อนทำการยืนยัน', { type: 'error' });
     }
   };
 
@@ -128,7 +130,7 @@ const AddReqList = ({ generate, ...props }) => {
   );
 };
 
-const IngrReqList = ({ generate, ...props }) => {
+const IngrReqList = ({ ...props }) => {
   const [branchData, setbranchData] = useState([]);
   const [selectedBranchId, setBranchId] = useState('');
 
@@ -149,7 +151,7 @@ const IngrReqList = ({ generate, ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     return () => (mounted = false);
   }, []);
@@ -300,7 +302,6 @@ const IngrReqList = ({ generate, ...props }) => {
                   <AddReqList
                     form={form}
                     setReqData={props.setReqData}
-                    generate={generate}
                     selectedBranchId={selectedBranchId}
                   />
                 </>

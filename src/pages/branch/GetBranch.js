@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchEdit } from 'components';
-const GetBranch = ({ generate, ...props }) => {
+const GetBranch = ({ ...props }) => {
   const [brId, setbrId] = useState();
   useEffect(() => {
     document.title = 'ข้อมูลสาขา';
@@ -34,7 +34,7 @@ const GetBranch = ({ generate, ...props }) => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={10}>
-          <BranchEdit generate={generate} brId={brId} />
+          <BranchEdit brId={brId} />
         </Col>
       </Row>
     </>

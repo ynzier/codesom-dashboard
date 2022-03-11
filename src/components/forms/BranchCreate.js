@@ -3,11 +3,13 @@ import { Col, Row, Card, Form, Button } from 'react-bootstrap';
 import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
+import { useAlert } from 'react-alert';
 
 // services
 import BranchService from 'services/branches.service';
 
-const BranchCreate = ({ generate }) => {
+const BranchCreate = () => {
+  const alert = useAlert();
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [tel, setTel] = useState('');
@@ -35,7 +37,7 @@ const BranchCreate = ({ generate }) => {
         setTel('');
         setBrName('');
         setBrAddr('');
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
       })
       .catch(error => {
         const resMessage =
@@ -44,7 +46,7 @@ const BranchCreate = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
   const [loading, setLoading] = useState(false);
@@ -57,11 +59,11 @@ const BranchCreate = ({ generate }) => {
   const beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      generate('danger', 'อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!');
+      alert.show('อัพโหลดได้เฉพาะไฟล์ .jpg .png เท่านั้น!', { type: 'error' });
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      generate('danger', 'ขนาดรูปจะต้องน้อยกว่า 2MB!');
+      alert.show('ขนาดรูปจะต้องน้อยกว่า 2MB!', { type: 'error' });
     }
     return isJpgOrPng && isLt2M;
   };
@@ -101,7 +103,7 @@ const BranchCreate = ({ generate }) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          generate('danger', resMessage);
+          alert.show(resMessage, { type: 'error' });
         });
     }
   }, [base64TextString]);

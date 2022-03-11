@@ -6,7 +6,7 @@ import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { IngrReqList } from 'components';
-const IngrRequestPage = ({ generate }) => {
+const IngrRequestPage = () => {
   const [selectedBranchId, setBranchId] = useState('');
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
@@ -45,7 +45,7 @@ const IngrRequestPage = ({ generate }) => {
             setBranchId={setBranchId}
             reqData={reqData}
             setReqData={setReqData}
-            generate={generate}
+            
           />
         </Col>
       </Row>

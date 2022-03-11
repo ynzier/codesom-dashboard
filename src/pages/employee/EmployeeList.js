@@ -14,12 +14,15 @@ import {
 import { Link, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table } from 'antd';
+import { useAlert } from 'react-alert';
 
 import 'antd/dist/antd.min.css';
 
 import EmployeeService from 'services/employee.service';
-const EmployeeList = ({ generate }) => {
+const EmployeeList = () => {
   let history = useHistory();
+  const alert = useAlert();
+
   const [records, setRecord] = useState([]);
   const [deleteData, setDeleteData] = useState([]);
   const [modalShow, setModalShow] = useState(false);
@@ -49,7 +52,7 @@ const EmployeeList = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
 
@@ -67,7 +70,7 @@ const EmployeeList = ({ generate }) => {
           (e.response && e.response.data && e.response.data.message) ||
           e.message ||
           e.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
     return () => (mounted = false);
   }, []);
@@ -76,7 +79,7 @@ const EmployeeList = ({ generate }) => {
     EmployeeService.deleteEmp(deleteData.emp_id)
       .then(response => {
         refreshList();
-        generate('success', response.data.message);
+        alert.show(response.data.message, { type: 'success' });
       })
       .catch(error => {
         const resMessage =
@@ -85,7 +88,7 @@ const EmployeeList = ({ generate }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        generate('danger', resMessage);
+        alert.show(resMessage, { type: 'error' });
       });
   };
   const header = [

@@ -1,5 +1,6 @@
 import http from 'http-common';
 
+const area = { signinDashboard: 'signinDashboard' };
 const signinDashboard = (userName, password) => {
   return http
     .post('/auth/signin', {
@@ -10,13 +11,15 @@ const signinDashboard = (userName, password) => {
       if (response.data.accessToken) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
-
-      return response.data;
+    })
+    .catch(error => {
+      throw error;
     });
 };
 
 const logoutDashboard = () => {
   localStorage.removeItem('user');
+  window.location.reload();
 };
 
 const getCurrentUser = () => {
@@ -27,4 +30,5 @@ export default {
   signinDashboard,
   logoutDashboard,
   getCurrentUser,
+  area,
 };

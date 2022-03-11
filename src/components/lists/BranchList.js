@@ -3,36 +3,44 @@ import { List, Card, Image } from 'antd';
 import { Button } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 import { useHistory } from 'react-router-dom';
+import { Spinner } from 'components';
+import { trackPromise } from 'react-promise-tracker';
+import branchesService from 'services/branches.service';
+import { useAlert } from 'react-alert';
 
 var getBranchData = [];
-const BranchList = ({ generate }) => {
+const BranchList = () => {
+  const alert = useAlert();
   const [record, setRecord] = useState([]);
-  const [loading, setLoading] = useState(true);
   let history = useHistory();
 
-  useEffect(async () => {
+  useEffect(() => {
     document.title = 'ข้อมูลสาขา';
     let mounted = true;
-    await BranchesService.getAllBranch()
-      .then(res => {
-        if (mounted) {
-          getBranchData = res.data;
-          setRecord(getBranchData);
-          setLoading(false);
-        }
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        generate('danger', resMessage);
-        setLoading(false);
-      });
+    const fetchData = async () => {
+      await trackPromise(
+        BranchesService.getAllBranch()
+          .then(res => {
+            if (mounted) {
+              getBranchData = res.data;
+              setRecord(getBranchData);
+            }
+          })
+          .catch(error => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+            alert.show(resMessage, { type: 'error' });
+          }),
+        branchesService.area.getAllBranch,
+      );
+    };
+    fetchData();
     return () => (mounted = false);
-  }, []);
+  }, [setRecord]);
   const openRecord = brId => {
     history.push('/dashboard/branch/getBranch/' + brId);
   };
@@ -41,7 +49,6 @@ const BranchList = ({ generate }) => {
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={record}
-        loading={loading}
         pagination={{
           pageSize: 4,
         }}
@@ -154,6 +161,7 @@ const BranchList = ({ generate }) => {
           </List.Item>
         )}
       />
+      <Spinner area={branchesService.area.getAllBranch} />
     </>
   );
 };
