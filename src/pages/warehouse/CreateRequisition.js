@@ -30,7 +30,9 @@ const IngrRequestPage = () => {
             ) : (
               <>
                 <Breadcrumb.Item>
-                  <Link to={Routes.IngrRequestPage.path}>คำร้องขอวัตถุดิบ</Link>
+                  <Link to={Routes.CreateRequisition.path}>
+                    คำร้องขอวัตถุดิบ
+                  </Link>
                 </Breadcrumb.Item>
                 <Breadcrumb.Item active>ยืนยันคำขอวัตถุดิบ</Breadcrumb.Item>
               </>
@@ -45,7 +47,6 @@ const IngrRequestPage = () => {
             setBranchId={setBranchId}
             reqData={reqData}
             setReqData={setReqData}
-            
           />
         </Col>
       </Row>

@@ -6,9 +6,9 @@ import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { ProductCreate } from 'components';
-const AddBranch = () => {
+const AddIngr = () => {
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลสินค้า';
+    document.title = 'เพิ่มข้อมูลวัตถุดิบ';
   }, []);
 
   return (
@@ -26,7 +26,7 @@ const AddBranch = () => {
             <Breadcrumb.Item>
               <Link to={Routes.ProductList.path}>รายการสินค้า</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสินค้า</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มข้อมูลวัตถุดิบ</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -38,4 +38,4 @@ const AddBranch = () => {
     </>
   );
 };
-export default AddBranch;
+export default AddIngr;

@@ -140,13 +140,18 @@ const App = () => {
           />
           <RouteWithSidebar
             exact
-            path={Routes.IngrRequestPage.path}
-            page={Page.IngrRequestPage}
+            path={Routes.CreateRequisition.path}
+            page={Page.CreateRequisition}
           />
           <RouteWithSidebar
             exact
             path={Routes.ProductList.path}
             page={Page.ProductList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.IngrAndStuffList.path}
+            page={Page.IngrAndStuffList}
           />
           <RouteWithSidebar
             exact

@@ -27,10 +27,11 @@ export const Routes = {
   GetBranch: { path: '/dashboard/branch/getBranch/:brId' },
 
   // Ingredient
-  IngrRequestPage: { path: '/dashboard/ingr' },
+  CreateRequisition: { path: '/dashboard/warehouse/createRequisition' },
 
   // Products
   ProductList: { path: '/dashboard/product' },
+  IngrAndStuffList: { path: '/dashboard/product/ingredient' },
   AddProduct: { path: '/dashboard/product/create' },
   GetProduct: { path: '/dashboard/product/getProduct/:prId' },
 };

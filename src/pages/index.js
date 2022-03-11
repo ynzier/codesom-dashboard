@@ -23,9 +23,10 @@ export { default as AddBranch } from './branch/AddBranch';
 export { default as GetBranch } from './branch/GetBranch';
 
 // Ingredient
-export { default as IngrRequestPage } from './ingredient/IngrRequestPage';
+export { default as CreateRequisition } from './warehouse/CreateRequisition';
 
 // Product
 export { default as ProductList } from './product/ProductList';
+export { default as IngrAndStuffList } from './product/IngrAndStuffList';
 export { default as AddProduct } from './product/AddProduct';
 export { default as GetProduct } from './product/GetProduct';

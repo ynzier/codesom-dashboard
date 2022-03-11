@@ -7,6 +7,7 @@ import {
   CgFileDocument,
 } from 'react-icons/cg';
 import { FiUsers } from 'react-icons/fi';
+import { GiCubes } from 'react-icons/gi';
 import { MdSpaceDashboard, MdDeliveryDining } from 'react-icons/md';
 import { FaWarehouse } from 'react-icons/fa';
 
@@ -24,7 +25,7 @@ import {
   SidebarFooter,
 } from 'react-pro-sidebar';
 
-const Sidebar = props => {
+const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -79,19 +80,29 @@ const Sidebar = props => {
                 <Link to={Routes.BranchLists.path} />
               </MenuItem>
             </SubMenu>
-            <SubMenu title="สินค้า" icon={<FaWarehouse color="#9D7463" />}>
+            <SubMenu
+              title="สินค้าและวัตถุดิบ"
+              icon={<GiCubes size="20px" color="#9D7463" />}>
               <MenuItem>
-                ข้อมูลสินค้า
+                สินค้า
                 <Link to={Routes.ProductList.path} />
               </MenuItem>
-              <MenuItem>ข้อมูลโปรโมชั่น</MenuItem>
-            </SubMenu>
-            <SubMenu title="วัตถุดิบ" icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem>
-                คำร้องขอวัตถุดิบ
-                <Link to={Routes.IngrRequestPage.path} />
+                วัตถุดิบและอื่นๆ
+                <Link to={Routes.IngrAndStuffList.path} />
               </MenuItem>
-              <MenuItem>ประวัติการเบิกวัตถุดิบ</MenuItem>
+              <MenuItem>
+                สูตรผสม
+                <Link to={Routes.ProductList.path} />
+              </MenuItem>
+              <MenuItem>โปรโมชั่น</MenuItem>
+            </SubMenu>
+            <SubMenu title="คลังสินค้า" icon={<FaWarehouse color="#9D7463" />}>
+              <MenuItem>
+                สร้างใบเบิกสินค้า
+                <Link to={Routes.CreateRequisition.path} />
+              </MenuItem>
+              <MenuItem>ประวัติการเบิกจ่ายสินค้า</MenuItem>
             </SubMenu>
             <SubMenu
               title="เดลิเวอรี่"
