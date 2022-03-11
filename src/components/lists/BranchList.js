@@ -4,12 +4,15 @@ import { Button } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 import { useHistory } from 'react-router-dom';
 import { Spinner } from 'components';
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import branchesService from 'services/branches.service';
 import { useAlert } from 'react-alert';
 
 var getBranchData = [];
 const BranchList = () => {
+  const { promiseInProgress } = usePromiseTracker({
+    area: branchesService.area.getAllBranch,
+  });
   const alert = useAlert();
   const [record, setRecord] = useState([]);
   let history = useHistory();
@@ -52,6 +55,7 @@ const BranchList = () => {
         pagination={{
           pageSize: 4,
         }}
+        loading={promiseInProgress}
         renderItem={item => (
           <List.Item>
             <Card
@@ -114,11 +118,15 @@ const BranchList = () => {
                   </div>
                   <div
                     style={{
+                      width: '350px',
                       borderColor: '#E8E8E8',
                       borderStyle: 'solid',
                       borderWidth: '0.155rem',
                       borderRadius: '8px',
                       paddingLeft: 10,
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
                     }}>
                     {item.brAddr || 'none'}
                   </div>
@@ -161,7 +169,6 @@ const BranchList = () => {
           </List.Item>
         )}
       />
-      <Spinner area={branchesService.area.getAllBranch} />
     </>
   );
 };
