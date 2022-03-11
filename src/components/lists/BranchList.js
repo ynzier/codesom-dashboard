@@ -3,7 +3,6 @@ import { List, Card, Image } from 'antd';
 import { Button } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 import { useHistory } from 'react-router-dom';
-import { Spinner } from 'components';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import branchesService from 'services/branches.service';
 import { useAlert } from 'react-alert';

@@ -31,3 +31,5 @@ export { default as ProductEdit } from './forms/ProductEdit';
 export { default as ManageProductType } from './offcanvas/ManageProductType';
 export { default as ProductBranchModal } from './modals/ProductBranchModal';
 export { default as ListProductBranch } from './lists/ListProductBranch';
+export { default as IngrStffCreateForm } from './forms/IngrStffCreateForm';
+export { default as IngrStffCreateModal } from './modals/IngrStffCreateModal';

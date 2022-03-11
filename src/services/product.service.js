@@ -3,6 +3,7 @@ import http from 'http-common';
 import authHeader from './auth-header';
 
 const prefix = '/product';
+const area = { productList: 'productList' };
 const createProduct = data => {
   return http.post(prefix + '/createProduct', data, {
     headers: authHeader(),
@@ -73,4 +74,5 @@ export default {
   updateProduct,
   getAllPairByProductId,
   updatePairProductBranch,
+  area,
 };
