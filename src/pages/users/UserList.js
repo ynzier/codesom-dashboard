@@ -90,32 +90,32 @@ const UserList = ({ ...props }) => {
   const header = [
     {
       title: 'รหัสผู้ใช้งาน',
-      dataIndex: 'user_id',
+      dataIndex: 'id',
       align: 'center',
       width: 300,
     },
     {
       title: 'ชื่อผู้ใช้งาน',
-      dataIndex: 'username',
+      dataIndex: 'userName',
       align: 'center',
       width: 300,
     },
     {
       title: 'ชื่อ',
-      dataIndex: 'first_name',
+      dataIndex: 'firstName',
       align: 'center',
       width: 300,
     },
     {
       title: 'นามสกุล',
-      dataIndex: 'last_name',
+      dataIndex: 'lastName',
       align: 'center',
       width: 300,
     },
     {
       title: 'ระดับ',
-      dataIndex: 'role_name',
       align: 'center',
+      dataIndex: 'role',
       width: 300,
     },
     {
@@ -218,7 +218,7 @@ const UserList = ({ ...props }) => {
           <Table
             dataSource={filterData == null ? records : filterData}
             columns={header}
-            rowKey="user_id"
+            rowKey="id"
             pagination={{ pageSize: 20 }}
             style={{ fontFamily: 'Prompt' }}
           />
