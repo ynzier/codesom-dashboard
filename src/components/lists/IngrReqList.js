@@ -15,6 +15,7 @@ import { IoIosTrash } from 'react-icons/io';
 
 // services
 import BranchesService from 'services/branches.service';
+import requisitionService from 'services/requisition.service';
 
 var getBranchData = [];
 const { Option } = Select;
@@ -23,8 +24,25 @@ const AddReqList = ({ ...props }) => {
   const alert = useAlert();
 
   const onFinish = values => {
+    var inputData = values.requisitionItems;
+    var tempData = [];
     if (props.selectedBranchId) {
-      props.setReqData(values.product);
+      inputData.forEach(obj => {
+        props.availableItem.forEach(data => {
+          if (obj.reqPrName == data.id) {
+            var pushData = {
+              id: data.id,
+              name: data.name,
+              unit: data.unit,
+              type: data.type,
+              key: data.key,
+              quantity: obj.reqCount,
+            };
+            tempData.push(pushData);
+          }
+        });
+      });
+      props.setReqData(tempData);
     } else {
       alert.show('เลือกสาขาก่อนทำการยืนยัน', { type: 'error' });
     }
@@ -32,51 +50,58 @@ const AddReqList = ({ ...props }) => {
 
   return (
     <Form form={props.form} name="reqIngrForm" onFinish={onFinish}>
-      <Form.List name="product">
+      <Form.List name="requisitionItems">
         {(fields, { add, remove }, { error }) => {
           console.log(error);
           return (
             <>
-              {fields.map((field, index) => (
-                <RowA key={field.key} style={{ height: '100%' }}>
-                  <ColA span={12}>
-                    <Form.Item
-                      name={[index, 'reqPrName']}
-                      rules={[{ required: true, message: '*เลือกรายการ' }]}>
-                      <Select
-                        placeholder="กดเพื่อเลือกรายการ"
-                        dropdownStyle={{ fontFamily: 'Prompt' }}>
-                        <Option value="มังคุด">มังคุด</Option>
-                      </Select>
-                    </Form.Item>
-                  </ColA>
-                  <ColA span={8} />
-                  <ColA span={3} style={{ textAlign: 'center' }}>
-                    <Form.Item
-                      name={[index, 'reqCount']}
-                      rules={[{ required: true, message: 'ใส่จำนวน' }]}>
-                      <InputNumber
-                        min="1"
-                        max="1000"
-                        style={{
-                          textAlign: 'center',
-                          width: '100%',
-                          textOverflow: 'ellipsis',
-                          paddingRight: '14px',
-                        }}
+              {fields.map((field, index) => {
+                console.log(field[0]);
+                return (
+                  <RowA key={field.key} style={{ height: '100%' }}>
+                    <ColA span={12}>
+                      <Form.Item
+                        name={[index, 'reqPrName']}
+                        rules={[{ required: true, message: '*เลือกรายการ' }]}>
+                        <Select
+                          placeholder="กดเพื่อเลือกรายการ"
+                          dropdownStyle={{ fontFamily: 'Prompt' }}>
+                          {props.availableItem.map((item, index) => (
+                            <Option key={index} value={item.id}>
+                              {item.name} ({item.unit}) ({item.type})
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </ColA>
+                    <ColA span={8} />
+                    <ColA span={3} style={{ textAlign: 'center' }}>
+                      <Form.Item
+                        name={[index, 'reqCount']}
+                        rules={[{ required: true, message: 'ใส่จำนวน' }]}>
+                        <InputNumber
+                          min="1"
+                          max="1000"
+                          style={{
+                            textAlign: 'center',
+                            width: '100%',
+                            textOverflow: 'ellipsis',
+                            paddingRight: '14px',
+                          }}
+                        />
+                      </Form.Item>
+                    </ColA>
+                    <ColA span={1}>
+                      <IoIosTrash
+                        onClick={() => remove(field.name)}
+                        size={20}
+                        className="dynamic-delete-button"
+                        style={{ marginTop: '5px' }}
                       />
-                    </Form.Item>
-                  </ColA>
-                  <ColA span={1}>
-                    <IoIosTrash
-                      onClick={() => remove(field.name)}
-                      size={20}
-                      className="dynamic-delete-button"
-                      style={{ marginTop: '5px' }}
-                    />
-                  </ColA>
-                </RowA>
-              ))}
+                    </ColA>
+                  </RowA>
+                );
+              })}
               <RowA style={{ justifyContent: 'center' }}>
                 <ColA span={14} style={{ alignItems: 'flex-end' }}>
                   <Button
@@ -133,6 +158,7 @@ const AddReqList = ({ ...props }) => {
 const IngrReqList = ({ ...props }) => {
   const [branchData, setbranchData] = useState([]);
   const [selectedBranchId, setBranchId] = useState('');
+  const [availableItem, setAvailableItem] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -156,35 +182,52 @@ const IngrReqList = ({ ...props }) => {
     return () => (mounted = false);
   }, []);
   useEffect(() => {
-    console.log(props.reqData);
-  }, [props.reqData]);
+    requisitionService
+      .getItemMakeRequest(selectedBranchId)
+      .then(res => setAvailableItem(res.data))
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
+  }, [selectedBranchId]);
   const [form] = Form.useForm();
 
   const header = [
     {
       title: 'No.',
-      dataIndex: 'reqNo',
+      dataIndex: 'id',
       align: 'center',
-      width: 300,
+      width: 200,
       defaultValue: 'none',
     },
     {
+      title: 'ประเภท',
+      dataIndex: 'type',
+      align: 'center',
+      width: 100,
+    },
+    {
       title: 'รายการสินค้า',
-      dataIndex: 'reqPrName',
+      dataIndex: 'name',
       align: 'center',
       width: 300,
     },
     {
       title: 'จำนวน',
-      dataIndex: 'reqCount',
+      dataIndex: 'quantity',
       align: 'center',
       width: 100,
     },
     {
-      title: 'วัน/เวลาที่สั่ง',
-      dataIndex: 'reqTimestamp',
+      title: 'หน่วย',
+      dataIndex: 'unit',
       align: 'center',
-      width: 200,
+      width: 100,
     },
   ];
 
@@ -301,6 +344,7 @@ const IngrReqList = ({ ...props }) => {
                   </Row>
                   <AddReqList
                     form={form}
+                    availableItem={availableItem}
                     setReqData={props.setReqData}
                     selectedBranchId={selectedBranchId}
                   />
