@@ -131,12 +131,11 @@ const RequisitionList = () => {
       title: 'อัพเดทล่าสุดเมื่อ',
       dataIndex: 'updatedAt',
       align: 'center',
-      width: 150,
+      width: 250,
       render: (text, record) => {
         return (
           <>
-            <div>{moment(record.updateAt).locale('th').format('LL')}</div>
-            <div>เวลา {moment(text).locale('th').format('LT')}</div>
+            <div>{moment(record.updatedAt).locale('th').format('LLL')}</div>
           </>
         );
       },
@@ -145,35 +144,20 @@ const RequisitionList = () => {
       title: 'สถานะ',
       dataIndex: 'requisitionStatus',
       align: 'center',
-      width: 400,
+      width: 150,
       render: (text, record) => {
         return (
-          <Steps
-            current={record.requisitionStatus}
-            progressDot={customDot}
-            size="small"
-            responsive={true}>
-            <Step
-              title={
-                record.requisitionStatus == 0 ? 'รออนุมัติ' : 'อนุมัติแล้ว'
-              }
-              status={record.requisitionStatus == 0 ? 'wait' : 'finish'}
-            />
-            <Step
-              title="กำลังดำเนินการ"
-              status={record.requisitionStatus < 2 ? 'wait' : 'finish'}
-            />
-            <Step
-              title={record.requisitionStatus == 4 ? 'ยกเลิก' : 'เสร็จสิ้น'}
-              status={
-                record.requisitionStatus == 4
-                  ? 'error'
-                  : record.requisitionStatus == 3
-                  ? 'finish'
-                  : 'wait'
-              }
-            />
-          </Steps>
+          <div>
+            {text == 0
+              ? 'รออนุมัติ'
+              : text == 1
+              ? 'อนุมัติแล้ว'
+              : text == 2
+              ? 'กำลังดำเนินการ'
+              : text == 3
+              ? 'เสร็จสิ้น'
+              : 'ยกเลิก'}
+          </div>
         );
       },
     },
