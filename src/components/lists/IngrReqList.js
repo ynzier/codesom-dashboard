@@ -12,7 +12,8 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 import { useAlert } from 'react-alert';
 import { IoIosTrash } from 'react-icons/io';
-
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
+import { Preloader } from 'components';
 // services
 import BranchesService from 'services/branches.service';
 import requisitionService from 'services/requisition.service';
@@ -22,7 +23,6 @@ const { Option } = Select;
 
 const AddReqList = ({ ...props }) => {
   const alert = useAlert();
-
   const onFinish = values => {
     var inputData = values.requisitionItems;
     var tempData = [];
@@ -156,13 +156,49 @@ const AddReqList = ({ ...props }) => {
 };
 
 const IngrReqList = ({ ...props }) => {
+  const alert = useAlert();
+  const { promiseInProgress } = usePromiseTracker();
   const [branchData, setbranchData] = useState([]);
   const [selectedBranchId, setBranchId] = useState('');
   const [availableItem, setAvailableItem] = useState([]);
-
+  const sendData = () => {
+    var prepareData = {
+      reqHeader: {
+        creatorId: JSON.parse(localStorage.getItem('user')).authPayload.empId,
+        itemCount: props.reqData.length,
+      },
+      requisitionItems: props.reqData,
+    };
+    void trackPromise(
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(
+            requisitionService
+              .createRequisit(prepareData, selectedBranchId)
+              .then(res => {
+                if (res.data && res.data.message) {
+                  alert.show(res.data.message, { type: 'success' });
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 5000);
+                }
+              })
+              .catch(error => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+                alert.show(resMessage, { type: 'error' });
+              }),
+          );
+        }, 2000);
+      }),
+    );
+  };
   useEffect(() => {
     let mounted = true;
-
     BranchesService.getAllBranch()
       .then(res => {
         if (mounted) {
@@ -233,6 +269,7 @@ const IngrReqList = ({ ...props }) => {
 
   return (
     <>
+      <Preloader show={promiseInProgress} />
       <Card
         border="light"
         className="bg-white px-6 py-4"
@@ -258,7 +295,7 @@ const IngrReqList = ({ ...props }) => {
                     <option value="">เลือกสาขา</option>
                     {branchData.map(option => (
                       <option key={option.brId} value={option.brId}>
-                        {option.brName}
+                        {option.brName} ({option.brId})
                       </option>
                     ))}
                   </FormBS.Select>
@@ -281,7 +318,7 @@ const IngrReqList = ({ ...props }) => {
                   <Table
                     dataSource={props.reqData}
                     columns={header}
-                    rowKey="reqNo"
+                    rowKey="id"
                     pagination={{ pageSize: 20 }}
                     style={{ fontFamily: 'Prompt' }}
                   />
@@ -325,7 +362,9 @@ const IngrReqList = ({ ...props }) => {
                         boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                         backgroundColor: '#2DC678',
                       }}
-                      htmlType="submit">
+                      onClick={() => {
+                        sendData();
+                      }}>
                       ยืนยัน
                     </ButtonA>
                   </div>

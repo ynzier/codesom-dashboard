@@ -7,7 +7,14 @@ const getItemMakeRequest = async branchId => {
     params: { branchId: branchId },
   });
 };
+const createRequisit = async (data, branchId) => {
+  return http.post(prefix + '/createReqApp', data, {
+    headers: authHeader(),
+    params: { branchId: branchId },
+  });
+};
 
 export default {
   getItemMakeRequest,
+  createRequisit,
 };
