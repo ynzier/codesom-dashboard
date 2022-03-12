@@ -178,9 +178,9 @@ const IngrReqList = ({ ...props }) => {
               .then(res => {
                 if (res.data && res.data.message) {
                   alert.show(res.data.message, { type: 'success' });
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 5000);
+                  props.setReqData([]);
+                  setBranchId('');
+                  form.resetFields();
                 }
               })
               .catch(error => {
@@ -291,6 +291,7 @@ const IngrReqList = ({ ...props }) => {
                   <FormBS.Select
                     required
                     disabled={props.reqData.length > 0}
+                    value={selectedBranchId}
                     onChange={e => setBranchId(e.target.value)}>
                     <option value="">เลือกสาขา</option>
                     {branchData.map(option => (
