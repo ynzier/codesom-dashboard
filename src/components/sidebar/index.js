@@ -102,7 +102,10 @@ const Sidebar = () => {
                 สร้างใบเบิกสินค้า
                 <Link to={Routes.CreateRequisition.path} />
               </MenuItem>
-              <MenuItem>ประวัติการเบิกจ่ายสินค้า</MenuItem>
+              <MenuItem>
+                ประวัติการเบิกจ่ายสินค้า
+                <Link to={Routes.RequisitionList.path} />
+              </MenuItem>
             </SubMenu>
             <SubMenu
               title="เดลิเวอรี่"

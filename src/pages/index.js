@@ -24,6 +24,8 @@ export { default as GetBranch } from './branch/GetBranch';
 
 // Ingredient
 export { default as CreateRequisition } from './warehouse/CreateRequisition';
+export { default as RequisitionList } from './warehouse/RequisitionList';
+export { default as GetRequisition } from './warehouse/GetRequisition';
 
 // Product
 export { default as ProductList } from './product/ProductList';

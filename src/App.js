@@ -145,6 +145,16 @@ const App = () => {
           />
           <RouteWithSidebar
             exact
+            path={Routes.RequisitionList.path}
+            page={Page.RequisitionList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.GetRequisition.path}
+            page={Page.GetRequisition}
+          />
+          <RouteWithSidebar
+            exact
             path={Routes.ProductList.path}
             page={Page.ProductList}
           />

@@ -13,6 +13,8 @@
 .ant-table-tbody > tr > td {
   border-bottom: 0;
   transition: background 0.3s;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 .dynamic-delete-button {
   position: relative;
@@ -172,4 +174,44 @@
 }
 .ant-input-number-handler-wrap {
   visibility: hidden;
+}
+
+.fileIcon {
+  margin-right: 30px;
+}
+.approveIcon {
+  margin-right: 10px;
+}
+.ant-table-fixed {
+  table-layout: fixed;
+}
+.branchName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  width: 200px;
+}
+.ant-steps-item-finish
+  .ant-steps-item-icon
+  > .ant-steps-icon
+  .ant-steps-icon-dot {
+  background: #2dc678;
+}
+.ant-steps-item-error
+  .ant-steps-item-icon
+  > .ant-steps-icon
+  .ant-steps-icon-dot {
+  background: #d8434b;
+}
+.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: #97515f !important;
+}
+
+.bg-soft {
+  background-color: black;
+  opacity: 0.8;
 }

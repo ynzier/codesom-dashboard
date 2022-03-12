@@ -28,6 +28,8 @@ export const Routes = {
 
   // Ingredient
   CreateRequisition: { path: '/dashboard/warehouse/createRequisition' },
+  RequisitionList: { path: '/dashboard/warehouse/RequisitionList' },
+  GetRequisition: { path: '/dashboard/warehouse/getRequisition/:reqId' },
 
   // Products
   ProductList: { path: '/dashboard/product' },
