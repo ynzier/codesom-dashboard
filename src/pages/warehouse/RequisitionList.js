@@ -2,10 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
-
-import NumberFormat from 'react-number-format';
+import locale from 'antd/es/date-picker/locale/th_TH';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { Table, Steps, Popover } from 'antd';
+import { Table, DatePicker } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
@@ -13,6 +12,7 @@ import {
   faHome,
   faSearch,
   faFileInvoice,
+  faEraser,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   Col,
@@ -31,33 +31,80 @@ import requisitionService from 'services/requisition.service';
 const RequisitionList = () => {
   let history = useHistory();
   const alert = useAlert();
-  const { Step } = Steps;
-  const customDot = dot => <span>{dot}</span>;
-
+  const { RangePicker } = DatePicker;
+  const format = 'LLL';
   const { promiseInProgress } = usePromiseTracker({
     area: requisitionService.area.listAllReq,
   });
   const [showCreate, setShowCreate] = useState(false);
   const [record, setRecord] = useState([]);
-  const [filterData, setfilterData] = useState();
-  const search = value => {
-    const filterTable = record.filter(o =>
-      Object.keys(o).some(k =>
-        String(o[k]).toLowerCase().includes(value.toLowerCase()),
-      ),
-    );
+  const [filterData, setfilterData] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const [option, setOption] = useState('');
+  const [pickDate, setPickDate] = useState([]);
 
+  useEffect(async () => {
+    const filterTable = record.filter(obj => {
+      // keyword
+      if (keyword != '' && option == '' && pickDate.length < 1)
+        return Object.keys(obj).some(k =>
+          String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+        );
+      // option
+      if (keyword == '' && option != '' && pickDate.length < 1)
+        return obj.requisitionStatus == option;
+      // date
+      if (keyword == '' && option == '' && pickDate.length > 0)
+        return (
+          moment(obj.updatedAt).unix() >=
+            moment(pickDate[0]).startOf('day').unix() &&
+          moment(obj.updatedAt).unix() <=
+            moment(pickDate[1]).endOf('day').unix()
+        );
+      // keyword option
+      if (keyword != '' && option != '' && pickDate.length < 1)
+        return (
+          obj.requisitionStatus == option &&
+          Object.keys(obj).some(k =>
+            String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+          )
+        );
+      // keyword date
+      if (keyword != '' && option == '' && pickDate.length > 0)
+        return (
+          Object.keys(obj).some(k =>
+            String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+          ) &&
+          moment(obj.updatedAt).unix() >=
+            moment(pickDate[0]).startOf('day').unix() &&
+          moment(obj.updatedAt).unix() <=
+            moment(pickDate[1]).endOf('day').unix()
+        );
+      // option date
+      if (keyword == '' && option != '' && pickDate.length > 0)
+        return (
+          obj.requisitionStatus == option &&
+          moment(obj.updatedAt).unix() >=
+            moment(pickDate[0]).startOf('day').unix() &&
+          moment(obj.updatedAt).unix() <=
+            moment(pickDate[1]).endOf('day').unix()
+        );
+      // keyword option date
+      if (keyword != '' && option != '' && pickDate.length > 0)
+        return (
+          obj.requisitionStatus == option &&
+          moment(obj.updatedAt).unix() >=
+            moment(pickDate[0]).startOf('day').unix() &&
+          moment(obj.updatedAt).unix() <=
+            moment(pickDate[1]).endOf('day').unix() &&
+          Object.keys(obj).some(k =>
+            String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+          )
+        );
+    });
     setfilterData(filterTable);
-  };
-  const getFilter = value => {
-    console.log(value);
-    if (value) {
-      var filterTable = record.filter(record => record.type == value);
-      setfilterData(filterTable);
-    } else {
-      setfilterData(record);
-    }
-  };
+    return () => {};
+  }, [keyword, option, pickDate]);
 
   const openRecord = reqId => {
     history.push('/dashboard/warehouse/getRequisition/' + reqId);
@@ -193,7 +240,7 @@ const RequisitionList = () => {
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
             <Row>
-              <Col xs={8} md={6} lg={3} xl={4}>
+              <Col xs={8} md={3}>
                 <Form.Group>
                   <InputGroup>
                     <InputGroup.Text>
@@ -201,35 +248,73 @@ const RequisitionList = () => {
                     </InputGroup.Text>
                     <Form.Control
                       type="text"
-                      placeholder="ค้นหาชื่อวัตถุดิบ / รหัสวัตถุดิบ"
-                      onChange={e => search(e.target.value)}
+                      value={keyword}
+                      placeholder="ค้นหารหัส/ชื่อสาขา"
+                      onChange={e => setKeyword(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
               </Col>
-              <Col xs={4} md={4} xl={3}>
+              <Col xs={4} md={2}>
                 <Form.Group>
-                  <Form.Select onChange={e => getFilter(e.target.value)}>
-                    <option value="">ประเภท</option>
-                    <option value="วัตถุดิบ">วัตถุดิบ</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
+                  <Form.Select onChange={e => setOption(e.target.value)}>
+                    <option value="">สถานะ</option>
+                    <option value="0">รออนุมัติ</option>
+                    <option value="1">อนุมัติแล้ว</option>
+                    <option value="2">กำลังดำเนินการ</option>
+                    <option value="3">เสร็จสิ้น</option>
+                    <option value="4">ยกเลิก</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
-              <Col xs={5} xl={{ span: 2, offset: 3 }}>
+              <Col md="4">
+                <RangePicker
+                  locale={locale}
+                  size="large"
+                  ranges={{
+                    วันนี้: [moment().startOf('day'), moment().endOf('day')],
+                    เดือนนี้: [
+                      moment().startOf('month'),
+                      moment().endOf('month'),
+                    ],
+                  }}
+                  style={{ borderRadius: '10px', fontFamily: 'Prompt' }}
+                  popupStyle={{ fontFamily: 'Prompt' }}
+                  onChange={setPickDate}
+                />
+              </Col>
+
+              <Col xs={5} xl={{ span: 2, offset: 1 }}>
                 <Button
                   className="w-100"
                   variant="codesom"
                   onClick={() => setShowCreate(true)}
                   style={{
                     color: '#fff',
-                    height: '50px',
                     paddingTop: '0.75rem',
                     borderRadius: '10px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    boxShadow: 'rgb(0 0 0 / 10%) 0px 0.5rem 0.7rem',
                   }}>
                   เพิ่มรายการ
                 </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={{ offset: 8}}>
+                <a
+                  onClick={() => {
+                    setKeyword('');
+                    setOption('');
+                    setPickDate([]);
+                  }}
+                  style={{
+                    fontFamily: 'Prompt',
+                    color: '#b4b4b4',
+                    textDecorationLine: 'underline',
+                    textAlign: 'right',
+                  }}>
+                  เคลียร์ค้นหา
+                </a>
               </Col>
             </Row>
           </div>
@@ -237,7 +322,7 @@ const RequisitionList = () => {
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             tableLayout="fixed"
-            dataSource={filterData == null ? record : filterData}
+            dataSource={filterData.length > 0 ? filterData : record}
             columns={header}
             rowKey="requisitionId"
             loading={promiseInProgress}

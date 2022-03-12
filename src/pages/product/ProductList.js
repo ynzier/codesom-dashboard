@@ -29,26 +29,32 @@ const ProductList = () => {
   const alert = useAlert();
 
   const [record, setRecord] = useState([]);
-  const [filterData, setfilterData] = useState();
+  const [filterData, setfilterData] = useState([]);
   const [typeData, setTypeData] = useState([]);
-  const search = value => {
-    const filterTable = record.filter(o =>
-      Object.keys(o).some(k =>
-        String(o[k]).toLowerCase().includes(value.toLowerCase()),
-      ),
-    );
+  const [keyword, setKeyword] = useState('');
+  const [option, setOption] = useState('');
 
+  useEffect(async () => {
+    const filterTable = record.filter(obj => {
+      // keyword
+      if (keyword != '' && option == '')
+        return Object.keys(obj).some(k =>
+          String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+        );
+      // option
+      if (keyword == '' && option != '') return obj.prType == option;
+      // keyword option
+      if (keyword != '' && option != '')
+        return (
+          obj.prType == option &&
+          Object.keys(obj).some(k =>
+            String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
+          )
+        );
+    });
     setfilterData(filterTable);
-  };
-  const getFilter = value => {
-    console.log(value);
-    if (value) {
-      var filterTable = record.filter(record => record.prType == value);
-      setfilterData(filterTable);
-    } else {
-      setfilterData(record);
-    }
-  };
+    return () => {};
+  }, [keyword, option]);
 
   const openRecord = prId => {
     history.push('/dashboard/product/getProduct/' + prId);
@@ -239,15 +245,16 @@ const ProductList = () => {
                     </InputGroup.Text>
                     <Form.Control
                       type="text"
+                      value={keyword}
                       placeholder="ค้นหาชื่อสินค้า / รหัสสินค้า"
-                      onChange={e => search(e.target.value)}
+                      onChange={e => setKeyword(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
               </Col>
               <Col xs={4} md={4} xl={3}>
                 <Form.Group>
-                  <Form.Select onChange={e => getFilter(e.target.value)}>
+                  <Form.Select onChange={e => setOption(e.target.value)}>
                     <option value="">ชนิดสินค้า</option>
                     {typeData.map(option => (
                       <option key={option.typeId} value={option.typeId}>
@@ -278,7 +285,7 @@ const ProductList = () => {
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
-            dataSource={filterData == null ? record : filterData}
+            dataSource={filterData.length < 1 ? record : filterData}
             columns={header}
             loading={promiseInProgress}
             rowKey="prId"
