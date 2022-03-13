@@ -161,9 +161,6 @@ const RequisitionList = () => {
       dataIndex: 'branchName',
       align: 'center',
       width: 200,
-      render: (text, record) => {
-        return <span className="branchName">{text}</span>;
-      },
     },
     {
       title: 'จำนวน',
@@ -300,7 +297,7 @@ const RequisitionList = () => {
               </Col>
             </Row>
             <Row>
-              <Col md={{ offset: 8}}>
+              <Col md={{ offset: 8 }}>
                 <a
                   onClick={() => {
                     setKeyword('');
