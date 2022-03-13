@@ -12,48 +12,45 @@ const ProductBranchModal = ({ editable, prId }) => {
   const [branchList, setBranchList] = useState([]);
   const [optionList, setOptionList] = useState([]);
   const [edited, setEdited] = useState(false);
-  useEffect(async () => {
-    if (prId) {
-      await productService
-        .getAllPairByProductId(prId)
-        .then(async res => {
-          if (res.data.length > 0) {
-            var tempData = [];
-            await res.data.forEach(entry => {
-              tempData.push({
-                value: entry.branchId,
-                label: entry.branch.brName,
-              });
-            });
-            setBranchList(tempData);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
-      await branchesService.getAllBranchName().then(async res => {
+  const fetchPair = () => {
+    productService
+      .getAllPairByProductId(prId)
+      .then(async res => {
         if (res.data.length > 0) {
           var tempData = [];
           await res.data.forEach(entry => {
             tempData.push({
-              value: entry.brId,
-              label: entry.brName,
+              value: entry.branchId,
+              label: entry.branch.brName,
             });
           });
-          setOptionList(tempData);
+          setBranchList(tempData);
         }
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
       });
-    }
-    return () => {
-      setEdited(false);
-    };
-  }, [prId]);
+  };
+  const fetchBranch = () => {
+    branchesService.getAllBranchName().then(async res => {
+      if (res.data.length > 0) {
+        var tempData = [];
+        await res.data.forEach(entry => {
+          tempData.push({
+            value: entry.brId,
+            label: entry.brName,
+          });
+        });
+        setOptionList(tempData);
+      }
+    });
+  };
 
   const branchSelectStyle = {
     control: styles => ({
@@ -107,8 +104,8 @@ const ProductBranchModal = ({ editable, prId }) => {
   };
   const sendData = async () => {
     if (edited) {
-      if (branchList.length) {
-        var preArray;
+      var preArray;
+      if (branchList.length > 0) {
         preArray = branchList.map(item => {
           return {
             branchId: item.value,
@@ -116,10 +113,13 @@ const ProductBranchModal = ({ editable, prId }) => {
         });
         setBranchList(preArray);
       }
+      console.log(prId);
+      console.log(preArray);
       await productService
         .updatePairProductBranch(prId, preArray)
         .then(response => {
           setEdited(false);
+          fetchPair();
           alert.show(response.data.message, { type: 'success' });
         })
         .catch(error => {
@@ -152,6 +152,11 @@ const ProductBranchModal = ({ editable, prId }) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={show}
+        onShow={async () => {
+          console.log(branchList);
+          await fetchPair();
+          await fetchBranch();
+        }}
         style={{ borderRadius: 40 }}
         onHide={() => setShow(false)}>
         <Modal.Header closeButton>
@@ -184,7 +189,7 @@ const ProductBranchModal = ({ editable, prId }) => {
             isDisabled={!editable}
             isClearable={false}
             styles={branchSelectStyle}
-            defaultValue={branchList}
+            value={branchList}
             minMenuHeight="500"
             noOptionsMessage={() => (
               <div style={{ fontFamily: 'Prompt' }}>ไม่พบสาขาอื่น</div>

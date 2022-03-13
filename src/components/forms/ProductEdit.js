@@ -90,7 +90,10 @@ const ProductEdit = ({ prId }) => {
     };
     ProductService.updateProduct(prId, data)
       .then(res => {
-        if (res) alert.show(res.data.message, { type: 'success' });
+        if (res) {
+          alert.show(res.data.message, { type: 'success' });
+          setEditable(false);
+        }
       })
       .catch(error => {
         const resMessage =
@@ -344,10 +347,7 @@ const ProductEdit = ({ prId }) => {
             </Row>
             <Row className="mb-2">
               <Col md={{ span: 3, offset: 9 }}>
-                <ProductBranchModal
-                  editable={editable}
-                  prId={prId}
-                />
+                <ProductBranchModal editable={editable} prId={prId} />
               </Col>
             </Row>
             <Row>
