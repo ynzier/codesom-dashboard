@@ -237,7 +237,7 @@ const RequisitionList = () => {
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
             <Row>
-              <Col xs={8} md={3}>
+              <Col xs={8} md={5}>
                 <Form.Group>
                   <InputGroup>
                     <InputGroup.Text>
@@ -252,10 +252,10 @@ const RequisitionList = () => {
                   </InputGroup>
                 </Form.Group>
               </Col>
-              <Col xs={4} md={2}>
+              <Col xs={4} md={3}>
                 <Form.Group>
                   <Form.Select onChange={e => setOption(e.target.value)}>
-                    <option value="">สถานะ</option>
+                    <option value="">ทั้งหมด</option>
                     <option value="0">รออนุมัติ</option>
                     <option value="1">อนุมัติแล้ว</option>
                     <option value="2">กำลังดำเนินการ</option>
@@ -268,6 +268,7 @@ const RequisitionList = () => {
                 <RangePicker
                   locale={locale}
                   size="large"
+                  value={pickDate}
                   ranges={{
                     วันนี้: [moment().startOf('day'), moment().endOf('day')],
                     เดือนนี้: [
@@ -280,24 +281,9 @@ const RequisitionList = () => {
                   onChange={setPickDate}
                 />
               </Col>
-
-              <Col xs={5} xl={{ span: 2, offset: 1 }}>
-                <Button
-                  className="w-100"
-                  variant="codesom"
-                  onClick={() => setShowCreate(true)}
-                  style={{
-                    color: '#fff',
-                    paddingTop: '0.75rem',
-                    borderRadius: '10px',
-                    boxShadow: 'rgb(0 0 0 / 10%) 0px 0.5rem 0.7rem',
-                  }}>
-                  เพิ่มรายการ
-                </Button>
-              </Col>
             </Row>
             <Row>
-              <Col md={{ offset: 8 }}>
+              <div>
                 <a
                   onClick={() => {
                     setKeyword('');
@@ -309,17 +295,22 @@ const RequisitionList = () => {
                     color: '#b4b4b4',
                     textDecorationLine: 'underline',
                     textAlign: 'right',
+                    float: 'right',
                   }}>
                   เคลียร์ค้นหา
                 </a>
-              </Col>
+              </div>
             </Row>
           </div>
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             tableLayout="fixed"
-            dataSource={filterData.length > 0 ? filterData : record}
+            dataSource={
+              keyword != '' || pickDate.length > 0 || option != ''
+                ? filterData
+                : record
+            }
             columns={header}
             rowKey="requisitionId"
             loading={promiseInProgress}
