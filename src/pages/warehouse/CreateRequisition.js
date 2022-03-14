@@ -10,6 +10,7 @@ const IngrRequestPage = () => {
   const [selectedBranchId, setBranchId] = useState('');
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
+    console.log(reqData);
     document.title = 'คำร้องขอวัตถุดิบ';
   }, []);
 
@@ -26,16 +27,16 @@ const IngrRequestPage = () => {
               </Link>
             </Breadcrumb.Item>
             {reqData.length > 0 ? (
-              <Breadcrumb.Item active>คำร้องขอวัตถุดิบ</Breadcrumb.Item>
-            ) : (
               <>
                 <Breadcrumb.Item>
                   <Link to={Routes.CreateRequisition.path}>
-                    คำร้องขอวัตถุดิบ
+                    สร้างใบเบิกวัตถุดิบ
                   </Link>
                 </Breadcrumb.Item>
-                <Breadcrumb.Item active>ยืนยันคำขอวัตถุดิบ</Breadcrumb.Item>
+                <Breadcrumb.Item active>ยืนยันรายการ</Breadcrumb.Item>
               </>
+            ) : (
+              <Breadcrumb.Item active>สร้างใบเบิกวัตถุดิบ</Breadcrumb.Item>
             )}
           </Breadcrumb>
         </div>

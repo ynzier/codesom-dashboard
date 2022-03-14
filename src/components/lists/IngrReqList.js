@@ -29,7 +29,7 @@ const AddReqList = ({ ...props }) => {
     if (props.selectedBranchId) {
       inputData.forEach(obj => {
         props.availableItem.forEach(data => {
-          if (obj.reqPrName == data.id) {
+          if (obj.reqItemKey == data.key) {
             var pushData = {
               id: data.id,
               name: data.name,
@@ -61,13 +61,13 @@ const AddReqList = ({ ...props }) => {
                   <RowA key={field.key} style={{ height: '100%' }}>
                     <ColA span={12}>
                       <Form.Item
-                        name={[index, 'reqPrName']}
+                        name={[index, 'reqItemKey']}
                         rules={[{ required: true, message: '*เลือกรายการ' }]}>
                         <Select
                           placeholder="กดเพื่อเลือกรายการ"
                           dropdownStyle={{ fontFamily: 'Prompt' }}>
                           {props.availableItem.map((item, index) => (
-                            <Option key={index} value={item.id}>
+                            <Option key={index} value={item.key}>
                               {item.name} ({item.unit}) ({item.type})
                             </Option>
                           ))}
@@ -238,7 +238,7 @@ const IngrReqList = ({ ...props }) => {
       title: 'No.',
       dataIndex: 'id',
       align: 'center',
-      width: 200,
+      width: 120,
       defaultValue: 'none',
     },
     {
@@ -257,13 +257,12 @@ const IngrReqList = ({ ...props }) => {
       title: 'จำนวน',
       dataIndex: 'quantity',
       align: 'center',
-      width: 100,
-    },
-    {
-      title: 'หน่วย',
-      dataIndex: 'unit',
-      align: 'center',
-      width: 100,
+      width: 200,
+      render: (text, record) => (
+        <div>
+          {text} {record.unit}
+        </div>
+      ),
     },
   ];
 
@@ -281,8 +280,8 @@ const IngrReqList = ({ ...props }) => {
           <FormBS>
             <h2 className="mb-4">
               {props.reqData.length > 0
-                ? 'ยืนยันคำขอวัตถุดิบ'
-                : 'ร้องขอวัตถุดิบ'}
+                ? 'ตรวจสอบรายการ'
+                : 'รายการสินค้าที่เบิก'}
             </h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">

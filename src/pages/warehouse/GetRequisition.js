@@ -141,7 +141,7 @@ const GetRequisition = ({ ...props }) => {
                           title: '#',
                           dataIndex: 'key',
                           align: 'center',
-                          width: 80,
+                          width: 60,
                           render: (text, record, index) => {
                             return (
                               <div style={{ display: 'flex' }}>
@@ -154,7 +154,7 @@ const GetRequisition = ({ ...props }) => {
                           title: 'ID',
                           dataIndex: 'prodId',
                           align: 'center',
-                          width: 120,
+                          width: 150,
                           render: (text, record, index) => {
                             return (
                               <div style={{ display: 'flex' }}>
@@ -176,13 +176,12 @@ const GetRequisition = ({ ...props }) => {
                           title: 'จำนวน',
                           dataIndex: 'quantity',
                           align: 'center',
-                          width: 80,
-                        },
-                        {
-                          title: 'หน่วย',
-                          dataIndex: 'prodUnit',
-                          align: 'center',
-                          width: 90,
+                          width: 200,
+                          render: (text, record) => (
+                            <span>
+                              {text} {record.prodUnit}
+                            </span>
+                          ),
                         },
                       ]}
                       rowKey="prodId"
@@ -200,7 +199,7 @@ const GetRequisition = ({ ...props }) => {
                           title: '#',
                           dataIndex: 'key',
                           align: 'center',
-                          width: 80,
+                          width: 60,
                           render: (text, record, index) => {
                             return (
                               <div style={{ display: 'flex' }}>
@@ -213,7 +212,7 @@ const GetRequisition = ({ ...props }) => {
                           title: 'ID',
                           dataIndex: 'ingrId',
                           align: 'center',
-                          width: 120,
+                          width: 150,
                         },
                         {
                           title: 'รายการ',
@@ -225,13 +224,12 @@ const GetRequisition = ({ ...props }) => {
                           title: 'จำนวน',
                           dataIndex: 'quantity',
                           align: 'center',
-                          width: 80,
-                        },
-                        {
-                          title: 'หน่วย',
-                          dataIndex: 'ingrUnit',
-                          align: 'center',
-                          width: 90,
+                          width: 200,
+                          render: (text, record) => (
+                            <span>
+                              {text} {record.ingrUnit}
+                            </span>
+                          ),
                         },
                       ]}
                       rowKey="ingrId"
@@ -249,7 +247,7 @@ const GetRequisition = ({ ...props }) => {
                           title: '#',
                           dataIndex: 'key',
                           align: 'center',
-                          width: 80,
+                          width: 60,
                           render: (text, record, index) => {
                             return (
                               <div style={{ display: 'flex' }}>
@@ -262,7 +260,7 @@ const GetRequisition = ({ ...props }) => {
                           title: 'ID',
                           dataIndex: 'stuffId',
                           align: 'center',
-                          width: 120,
+                          width: 150,
                         },
                         {
                           title: 'รายการ',
@@ -274,13 +272,12 @@ const GetRequisition = ({ ...props }) => {
                           title: 'จำนวน',
                           dataIndex: 'quantity',
                           align: 'center',
-                          width: 80,
-                        },
-                        {
-                          title: 'หน่วย',
-                          dataIndex: 'stuffUnit',
-                          align: 'center',
-                          width: 90,
+                          width: 200,
+                          render: (text, record) => (
+                            <span>
+                              {text} {record.stuffUnit}
+                            </span>
+                          ),
                         },
                       ]}
                       rowKey="ingrId"
@@ -354,7 +351,9 @@ const GetRequisition = ({ ...props }) => {
               <Row>
                 <Col>ผู้ตรวจสอบสินค้า: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {!requisitData.validator && 'รอยืนยัน'}
+                  {!requisitData.validator ||
+                    (requisitData.requisitionStatus != 4 && 'รอยืนยัน')}
+                  {requisitData.requisitionStatus == 4 && 'รายการถูกยกเลิก'}
                   {requisitData.validator &&
                     requisitData.validator.firstName}{' '}
                   {requisitData.validator && requisitData.validator.lastName}
