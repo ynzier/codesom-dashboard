@@ -14,8 +14,10 @@ const ProductCreate = () => {
   const [typeData, setTypeData] = useState([]);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
+  const [productCost, setProductCost] = useState(0);
   const [productType, setProductType] = useState('');
   const [productDetail, setProductDetail] = useState('');
+  const [needProcess, setNeedProcess] = useState(false);
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
   const blockInvalidChar = e =>
@@ -172,6 +174,21 @@ const ProductCreate = () => {
                     uploadButton
                   )}
                 </Upload>
+                <Row>
+                  <Form.Group id="ItemNo">
+                    <Form.Label>คำอธิบายของสินค้า</Form.Label>
+                    <Form.Control
+                      type="text"
+                      as="textarea"
+                      rows={4}
+                      placeholder="คำอธิบายของสินค้า"
+                      name="productDetail"
+                      style={{ resize: 'none' }}
+                      value={productDetail}
+                      onChange={e => setProductDetail(e.target.value)}
+                    />
+                  </Form.Group>
+                </Row>
               </Col>
               <Col md={6} className="mb-3">
                 <Row>
@@ -190,9 +207,25 @@ const ProductCreate = () => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={4} className="mb-3">
+                  <Col md={6} className="mb-3">
                     <Form.Group id="modelID">
                       <Form.Label>ราคาทุน</Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        value={productCost}
+                        name="productCost"
+                        onWheel={event => event.currentTarget.blur()}
+                        onKeyDown={blockInvalidChar}
+                        onChange={e =>
+                          setProductCost(parseFloat(e.target.value).toFixed(2))
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6} className="mb-3">
+                    <Form.Group id="modelID">
+                      <Form.Label>ราคาขาย</Form.Label>
                       <Form.Control
                         required
                         type="number"
@@ -200,11 +233,15 @@ const ProductCreate = () => {
                         name="productPrice"
                         onWheel={event => event.currentTarget.blur()}
                         onKeyDown={blockInvalidChar}
-                        onChange={e => setProductPrice(e.target.value)}
+                        onChange={e =>
+                          setProductPrice(parseFloat(e.target.value).toFixed(2))
+                        }
                       />
                     </Form.Group>
                   </Col>
-                  <Col md={8} className="mb-3">
+                </Row>
+                <Row>
+                  <Col md={12} className="mb-3">
                     <Form.Group id="modelID">
                       <Form.Label>
                         ชนิดสินค้า{' '}
@@ -228,32 +265,27 @@ const ProductCreate = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="mb-4">
-                <Form.Group id="ItemNo">
-                  <Form.Label>คำอธิบายของสินค้า</Form.Label>
-                  <Form.Control
-                    type="text"
-                    as="textarea"
-                    rows={4}
-                    placeholder="คำอธิบายของสินค้า"
-                    name="productDetail"
-                    style={{ resize: 'none' }}
-                    value={productDetail}
-                    onChange={e => setProductDetail(e.target.value)}
-                  />
-                </Form.Group>
+                <Row>
+                  <Col md={12} className="mb-3">
+                    <Form.Group id="modelID">
+                      <Form.Switch
+                        label="Process"
+                        onChange={e => {
+                          setNeedProcess(e.target.checked);
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <Row>
               <Col md={{ span: 3, offset: 6 }}>
                 <div>
                   <Button
-                    variant="outline-danger"
+                    variant="outline-secondary"
                     onClick={() => history.back()}
-                    style={{ width: '100%' }}>
+                    style={{ width: '100%', borderWidth: 0 }}>
                     ย้อนกลับ
                   </Button>
                 </div>

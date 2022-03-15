@@ -38,18 +38,38 @@ const ProductList = () => {
     const filterTable = record.filter(obj => {
       // keyword
       if (keyword != '' && option == '')
-        return Object.keys(obj).some(k =>
-          String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
-        );
+        return Object.keys(obj).some(k => {
+          if (
+            k != 'image' &&
+            k != 'recipeId' &&
+            k != 'prImg' &&
+            k != 'prType' &&
+            k != 'product_type' &&
+            k != 'prUnit'
+          ) {
+            return String(obj[k]).toLowerCase().includes(keyword.toLowerCase());
+          }
+        });
       // option
       if (keyword == '' && option != '') return obj.prType == option;
       // keyword option
       if (keyword != '' && option != '')
         return (
           obj.prType == option &&
-          Object.keys(obj).some(k =>
-            String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
-          )
+          Object.keys(obj).some(k => {
+            if (
+              k != 'image' &&
+              k != 'recipeId' &&
+              k != 'prImg' &&
+              k != 'prType' &&
+              k != 'product_type' &&
+              k != 'prUnit'
+            ) {
+              return String(obj[k])
+                .toLowerCase()
+                .includes(keyword.toLowerCase());
+            }
+          })
         );
     });
     setfilterData(filterTable);
@@ -69,7 +89,6 @@ const ProductList = () => {
           ProductService.getAllProducts()
             .then(res => {
               if (mounted) {
-                console.log(res.data);
                 setRecord(res.data);
               }
             })
@@ -147,6 +166,16 @@ const ProductList = () => {
             <div style={{ textAlign: 'left', fontSize: '12px' }}>
               {record.prDetail}
             </div>
+            {record.recipeId && (
+              <div
+                style={{
+                  textAlign: 'left',
+                  fontSize: '12px',
+                  textDecorationLine: 'underline',
+                }}>
+                <a>ดูส่วนผสม</a>
+              </div>
+            )}
           </>
         );
       },
