@@ -539,6 +539,24 @@ const ProductEdit = ({ prId }) => {
               onChange={values => console.log(values)}
               onFinish={values => {
                 if (recipeEdit) {
+                  var isDuplicate = false;
+                  if (recipeEdit) {
+                    if (values.RecipeItem) {
+                      const uniqueValues = new Set(
+                        values.RecipeItem.map(v => v.id),
+                      );
+
+                      if (uniqueValues.size < values.RecipeItem.length) {
+                        isDuplicate = true;
+                      }
+                    }
+                    if (!isDuplicate) setRecipeData(values.RecipeItem);
+                    if (isDuplicate)
+                      return alert.show(
+                        'ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน',
+                        { type: 'error' },
+                      );
+                  }
                   updateRecipe(values.RecipeItem);
                 }
                 setRecipeEdit(!recipeEdit);

@@ -26,6 +26,19 @@ const AddReqList = ({ ...props }) => {
   const onFinish = values => {
     var inputData = values.requisitionItems;
     var tempData = [];
+    var isDuplicate = false;
+
+    const uniqueValues = new Set(inputData.map(v => v.id));
+
+    if (uniqueValues.size < inputData.length) {
+      isDuplicate = true;
+    }
+
+    if (isDuplicate)
+      return alert.show('ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน', {
+        type: 'error',
+      });
+
     if (props.selectedBranchId) {
       inputData.forEach(obj => {
         props.availableItem.forEach(data => {

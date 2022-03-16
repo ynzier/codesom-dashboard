@@ -451,9 +451,23 @@ const ProductCreate = () => {
               name="addRecipeForm"
               preserve={false}
               onFinish={values => {
+                var isDuplicate = false;
                 if (recipeEdit) {
-                  setRecipeData(values.RecipeItem);
-                  console.log(values);
+                  if (values.RecipeItem) {
+                    const uniqueValues = new Set(
+                      values.RecipeItem.map(v => v.id),
+                    );
+
+                    if (uniqueValues.size < values.RecipeItem.length) {
+                      isDuplicate = true;
+                    }
+                  }
+                  if (!isDuplicate) setRecipeData(values.RecipeItem);
+                  if (isDuplicate)
+                    return alert.show(
+                      'ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน',
+                      { type: 'error' },
+                    );
                 }
                 setRecipeEdit(!recipeEdit);
               }}>
