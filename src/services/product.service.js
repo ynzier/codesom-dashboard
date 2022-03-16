@@ -10,6 +10,12 @@ const createProduct = data => {
   });
 };
 
+const createProductWithRecipe = data => {
+  return http.post(prefix + '/createProductWithRecipe', data, {
+    headers: authHeader(),
+  });
+};
+
 const getAllProducts = () => {
   return http.get(prefix + '/getAllProducts', {
     headers: authHeader(),
@@ -42,10 +48,22 @@ const getProductById = prId => {
     params: { prId: prId },
   });
 };
+const getRecipeById = productId => {
+  return http.get(prefix + '/getRecipeById', {
+    headers: authHeader(),
+    params: { productId: productId },
+  });
+};
 const updateProduct = (prId, data) => {
   return http.put(prefix + '/updateProduct', data, {
     headers: authHeader(),
     params: { prId: prId },
+  });
+};
+const updateRecipe = (recipeId, data) => {
+  return http.put(prefix + '/updateRecipe', data, {
+    headers: authHeader(),
+    params: { recipeId: recipeId },
   });
 };
 const getAllPairByProductId = productId => {
@@ -73,6 +91,9 @@ export default {
   disableType,
   updateProduct,
   getAllPairByProductId,
+  getRecipeById,
   updatePairProductBranch,
+  createProductWithRecipe,
+  updateRecipe,
   area,
 };

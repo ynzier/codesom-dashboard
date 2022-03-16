@@ -12,6 +12,12 @@ const createIngredient = data => {
     },
   );
 };
+const ingredientForRecipe = () => {
+  return http.get(prefix + '/ingredientForRecipe', {
+    headers: authHeader(),
+  });
+};
 export default {
   createIngredient,
+  ingredientForRecipe,
 };

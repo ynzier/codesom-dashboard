@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import ProductService from 'services/product.service';
+import { RecipeLookUp } from 'components';
 
 const ProductList = () => {
   let history = useHistory();
@@ -28,6 +29,8 @@ const ProductList = () => {
   });
   const alert = useAlert();
 
+  const [showRecipe, setShowRecipe] = useState(false);
+  const [recipeId, setRecipeId] = useState();
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState([]);
   const [typeData, setTypeData] = useState([]);
@@ -166,14 +169,20 @@ const ProductList = () => {
             <div style={{ textAlign: 'left', fontSize: '12px' }}>
               {record.prDetail}
             </div>
-            {record.recipeId && (
+            {record.needProcess == 1 && (
               <div
                 style={{
                   textAlign: 'left',
                   fontSize: '12px',
                   textDecorationLine: 'underline',
                 }}>
-                <a>ดูส่วนผสม</a>
+                <a
+                  onClick={() => {
+                    setShowRecipe(true);
+                    setRecipeId(record.prId);
+                  }}>
+                  ดูส่วนผสม
+                </a>
               </div>
             )}
           </>
@@ -242,6 +251,11 @@ const ProductList = () => {
   ];
   return (
     <>
+      <RecipeLookUp
+        recipeId={recipeId}
+        showRecipe={showRecipe}
+        setShowRecipe={setShowRecipe}
+      />
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb

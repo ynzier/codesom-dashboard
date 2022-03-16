@@ -34,9 +34,7 @@ const GetProduct = ({ ...props }) => {
         </div>
       </div>
       <Row className="mb-4">
-        <Col xs={12} xl={8}>
-          <ProductEdit prId={prId} />
-        </Col>
+        <ProductEdit prId={prId} />
       </Row>
     </>
   );
