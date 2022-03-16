@@ -68,14 +68,16 @@ const ProductEdit = ({ prId }) => {
           setImgId(getData.prImg);
           setBase64TextString(getData.image.imgObj);
           setNeedProcess(getData.needProcess);
-          setRecipeDescription(getData.recipe.description);
-          setRecipeData(getData.recipe);
-          getData.recipe.recipe_ingredients.forEach(obj =>
-            fetchData.push({
-              ingrId: obj.ingrId,
-              amountRequired: obj.amountRequired,
-            }),
-          );
+          if (getData.needProcess) {
+            setRecipeDescription(getData.recipe.description);
+            setRecipeData(getData.recipe);
+            getData.recipe.recipe_ingredients.forEach(obj =>
+              fetchData.push({
+                ingrId: obj.ingrId,
+                amountRequired: obj.amountRequired,
+              }),
+            );
+          }
         }
       })
       .catch(error => {
