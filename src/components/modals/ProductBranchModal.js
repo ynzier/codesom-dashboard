@@ -113,8 +113,6 @@ const ProductBranchModal = ({ editable, prId }) => {
         });
         setBranchList(preArray);
       }
-      console.log(prId);
-      console.log(preArray);
       await productService
         .updatePairProductBranch(prId, preArray)
         .then(response => {

@@ -32,7 +32,6 @@ const ProductEdit = ({ prId }) => {
   const [productType, setProductType] = useState('');
   const [productDetail, setProductDetail] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
-  const [recipeData, setRecipeData] = useState();
   const [recipeEdit, setRecipeEdit] = useState(false);
   const [productStatus, setProductStatus] = useState('');
   const [imgId, setImgId] = useState();
@@ -70,7 +69,6 @@ const ProductEdit = ({ prId }) => {
           setNeedProcess(getData.needProcess);
           if (getData.needProcess) {
             setRecipeDescription(getData.recipe.description);
-            setRecipeData(getData.recipe);
             getData.recipe.recipe_ingredients.forEach(obj =>
               fetchData.push({
                 ingrId: obj.ingrId,
@@ -416,7 +414,11 @@ const ProductEdit = ({ prId }) => {
               </Row>
               <Row className="mb-2">
                 <Col md={{ span: 3, offset: 9 }}>
-                  <ProductBranchModal editable={editable} prId={prId} />
+                  <ProductBranchModal
+                    editable={editable}
+                    prId={prId}
+                    needProcess={needProcess}
+                  />
                 </Col>
               </Row>
               <Row>
@@ -550,7 +552,6 @@ const ProductEdit = ({ prId }) => {
                         isDuplicate = true;
                       }
                     }
-                    if (!isDuplicate) setRecipeData(values.RecipeItem);
                     if (isDuplicate)
                       return alert.show(
                         'ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน',
