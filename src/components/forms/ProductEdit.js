@@ -48,12 +48,19 @@ const ProductEdit = ({ prId }) => {
       await fetchProductType();
       await fetchforRecipe();
     }
+    return () => {};
   }, [prId]);
 
   const handleSubmit = e => {
     e.preventDefault();
     sendData();
   };
+
+  useEffect(() => {
+    return () => {
+      fetchData = [];
+    };
+  }, []);
 
   const fetchProductData = async prId => {
     await ProductService.getProductById(prId)
@@ -65,6 +72,7 @@ const ProductEdit = ({ prId }) => {
           setProductType(getData.prType);
           setProductDetail(getData.prDetail);
           setImgId(getData.prImg);
+          setProductStatus(getData.prStatus);
           setBase64TextString(getData.image.imgObj);
           setNeedProcess(getData.needProcess);
           if (getData.needProcess) {
@@ -346,7 +354,7 @@ const ProductEdit = ({ prId }) => {
                           onChange={() => {
                             if (productStatus == 'AVAILABLE')
                               return setProductStatus('UNAVAILABLE');
-                            setProductStatus('AVAILABLE');
+                            else setProductStatus('AVAILABLE');
                           }}
                           checked={productStatus == 'AVAILABLE' ? true : false}
                           className="react-switch"
@@ -538,14 +546,14 @@ const ProductEdit = ({ prId }) => {
               form={form}
               name="addRecipeForm"
               preserve={false}
-              onChange={values => console.log(values)}
               onFinish={values => {
                 if (recipeEdit) {
                   var isDuplicate = false;
                   if (recipeEdit) {
+                    console.log(values.RecipeItem);
                     if (values.RecipeItem) {
                       const uniqueValues = new Set(
-                        values.RecipeItem.map(v => v.id),
+                        values.RecipeItem.map(v => v.ingrId),
                       );
 
                       if (uniqueValues.size < values.RecipeItem.length) {

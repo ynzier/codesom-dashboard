@@ -6,7 +6,7 @@ import Select from 'react-select';
 import productService from 'services/product.service';
 import branchesService from 'services/branches.service';
 
-const ProductBranchModal = ({ editable, prId }) => {
+const ProductBranchModal = ({ editable, prId, needProcess }) => {
   const [show, setShow] = useState(false);
   const alert = useAlert();
   const [branchList, setBranchList] = useState([]);
@@ -161,23 +161,27 @@ const ProductBranchModal = ({ editable, prId }) => {
           <Modal.Title>รายชื่อสาขาที่จำหน่าย</Modal.Title>
         </Modal.Header>
         <Modal.Body className="px-5 mt-2 mb-4">
-          <div
-            className="mb-2"
-            style={{
-              fontFamily: 'Prompt',
-              fontWeight: 600,
-            }}>
-            ยอดคงเหลือแต่ละสาขา
-          </div>
-          <ListProductBranch prId={prId} editable={editable} />
-          <div
-            className="mb-2"
-            style={{
-              fontFamily: 'Prompt',
-              fontWeight: 600,
-            }}>
-            สาขาที่เลือก
-          </div>
+          {!needProcess && (
+            <>
+              <div
+                className="mb-2"
+                style={{
+                  fontFamily: 'Prompt',
+                  fontWeight: 600,
+                }}>
+                ยอดคงเหลือแต่ละสาขา
+              </div>
+              <ListProductBranch prId={prId} editable={editable} />
+              <div
+                className="mb-2"
+                style={{
+                  fontFamily: 'Prompt',
+                  fontWeight: 600,
+                }}>
+                สาขาที่เลือก
+              </div>
+            </>
+          )}
           <Select
             className="mb-2"
             isMulti

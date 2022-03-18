@@ -455,7 +455,7 @@ const ProductCreate = () => {
                 if (recipeEdit) {
                   if (values.RecipeItem) {
                     const uniqueValues = new Set(
-                      values.RecipeItem.map(v => v.id),
+                      values.RecipeItem.map(v => v.ingrId),
                     );
 
                     if (uniqueValues.size < values.RecipeItem.length) {

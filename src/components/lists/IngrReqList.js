@@ -27,8 +27,9 @@ const AddReqList = ({ ...props }) => {
     var inputData = values.requisitionItems;
     var tempData = [];
     var isDuplicate = false;
+    console.log(inputData);
 
-    const uniqueValues = new Set(inputData.map(v => v.id));
+    const uniqueValues = new Set(inputData.map(v => v.reqItemKey));
 
     if (uniqueValues.size < inputData.length) {
       isDuplicate = true;
@@ -64,12 +65,10 @@ const AddReqList = ({ ...props }) => {
   return (
     <Form form={props.form} name="reqIngrForm" onFinish={onFinish}>
       <Form.List name="requisitionItems">
-        {(fields, { add, remove }, { error }) => {
-          console.log(error);
+        {(fields, { add, remove }) => {
           return (
             <>
               {fields.map((field, index) => {
-                console.log(field[0]);
                 return (
                   <RowA key={field.key} style={{ height: '100%' }}>
                     <ColA span={12}>
