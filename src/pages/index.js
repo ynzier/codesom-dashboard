@@ -32,3 +32,8 @@ export { default as ProductList } from './product/ProductList';
 export { default as IngrAndStuffList } from './product/IngrAndStuffList';
 export { default as AddProduct } from './product/AddProduct';
 export { default as GetProduct } from './product/GetProduct';
+
+// Promotion
+export { default as AddPromotion } from './promotion/AddPromotion';
+export { default as GetPromotion } from './promotion/GetPromotion';
+export { default as PromotionList } from './promotion/PromotionList';

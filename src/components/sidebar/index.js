@@ -91,7 +91,10 @@ const Sidebar = () => {
                 วัตถุดิบและอื่นๆ
                 <Link to={Routes.IngrAndStuffList.path} />
               </MenuItem>
-              <MenuItem>โปรโมชั่น</MenuItem>
+              <MenuItem>
+                โปรโมชั่น
+                <Link to={Routes.PromotionList.path} />
+              </MenuItem>
             </SubMenu>
             <SubMenu title="คลังสินค้า" icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem>

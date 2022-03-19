@@ -620,7 +620,7 @@ const ProductEdit = ({ prId }) => {
                                 onClick={() => remove(field.name)}
                                 size={20}
                                 className="dynamic-delete-button"
-                                style={{ marginTop: '5px' }}
+                                style={{ marginTop: '5px', float: 'right' }}
                               />
                             </ColA>
                           </RowA>

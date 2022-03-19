@@ -173,6 +173,16 @@ const App = () => {
             path={Routes.GetProduct.path}
             page={Page.GetProduct}
           />
+          <RouteWithSidebar
+            exact
+            path={Routes.PromotionList.path}
+            page={Page.PromotionList}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.AddPromotion.path}
+            page={Page.AddPromotion}
+          />
           <Redirect to={Routes.NotFound.path} />
         </Switch>
       </AlertProvider>

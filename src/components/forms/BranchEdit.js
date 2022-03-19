@@ -364,6 +364,7 @@ function BranchEditForm({ ...props }) {
 
 const BranchEdit = ({ ...props }) => {
   const [editable, setEditable] = useState(false);
+  const alert = useAlert();
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [brTel, setBrTel] = useState('');

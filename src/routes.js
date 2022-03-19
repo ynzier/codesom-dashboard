@@ -36,4 +36,8 @@ export const Routes = {
   IngrAndStuffList: { path: '/dashboard/product/ingredient' },
   AddProduct: { path: '/dashboard/product/create' },
   GetProduct: { path: '/dashboard/product/getProduct/:prId' },
+  // Promotion
+  PromotionList: { path: '/dashboard/promotion' },
+  AddPromotion: { path: '/dashboard/promotion/create' },
+  GetPromotion: { path: '/dashboard/promotion/getPromotion/:prId' },
 };

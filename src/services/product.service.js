@@ -21,6 +21,11 @@ const getAllProducts = () => {
     headers: authHeader(),
   });
 };
+const getProductCreatePromo = () => {
+  return http.get(prefix + '/getProductCreatePromo', {
+    headers: authHeader(),
+  });
+};
 
 const getAllProductTypes = () => {
   return http.get(prefix + '/getAllProductTypes', {
@@ -96,4 +101,5 @@ export default {
   createProductWithRecipe,
   updateRecipe,
   area,
+  getProductCreatePromo,
 };
