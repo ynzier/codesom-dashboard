@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
-import { ProductEdit } from 'components';
+import { PromotionEdit } from 'components';
 const GetPromotion = ({ ...props }) => {
-  const [prId, setPrId] = useState();
+  const [promoId, setPromoId] = useState();
   useEffect(() => {
     document.title = 'ข้อมูลสินค้า';
-    console.log(props.match.params.prId);
-    setPrId(props.match.params.prId);
-  }, [prId]);
+    console.log(props.match.params.promoId);
+    setPromoId(props.match.params.promoId);
+  }, [promoId]);
 
   return (
     <>
@@ -34,7 +34,7 @@ const GetPromotion = ({ ...props }) => {
         </div>
       </div>
       <Row className="mb-4">
-        <ProductEdit prId={prId} />
+        <PromotionEdit promoId={promoId} />
       </Row>
     </>
   );

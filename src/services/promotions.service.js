@@ -13,8 +13,22 @@ const createPromotion = async data => {
     headers: authHeader(),
   });
 };
+const updatePromotion = async (promoId, data) => {
+  return http.put(prefix + '/updatePromotion', data, {
+    headers: authHeader(),
+    params: { promoId: promoId },
+  });
+};
 
+const getPromotionById = async promoId => {
+  return await http.get(prefix + '/getPromotionById', {
+    headers: authHeader(),
+    params: { promoId: promoId },
+  });
+};
 export default {
   getAllPromotion,
   createPromotion,
+  getPromotionById,
+  updatePromotion,
 };

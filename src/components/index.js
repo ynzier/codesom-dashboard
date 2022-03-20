@@ -38,3 +38,4 @@ export { default as RecipeLookUp } from './modals/RecipeLookUp';
 //Promotion
 
 export { default as PromotionCreate } from './forms/PromotionCreate';
+export { default as PromotionEdit } from './forms/PromotionEdit';

@@ -39,5 +39,5 @@ export const Routes = {
   // Promotion
   PromotionList: { path: '/dashboard/promotion' },
   AddPromotion: { path: '/dashboard/promotion/create' },
-  GetPromotion: { path: '/dashboard/promotion/getPromotion/:prId' },
+  GetPromotion: { path: '/dashboard/promotion/getPromotion/:promoId' },
 };

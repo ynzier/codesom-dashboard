@@ -34,7 +34,6 @@ const PromotionList = () => {
   const [recipeId, setRecipeId] = useState();
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState([]);
-  const [typeData, setTypeData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
 
@@ -80,8 +79,8 @@ const PromotionList = () => {
     return () => {};
   }, [keyword, option]);
 
-  const openRecord = prId => {
-    history.push('/dashboard/product/getProduct/' + prId);
+  const openRecord = promoId => {
+    history.push('/dashboard/promotion/getPromotion/' + promoId);
   };
   useEffect(async () => {
     document.title = 'รายการสินค้าทั้งหมด';
@@ -178,12 +177,13 @@ const PromotionList = () => {
                 <CardA
                   loading={promiseInProgress}
                   hoverable
-                  onClick={() => {
-                    console.log('first');
-                  }}
                   style={{ fontFamily: 'Prompt' }}
+                  onClick={() => {
+                    openRecord(item.promoId);
+                  }}
                   cover={
                     <Image
+                      preview={false}
                       style={{
                         objectFit: 'contain',
                       }}
@@ -198,7 +198,15 @@ const PromotionList = () => {
                       {moment(item.promoEnd).locale('th').format('LL')}
                     </div>,
                   ]}>
-                  <Meta title={item.promoName} description={item.promoDetail} />
+                  <Meta
+                    title={[<h4 key="promoName">{item.promoName}</h4>]}
+                    description={[
+                      <div key="promoName">{item.promoDetail}</div>,
+                    ]}
+                    onClick={() => {
+                      console.log(item.promoId);
+                    }}
+                  />
                 </CardA>
               </List.Item>
             )}
