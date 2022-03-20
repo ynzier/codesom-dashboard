@@ -63,7 +63,8 @@ const BranchList = () => {
                 padding: '0 10px 0 10px',
                 fontFamily: 'Prompt',
                 fontSize: '14px',
-              }}>
+              }}
+              className="add-dimension">
               <div
                 style={{
                   display: 'flex',

@@ -210,7 +210,10 @@ const PromotionCreate = () => {
                         uploadButton
                       )}
                     </Upload>
-                    <Form.Item name="promoDetail" label="คำอธิบายโปรโมชัน" rules={[{max:255,message:"*ห้ามเกิน 255 ตัวอักษร"}]}>
+                    <Form.Item
+                      name="promoDetail"
+                      label="คำอธิบายโปรโมชัน"
+                      rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
                       <Input.TextArea
                         autoSize={{ minRows: 2, maxRows: 6 }}
                         placeholder="คำอธิบายโปรโมชัน"
@@ -223,7 +226,10 @@ const PromotionCreate = () => {
                     <Form.Item
                       name="promoName"
                       label="ชื่อโปรโมชัน"
-                      rules={[{ required: true, message: '*ใส่ชื่อโปรโมชัน' }]}>
+                      rules={[
+                        { required: true, message: '*ใส่ชื่อโปรโมชัน' },
+                        { max: 30, message: '*ไม่เกิน 30 ตัวอักษร' },
+                      ]}>
                       <Input placeholder="ชื่อโปรโมชัน" />
                     </Form.Item>
                     <Form.Item

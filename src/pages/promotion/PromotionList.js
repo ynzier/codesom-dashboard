@@ -199,13 +199,20 @@ const PromotionList = () => {
                     </div>,
                   ]}>
                   <Meta
-                    title={[<h4 key="promoName">{item.promoName}</h4>]}
+                    title={[
+                      <div
+                        key="promoName"
+                        style={{
+                          whiteSpace: 'pre-wrap',
+                          overflowWrap: 'break-word',
+                          fontWeight: 'bold',
+                        }}>
+                        {item.promoName}
+                      </div>,
+                    ]}
                     description={[
                       <div key="promoName">{item.promoDetail}</div>,
                     ]}
-                    onClick={() => {
-                      console.log(item.promoId);
-                    }}
                   />
                 </CardA>
               </List.Item>

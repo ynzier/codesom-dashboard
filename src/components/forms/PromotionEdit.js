@@ -85,7 +85,7 @@ const PromotionEdit = props => {
       promoDetail: values.promoDetail,
       promoStart: values.promoDate[0],
       promoEnd: values.promoDate[1],
-      promoPrice: values.promoPrice,
+      promoPrice: values.promoPrice.toString(),
       imgId: imgId,
       productInPromotion: values.productInPromotion,
     };
@@ -250,7 +250,10 @@ const PromotionEdit = props => {
                     <Form.Item
                       name="promoName"
                       label="ชื่อโปรโมชัน"
-                      rules={[{ required: true, message: '*ใส่ชื่อโปรโมชัน' }]}>
+                      rules={[
+                        { required: true, message: '*ใส่ชื่อโปรโมชัน' },
+                        { max: 30, message: '*ไม่เกิน 30 ตัวอักษร' },
+                      ]}>
                       <Input placeholder="ชื่อโปรโมชัน" />
                     </Form.Item>
                     <Form.Item
