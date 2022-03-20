@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
-import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
+import {
+  Col,
+  Row,
+  Card,
+  Button,
+  InputGroup,
+  FormControl,
+} from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 // services
+import { Form, Input, Button as ButtonA } from 'antd';
 import EmployeeService from 'services/employee.service';
 import UserService from 'services/users.service';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 const UserCreateForm = () => {
   const alert = useAlert();
+  const [form] = Form.useForm();
   const initialRecordState = {
     userName: '',
     password: '',
@@ -31,29 +41,21 @@ const UserCreateForm = () => {
     });
   };
 
-  const form = document.forms[0];
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    sendData();
-  };
-
-  const sendData = async () => {
+  const sendData = async values => {
     var data = {
-      userName: record.userName,
-      password: record.password,
-      confirmPassword: record.confirmPassword,
+      userName: values.userName,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
       empId: validEmpId,
       firstName: firstName,
       lastName: lastName,
       createdBy: '0', //on start
     };
-    console.log(data);
     await UserService.createNewUser(data)
       .then(res => {
         if (res) {
           alert.show(res.data.message, { type: 'success' });
-          form.reset();
+          form.resetFields();
         }
       })
       .catch(error => {
@@ -75,129 +77,133 @@ const UserCreateForm = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form
+            form={form}
+            name="createEmployee"
+            preserve={false}
+            layout="vertical"
+            onFinish={values => {
+              sendData(values);
+            }}>
             <h2 className="mb-4">เพิ่มผู้ใช้งานใหม่</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="firstname">
-                  <Form.Label>รหัสพนักงาน</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="tel"
-                      maxLength="10"
-                      value={empId}
-                      autoComplete="new-password"
-                      placeholder="รหัสพนักงาน"
-                      onChange={e => checkInput(e)}
-                    />
-                    <Button
-                      variant="outline-codesom"
-                      style={{ zIndex: 5 }}
-                      onClick={e => {
-                        EmployeeService.getEmployeeByIdForUserCreate(empId)
-                          .then(response => {
-                            const RecievedData = response && response.data;
-                            alert.show(response.data.message, {
-                              type: 'success',
-                            });
-                            setFirstName(RecievedData.resData[0].first_name);
-                            setLastName(RecievedData.resData[0].last_name);
-                            setValidEmpId(empId);
-                            e.disabled = true;
-                          })
-                          .catch(error => {
-                            const resMessage =
-                              (error.response &&
-                                error.response.data &&
-                                error.response.data.message) ||
-                              error.message ||
-                              error.toString();
-                            setFirstName('');
-                            setLastName('');
-                            alert.show(resMessage, { type: 'error' });
-                          });
-                      }}>
-                      ค้นหา
-                    </Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-              <Col md={6} xl={6} className="mb-3">
-                <div></div>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="firstname">
-                  <Form.Label>ชื่อ</Form.Label>
-                  <Form.Control
-                    disabled
-                    type="text"
-                    placeholder="ชื่อ"
-                    name="firstName"
-                    value={firstName}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="lastname">
-                  <Form.Label>นามสกุล</Form.Label>
-                  <Form.Control
-                    disabled
-                    type="text"
-                    placeholder="นามสกุล"
-                    name="lastName"
-                    value={lastName}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="firstname">
-                  <Form.Label>ชื่อผู้ใช้งาน</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="ชื่อผู้ใช้งาน"
-                    name="userName"
+                <InputGroup>
+                  <FormControl
+                    type="tel"
+                    maxLength="10"
+                    value={empId}
                     autoComplete="new-password"
-                    maxLength="40"
-                    onChange={handleInputChange}
+                    placeholder="รหัสพนักงาน"
+                    onChange={e => checkInput(e)}
                   />
-                </Form.Group>
+                  <Button
+                    variant="outline-codesom"
+                    style={{ zIndex: 5 }}
+                    onClick={e => {
+                      EmployeeService.getEmployeeByIdForUserCreate(empId)
+                        .then(response => {
+                          const RecievedData = response && response.data;
+                          alert.show(response.data.message, {
+                            type: 'success',
+                          });
+                          setFirstName(RecievedData.resData[0].first_name);
+                          setLastName(RecievedData.resData[0].last_name);
+                          setValidEmpId(empId);
+                          form.resetFields();
+                          e.disabled = true;
+                        })
+                        .catch(error => {
+                          const resMessage =
+                            (error.response &&
+                              error.response.data &&
+                              error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+                          setFirstName('');
+                          setLastName('');
+                          alert.show(resMessage, { type: 'error' });
+                        });
+                    }}>
+                    ค้นหา
+                  </Button>
+                </InputGroup>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="password">
-                  <Form.Label>รหัสผ่าน</Form.Label>
-                  <Form.Control
-                    required
-                    type="password"
-                    placeholder="รหัสผ่าน"
-                    name="password"
-                    maxLength="40"
-                    autoComplete="off"
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
+                <Form.Item
+                  name="firstName"
+                  label="ชื่อ"
+                  initialValue={firstName}
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อ' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อ" disabled />
+                </Form.Item>
               </Col>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="password">
-                  <Form.Label>ยืนยันรหัสผ่าน</Form.Label>
-                  <Form.Control
-                    required
-                    type="password"
-                    placeholder="ยืนยันรหัสผ่าน"
-                    name="confirmPassword"
-                    maxLength="40"
-                    autoComplete="off"
-                    onChange={handleInputChange}
+                <Form.Item
+                  name="lastName"
+                  label="นามสกุล"
+                  initialValue={lastName}
+                  rules={[
+                    { required: true, message: '*ใส่นามสกุล' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="นามสกุล" disabled />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} xl={6} className="mb-3">
+                <Form.Item
+                  name="userName"
+                  label="ชื่อผู้ใช้งาน"
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อผู้ใช้งาน (Username)' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อผู้ใช้งาน" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} xl={6} className="mb-3">
+                <Form.Item
+                  name="password"
+                  label="รหัสผ่าน"
+                  rules={[
+                    { required: true, message: '*ใส่รหัสผ่าน' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input.Password
+                    placeholder="รหัสผ่าน"
+                    iconRender={visible =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
                   />
-                </Form.Group>
+                </Form.Item>
+              </Col>
+              <Col md={6} xl={6} className="mb-3">
+                <Form.Item
+                  name="confirmPassword"
+                  label="รหัสผ่าน"
+                  rules={[
+                    { required: true, message: '*ใส่รหัสผ่าน' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input.Password
+                    placeholder="ยืนยันรหัสผ่าน"
+                    iconRender={visible =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                  />
+                </Form.Item>
               </Col>
             </Row>
             <Row>
@@ -206,11 +212,7 @@ const UserCreateForm = () => {
                 <Button
                   variant="outline-danger"
                   onClick={() => {
-                    setEmpId('');
-                    setValidEmpId('');
-                    setFirstName('');
-                    setLastName('');
-                    form.reset();
+                    form.resetFields();
                   }}
                   style={{
                     borderRadius: '10px',
@@ -221,17 +223,21 @@ const UserCreateForm = () => {
                 </Button>
               </Col>
               <Col sm={3} md={3}>
-                <Button
-                  variant="tertiary"
-                  type="submit"
+                <ButtonA
                   style={{
-                    borderRadius: '10px',
                     width: '100%',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    height: '100%',
+                    borderRadius: '10px',
+                    borderWidth: '0',
                     color: 'white',
-                  }}>
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    backgroundColor: '#2DC678',
+                  }}
+                  htmlType="submit">
                   บันทึกข้อมูล
-                </Button>
+                </ButtonA>
               </Col>
             </Row>
           </Form>

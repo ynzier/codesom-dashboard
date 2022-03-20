@@ -16,13 +16,11 @@ const AddAdmin = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.EmployeeList.path}>พนักงาน</Link>
+            <Breadcrumb.Item href={Routes.EmployeeList.path}>
+              พนักงาน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>เพิ่มข้อมูลพนักงาน</Breadcrumb.Item>
           </Breadcrumb>
@@ -30,7 +28,7 @@ const AddAdmin = () => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <EmployeeCreate  />
+          <EmployeeCreate />
         </Col>
       </Row>
     </>

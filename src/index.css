@@ -327,3 +327,16 @@ textarea.ant-input {
   box-shadow: 0 0 0 2px rgba(179, 179, 179, 0.219);
   transition: border 1s, box-shadow 0.3s;
 }
+
+.ant-input-number-group-addon:first-child,
+.ant-input-number-group-addon:first-child .ant-select .ant-select-selector,
+.ant-input-number-group > .ant-input-number:first-child,
+.ant-input-number-group
+  > .ant-input-number:first-child
+  .ant-select
+  .ant-select-selector {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

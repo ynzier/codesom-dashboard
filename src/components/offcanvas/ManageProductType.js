@@ -52,7 +52,7 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
   return (
     <>
       <a style={{ color: '#c4c4c4', fontSize: 12 }} onClick={handleShow}>
-        เพิ่มเติม
+        (เพิ่มเติม)
       </a>
       <Offcanvas show={show} placement="end" onHide={handleClose} {...props}>
         <Offcanvas.Header closeButton>

@@ -35,7 +35,6 @@ const PromotionEdit = props => {
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
   const [loading, setLoading] = useState(false);
-  const [promoName, setPromoName] = useState('');
   useEffect(() => {
     fetchPromoData(props.promoId);
     fetchProducts();
@@ -67,7 +66,7 @@ const PromotionEdit = props => {
     var isDuplicate = false;
     if (values.productInPromotion) {
       const uniqueValues = new Set(
-        values.productInPromotion.map(v => v.ingrId),
+        values.productInPromotion.map(v => v.productId),
       );
 
       if (uniqueValues.size < values.productInPromotion.length) {
@@ -83,8 +82,8 @@ const PromotionEdit = props => {
     var data = {
       promoName: values.promoName,
       promoDetail: values.promoDetail,
-      promoStart: values.promoDate[0],
-      promoEnd: values.promoDate[1],
+      promoStart: moment(values.promoDate[0]).startOf('day'),
+      promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice.toString(),
       imgId: imgId,
       productInPromotion: values.productInPromotion,

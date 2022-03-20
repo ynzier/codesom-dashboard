@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, Card, Form, Button } from 'react-bootstrap';
+import { Col, Row, Card } from 'react-bootstrap';
 import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Upload } from 'antd';
+import { Form, InputNumber, Input, Upload, Button as ButtonA } from 'antd';
 import { useAlert } from 'react-alert';
 
 // services
@@ -10,34 +10,21 @@ import BranchService from 'services/branches.service';
 
 const BranchCreate = () => {
   const alert = useAlert();
-  const [brName, setBrName] = useState('');
-  const [brAddr, setBrAddr] = useState('');
-  const [tel, setTel] = useState('');
+  const [form] = Form.useForm();
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
-  const checkInput = e => {
-    const onlyDigits = e.target.value.replace(/\D/g, '');
-    setTel(onlyDigits);
-  };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    sendData();
-  };
-
-  const sendData = async () => {
+  const handleSubmit = async value => {
     var data = {
-      brName: brName,
-      brAddr: brAddr,
-      brTel: tel, //on start
+      brName: value.brName,
+      brAddr: value.address,
+      brTel: '0' + value.tel, //on start
       brImg: imgId,
     };
     await BranchService.createNewBranch(data)
       .then(response => {
-        setTel('');
-        setBrName('');
-        setBrAddr('');
         alert.show(response.data.message, { type: 'success' });
+        form.resetFields();
       })
       .catch(error => {
         const resMessage =
@@ -115,16 +102,24 @@ const BranchCreate = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form
+            form={form}
+            name="createBranch"
+            preserve={false}
+            layout="vertical"
+            onFinish={values => {
+              handleSubmit(values);
+            }}>
             <h2 className="mb-4">เพิ่มสาขา</h2>
             <Row className="mb-3">
               <Col sm={{ span: 6, offset: 3 }}>
                 <Upload
-                  name="branchImg"
+                  name="productImg"
                   listType="picture-card"
-                  className="avatar-uploader"
+                  className="avatar-uploader mb-1"
                   showUploadList={false}
                   customRequest={() => {}}
                   beforeUpload={beforeUpload}
@@ -135,7 +130,7 @@ const BranchCreate = () => {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                       }}
                     />
                   ) : (
@@ -147,93 +142,73 @@ const BranchCreate = () => {
             <Row>
               <Col>
                 <Col md={12} xl={12} className="mb-3">
-                  <Form.Group id="brName">
-                    <Form.Label>ชื่อสาขา</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="ชื่อสาขา"
-                      name="brName"
-                      maxLength="40"
-                      value={brName}
-                      onChange={e => setBrName(e.target.value)}
-                    />
-                  </Form.Group>
+                  <Form.Item
+                    name="brName"
+                    label="ชื่อสาขา"
+                    rules={[
+                      { required: true, message: '*ใส่ชื่อสาขา' },
+                      { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                    ]}>
+                    <Input placeholder="ชื่อสาขา" />
+                  </Form.Item>
                 </Col>
 
                 <Row>
                   <Col md={12} xl={12} className="mb-3">
-                    <Form.Group id="tel">
-                      <Form.Label>เบอร์โทรศัพท์</Form.Label>
-                      <Form.Control
-                        required
-                        type="tel"
-                        maxLength="10"
-                        value={tel}
+                    <Form.Item
+                      name="tel"
+                      label="เบอร์โทรศัพท์"
+                      rules={[
+                        { required: true, message: '*ใส่เบอร์โทรศัพท์' },
+                        { max: 9, message: '*ตัวเลขต้องไม่เกิน 9 ตัว' },
+                        { min: 8, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                      ]}>
+                      <InputNumber
+                        stringMode
+                        addonBefore="+66"
                         placeholder="เบอร์โทรศัพท์"
-                        onChange={e => checkInput(e)}
+                        style={{ width: '100%' }}
                       />
-                    </Form.Group>
+                    </Form.Item>
                   </Col>
                 </Row>
               </Col>
               <Col>
                 <Row>
                   <Col md={12} xl={12} className="mb-3">
-                    <Form.Group id="address">
-                      <Form.Label>ที่อยู่</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        as="textarea"
-                        rows={5}
+                    <Form.Item
+                      name="address"
+                      label="ที่อยู่"
+                      rules={[
+                        { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
+                        { required: true, message: '*ใส่ที่อยู่' },
+                      ]}>
+                      <Input.TextArea
+                        autoSize={{ minRows: 2, maxRows: 6 }}
                         placeholder="ที่อยู่"
-                        name="brAddr"
-                        value={brAddr}
-                        maxLength="255"
-                        onChange={e => setBrAddr(e.target.value)}
-                        style={{ resize: 'none', paddingBottom: '4px' }}
                       />
-                    </Form.Group>
+                    </Form.Item>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col sm={6} md={6} />
-              <Col sm={3} md={3}>
-                <Button
-                  variant="outline-danger"
-                  onClick={() => {
-                    setBrName('');
-                    setTel('');
-                    setBrAddr('');
-                    setImgId('');
-                    setBase64TextString('');
-                    setLoading(false);
-                  }}
+              <Col sm={3} md={{ span: 3, offset: 9 }}>
+                <ButtonA
                   style={{
-                    borderRadius: '10px',
                     width: '100%',
                     height: '50px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                  }}>
-                  ล้างข้อมูล
-                </Button>
-              </Col>
-              <Col sm={3} md={3}>
-                <Button
-                  variant="tertiary"
-                  type="submit"
-                  style={{
                     borderRadius: '10px',
-                    width: '100%',
-                    height: '50px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    borderWidth: '0',
                     color: 'white',
-                  }}>
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    backgroundColor: '#2DC678',
+                  }}
+                  htmlType="submit">
                   บันทึกข้อมูล
-                </Button>
+                </ButtonA>
               </Col>
             </Row>
           </Form>

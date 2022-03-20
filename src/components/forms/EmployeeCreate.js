@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, Card, Form, Button, InputGroup } from 'react-bootstrap';
-import moment from 'moment-timezone';
-import Datetime from 'react-datetime';
+import { Col, Row, Card, Button } from 'react-bootstrap';
 import RolesService from 'services/roles.service';
-import { FaCalendarAlt } from 'react-icons/fa';
+import moment from 'moment-timezone';
+import 'moment/locale/th';
+import locale from 'antd/es/date-picker/locale/th_TH';
+import {
+  Form,
+  InputNumber,
+  Select,
+  Input,
+  Button as ButtonA,
+  DatePicker,
+} from 'antd';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
 import { useAlert } from 'react-alert';
@@ -12,34 +20,11 @@ var getRoleData = [];
 var getBranchData = [];
 
 const CreateEmployeeForm = () => {
+  const [form] = Form.useForm();
+  const { Option } = Select;
   const alert = useAlert();
-  const initialRecordState = {
-    firstName: '',
-    lastName: '',
-  };
-  const [birthDate, setBirthDate] = useState();
   const [roleData, setRoleData] = useState([]);
   const [branchData, setbranchData] = useState([]);
-  const [salary, setSalary] = useState(0);
-  const blockInvalidChar = e =>
-    ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
-  const [selectedRoleId, setRoleId] = useState('');
-  const [selectedBranchId, setBranchId] = useState('');
-  const [address, setAddress] = useState('');
-  const [tel, setTel] = useState('');
-  const checkInput = e => {
-    const onlyDigits = e.target.value.replace(/\D/g, '');
-    setTel(onlyDigits);
-  };
-
-  const [record, setRecord] = useState(initialRecordState);
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setRecord({
-      ...record,
-      [name]: value,
-    });
-  };
 
   useEffect(() => {
     let mounted = true;
@@ -78,31 +63,22 @@ const CreateEmployeeForm = () => {
     return () => (mounted = false);
   }, []);
 
-  const form = document.forms[0];
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    sendData();
-  };
-
-  const sendData = () => {
+  const sendData = values => {
     var data = {
-      firstName: record.firstName,
-      lastName: record.lastName,
-      birthDate: moment(birthDate).format('YYYY-MM-DD'),
-      tel: tel,
-      address: address,
-      roleId: selectedRoleId,
-      branchId: selectedBranchId,
-      salary: salary,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      birthDate: moment(values.birthDate).format('YYYY-MM-DD'),
+      tel: '0' + values.tel,
+      address: values.address,
+      roleId: values.roleId,
+      branchId: values.branchId,
+      salary: values.salary,
       recruitDate: moment().format('YYYY-MM-DD'),
     };
     EmployeeService.createNewEmployee(data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
-        form.reset();
-        setBirthDate('');
-        setTel('');
+        form.resetFields();
       })
       .catch(error => {
         const resMessage =
@@ -123,161 +99,140 @@ const CreateEmployeeForm = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form
+            form={form}
+            name="createEmployee"
+            preserve={false}
+            layout="vertical"
+            onFinish={values => {
+              sendData(values);
+            }}>
             <h2 className="mb-4">เพิ่มพนักงานใหม่</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="firstname">
-                  <Form.Label>ชื่อ (1-40 ตัวอักษร)</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="ชื่อ"
-                    name="firstName"
-                    autoComplete="new-password"
-                    maxLength="40"
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
+                <Form.Item
+                  name="firstName"
+                  label="ชื่อ"
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อ' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อ" />
+                </Form.Item>
               </Col>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="lastname">
-                  <Form.Label>นามสกุล (1-40 ตัวอักษร)</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="นามสกุล"
-                    name="lastName"
-                    maxLength="40"
-                    autoComplete="new-password"
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
+                <Form.Item
+                  name="lastName"
+                  label="นามสกุล"
+                  rules={[
+                    { required: true, message: '*ใส่นามสกุล' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="นามสกุล" />
+                </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="birthDate">
-                  <Form.Label>วัน/เดือน/ปีเกิด</Form.Label>
-                  <Datetime
-                    timeFormat={false}
-                    onChange={setBirthDate}
-                    closeOnSelect={true}
-                    renderInput={(props, openCalendar) => (
-                      <InputGroup>
-                        <InputGroup.Text>
-                          <FaCalendarAlt />
-                        </InputGroup.Text>
-                        <Form.Control
-                          required
-                          type="text"
-                          autoComplete="new-password"
-                          value={
-                            birthDate
-                              ? moment(birthDate, 'DD/MM/YYYY').format(
-                                  'DD/MM/YYYY',
-                                )
-                              : ''
-                          }
-                          name="birthDate"
-                          placeholder="วัน/เดือน/ปีเกิด"
-                          onFocus={openCalendar}
-                          onChange={e => {
-                            setBirthDate(
-                              moment(e.target.value).format('DD/MM/YYYY'),
-                            );
-                          }}
-                        />
-                      </InputGroup>
-                    )}
+                <Form.Item
+                  name="birthDate"
+                  label="วัน/เดือน/ปีเกิด"
+                  rules={[{ required: true, message: '*ใส่วัน/เดือน/ปีเกิด' }]}>
+                  <DatePicker
+                    locale={locale}
+                    popupStyle={{ fontFamily: 'Prompt' }}
+                    size="large"
                   />
-                </Form.Group>
+                </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="tel">
-                  <Form.Label>เบอร์โทรศัพท์</Form.Label>
-                  <Form.Control
-                    required
-                    type="tel"
-                    maxLength="10"
-                    value={tel}
-                    autoComplete="new-password"
+                <Form.Item
+                  name="tel"
+                  label="เบอร์โทรศัพท์"
+                  rules={[
+                    { required: true, message: '*ใส่เบอร์โทรศัพท์' },
+                    { max: 9, message: '*ตัวเลขต้องไม่เกิน 9 ตัว' },
+                    { min: 8, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                  ]}>
+                  <InputNumber
+                    stringMode
+                    addonBefore="+66"
                     placeholder="เบอร์โทรศัพท์"
-                    onChange={e => checkInput(e)}
+                    style={{ width: '100%' }}
                   />
-                </Form.Group>
+                </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="address">
-                  <Form.Label>ที่อยู่</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    as="textarea"
-                    rows={3}
+                <Form.Item
+                  name="address"
+                  label="ที่อยู่"
+                  rules={[
+                    { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
+                    { required: true, message: '*ใส่ที่อยู่' },
+                  ]}>
+                  <Input.TextArea
+                    autoSize={{ minRows: 2, maxRows: 6 }}
                     placeholder="ที่อยู่"
-                    name="address"
-                    maxLength="255"
-                    autoComplete="new-password"
-                    onChange={e => setAddress(e.target.value)}
-                    style={{ resize: 'none' }}
                   />
-                </Form.Group>
+                </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-2">
-                <Form.Group id="branch">
-                  <Form.Label>สาขา</Form.Label>
-                  <Form.Select
-                    required
-                    onChange={e => setBranchId(e.target.value)}>
-                    <option value="">เลือกสาขา</option>
-                    {branchData.map(option => (
-                      <option key={option.brId} value={option.brId}>
-                        {option.brName}
-                      </option>
+                <Form.Item
+                  name={'branchId'}
+                  label="สาขา"
+                  rules={[{ required: true, message: '*เลือกสาขา' }]}>
+                  <Select
+                    placeholder="กดเพื่อเลือกสาขา"
+                    value={'branchId'}
+                    dropdownStyle={{ fontFamily: 'Prompt' }}>
+                    {branchData.map((item, index) => (
+                      <Option key={index} value={item.brId}>
+                        {item.brName}
+                      </Option>
                     ))}
-                  </Form.Select>
-                </Form.Group>
+                  </Select>
+                </Form.Item>
               </Col>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="role">
-                  <Form.Label>ตำแหน่ง</Form.Label>
-                  <Form.Select
-                    required
-                    onChange={e => setRoleId(e.target.value)}>
-                    <option value="">เลือกตำแหน่ง</option>
-                    {roleData.map(option => (
-                      <option key={option.roleId} value={option.roleId}>
-                        {option.roleName}
-                      </option>
+                <Form.Item
+                  name={'roleId'}
+                  label="ตำแหน่ง"
+                  rules={[{ required: true, message: '*เลือกตำแหน่ง' }]}>
+                  <Select
+                    placeholder="กดเพื่อเลือกตำแหน่ง"
+                    value={'branchId'}
+                    dropdownStyle={{ fontFamily: 'Prompt' }}>
+                    {roleData.map((item, index) => (
+                      <Option key={index} value={item.roleId}>
+                        {item.roleName}
+                      </Option>
                     ))}
-                  </Form.Select>
-                </Form.Group>
+                  </Select>
+                </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <Form.Group id="salary">
-                  <Form.Label>เงินเดือน</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    placeholder="เงินเดือน (บาท)"
-                    name="salary"
+                <Form.Item
+                  name="salary"
+                  label="เงินเดือน"
+                  rules={[{ required: true, message: '*กรอกเงินเดือน' }]}>
+                  <InputNumber
                     min="0"
-                    onWheel={event => event.currentTarget.blur()}
-                    onKeyDown={blockInvalidChar}
-                    onChange={e => setSalary(e.target.value)}
+                    precision="2"
+                    stringMode
+                    placeholder="0.00"
                   />
-                </Form.Group>
+                </Form.Item>
               </Col>
             </Row>
             <Row>
@@ -286,30 +241,33 @@ const CreateEmployeeForm = () => {
                 <Button
                   variant="outline-danger"
                   onClick={() => {
-                    form.reset();
-                    setBirthDate('');
-                    setTel('');
+                    form.resetFields();
                   }}
                   style={{
                     borderRadius: '10px',
                     width: '100%',
+                    borderWidth: 0,
                     boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   }}>
                   ล้างข้อมูล
                 </Button>
               </Col>
               <Col sm={3}>
-                <Button
-                  variant="tertiary"
-                  type="submit"
+                <ButtonA
                   style={{
-                    borderRadius: '10px',
                     width: '100%',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    height: '100%',
+                    borderRadius: '10px',
+                    borderWidth: '0',
                     color: 'white',
-                  }}>
-                  บันทึกข้อมูล
-                </Button>
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    backgroundColor: '#2DC678',
+                  }}
+                  htmlType="submit">
+                  ยืนยัน
+                </ButtonA>
               </Col>
             </Row>
           </Form>

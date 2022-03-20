@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Col, Row, Card, Button, Stack } from 'react-bootstrap';
 import FileService from 'services/file.service';
-import storageService from 'services/storage.service';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
@@ -44,7 +43,7 @@ const PromotionCreate = () => {
     var isDuplicate = false;
     if (values.productInPromotion) {
       const uniqueValues = new Set(
-        values.productInPromotion.map(v => v.ingrId),
+        values.productInPromotion.map(v => v.productId),
       );
 
       if (uniqueValues.size < values.productInPromotion.length) {
@@ -60,8 +59,8 @@ const PromotionCreate = () => {
     var data = {
       promoName: values.promoName,
       promoDetail: values.promoDetail,
-      promoStart: values.promoDate[0],
-      promoEnd: values.promoDate[1],
+      promoStart: moment(values.promoDate[0]).startOf('day'),
+      promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
@@ -179,7 +178,7 @@ const PromotionCreate = () => {
           <Card.Body>
             <Form
               form={form}
-              name="addRecipeForm"
+              name="addPromotion"
               preserve={false}
               layout="vertical"
               onFinish={values => {
@@ -213,7 +212,7 @@ const PromotionCreate = () => {
                     <Form.Item
                       name="promoDetail"
                       label="คำอธิบายโปรโมชัน"
-                      rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
+                      rules={[{ max: 50, message: '*ห้ามเกิน 50 ตัวอักษร' }]}>
                       <Input.TextArea
                         autoSize={{ minRows: 2, maxRows: 6 }}
                         placeholder="คำอธิบายโปรโมชัน"
