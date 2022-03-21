@@ -12,7 +12,6 @@ import {
   DatePicker,
 } from 'antd';
 import RolesService from 'services/roles.service';
-import { FaCalendarAlt } from 'react-icons/fa';
 import BranchesService from 'services/branches.service';
 import EmployeeService from 'services/employee.service';
 import { useAlert } from 'react-alert';

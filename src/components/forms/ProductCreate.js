@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Col, Row, Card, Button, InputGroup } from 'react-bootstrap';
+import { Col, Row, Card, Button } from 'react-bootstrap';
 import ProductService from 'services/product.service';
 import FileService from 'services/file.service';
 import storageService from 'services/storage.service';
@@ -20,7 +20,6 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType } from 'components';
 import { useAlert } from 'react-alert';
 import ingredientService from 'services/ingredient.service';
-import productService from 'services/product.service';
 
 var getData = [];
 
@@ -32,15 +31,7 @@ const ProductCreate = () => {
   const [dataIngrStuff, setDataIngrStuff] = useState([]);
   const [typeData, setTypeData] = useState([]);
   const [needProcess, setNeedProcess] = useState(false);
-  const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState('0');
-  const [productCost, setProductCost] = useState('0');
-  const [productType, setProductType] = useState();
-  const [productDetail, setProductDetail] = useState('');
-  const [recipeDescription, setRecipeDescription] = useState('');
   const [base64TextString, setBase64TextString] = useState();
-  const [recipeData, setRecipeData] = useState();
-  const [recipeEdit, setRecipeEdit] = useState(true);
   const [imgId, setImgId] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -50,8 +41,9 @@ const ProductCreate = () => {
   }, []);
 
   const handleSubmit = values => {
-    var isDuplicate = false;
-    if (recipeEdit) {
+    console.log(values);
+    if (needProcess) {
+      var isDuplicate = false;
       if (values.RecipeItem) {
         const uniqueValues = new Set(values.RecipeItem.map(v => v.ingrId));
 
@@ -59,16 +51,14 @@ const ProductCreate = () => {
           isDuplicate = true;
         }
       }
-      if (!isDuplicate) setRecipeData(values.RecipeItem);
       if (isDuplicate)
         return alert.show('ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน', {
           type: 'error',
         });
-    }
-    if (!needProcess) sendData(values);
-    else {
+
       sendRecipeProduct(values);
     }
+    if (!needProcess) sendData(values);
   };
 
   const fetchProductType = () => {
@@ -109,7 +99,7 @@ const ProductCreate = () => {
   const sendData = e => {
     var data = {
       prName: e.productName,
-      productCost: e.productCost,
+      prCost: e.productCost,
       prPrice: e.productPrice,
       prImg: imgId,
       prType: e.productType,
@@ -136,14 +126,17 @@ const ProductCreate = () => {
     var data = {
       productData: {
         prName: e.productName,
-        productCost: e.productCost,
+        prCost: e.productCost,
         prPrice: e.productPrice,
         prImg: imgId,
         prType: e.productType,
         prDetail: e.productDetail,
         needProcess: needProcess,
       },
-      recipeData: { description: recipeDescription, ingredients: recipeData },
+      recipeData: {
+        description: e.recipeDescription,
+        ingredients: e.RecipeItem,
+      },
     };
     ProductService.createProductWithRecipe(data)
       .then(res => {
@@ -237,24 +230,6 @@ const ProductCreate = () => {
         layout="vertical"
         onFinish={values => {
           handleSubmit(values);
-          // var isDuplicate = false;
-          // if (recipeEdit) {
-          //   if (values.RecipeItem) {
-          //     const uniqueValues = new Set(
-          //       values.RecipeItem.map(v => v.ingrId),
-          //     );
-
-          //     if (uniqueValues.size < values.RecipeItem.length) {
-          //       isDuplicate = true;
-          //     }
-          //   }
-          //   if (!isDuplicate) setRecipeData(values.RecipeItem);
-          //   if (isDuplicate)
-          //     return alert.show(
-          //       'ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน',
-          //       { type: 'error' },
-          //     );
-          // }
         }}>
         <Row>
           <Col xs={12} md={8}>
@@ -415,7 +390,7 @@ const ProductCreate = () => {
                           backgroundColor: '#2DC678',
                         }}
                         htmlType="submit">
-                        {recipeEdit ? 'ยืนยัน' : 'แก้ไข'}
+                        ยืนยัน
                       </ButtonA>
                     </div>
                   </Col>
@@ -423,116 +398,119 @@ const ProductCreate = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={4}>
-            <Card
-              border="light"
-              className="bg-white px-2 py-4"
-              style={{
-                borderRadius: '36px',
-                boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                fontFamily: 'Prompt',
-                display: needProcess ? 'block' : 'none',
-              }}>
-              <Card.Body>
-                <h5 className="mb-4">ข้อมูลการผสม / Recipe</h5>
-                <Row>
-                  <Form.Item
-                    name="recipeDescription"
-                    label="คำอธิบายการผสม"
-                    rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
-                    <Input.TextArea
-                      autoSize={{ minRows: 2, maxRows: 6 }}
-                      placeholder="คำอธิบายการผสม"
-                    />
-                  </Form.Item>
-                </Row>
-                <Row className="mb-3 mt-3">
-                  <Col xs={9} style={{ fontWeight: 'bold' }}>
-                    ส่วนผสม
-                  </Col>
-                  <Col
-                    xs={3}
-                    style={{ fontWeight: 'bold', textAlign: 'center' }}>
-                    ปริมาณ
-                  </Col>
-                </Row>
-                <Form.List name="RecipeItem" initialValue={[{}]}>
-                  {(fields, { add, remove }, { error }) => {
-                    return (
-                      <>
-                        {fields.map((field, index) => {
-                          return (
-                            <RowA key={field.key} style={{ height: '100%' }}>
-                              <ColA span={16}>
-                                <Form.Item
-                                  name={[index, 'ingrId']}
-                                  rules={[
-                                    { required: true, message: '*เลือกรายการ' },
-                                  ]}>
-                                  <Select
-                                    placeholder="กดเพื่อเลือกรายการ"
-                                    disabled={!recipeEdit}
-                                    value={[index, 'ingrId']}
-                                    dropdownStyle={{ fontFamily: 'Prompt' }}>
-                                    {dataIngrStuff.map((item, index) => (
-                                      <Option key={index} value={item.id}>
-                                        {item.name} ({item.unit})
-                                      </Option>
-                                    ))}
-                                  </Select>
-                                </Form.Item>
-                              </ColA>
-                              <ColA span={1} />
-                              <ColA span={6} style={{ textAlign: 'center' }}>
-                                <Form.Item
-                                  name={[index, 'amountRequired']}
-                                  rules={[
-                                    { required: true, message: 'ใส่จำนวน' },
-                                  ]}>
-                                  <InputNumber
-                                    min="1"
-                                    max="1000"
-                                    disabled={!recipeEdit}
-                                    style={{
-                                      textAlign: 'center',
-                                      width: '100%',
-                                      textOverflow: 'ellipsis',
-                                    }}
+          {needProcess && (
+            <Col md={4}>
+              <Card
+                border="light"
+                className="bg-white px-2 py-4"
+                style={{
+                  borderRadius: '36px',
+                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  fontFamily: 'Prompt',
+                  display: 'block',
+                }}>
+                <Card.Body>
+                  <h5 className="mb-4">ข้อมูลการผสม / Recipe</h5>
+                  <Row>
+                    <Form.Item
+                      name="recipeDescription"
+                      label="คำอธิบายการผสม"
+                      rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
+                      <Input.TextArea
+                        autoSize={{ minRows: 2, maxRows: 6 }}
+                        placeholder="คำอธิบายการผสม"
+                      />
+                    </Form.Item>
+                  </Row>
+                  <Row className="mb-3 mt-3">
+                    <Col xs={9} style={{ fontWeight: 'bold' }}>
+                      ส่วนผสม
+                    </Col>
+                    <Col
+                      xs={3}
+                      style={{ fontWeight: 'bold', textAlign: 'center' }}>
+                      ปริมาณ
+                    </Col>
+                  </Row>
+                  <Form.List name="RecipeItem" initialValue={[{}]}>
+                    {(fields, { add, remove }, { error }) => {
+                      return (
+                        <>
+                          {fields.map((field, index) => {
+                            return (
+                              <RowA key={field.key} style={{ height: '100%' }}>
+                                <ColA span={16}>
+                                  <Form.Item
+                                    name={[index, 'ingrId']}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: '*เลือกรายการ',
+                                      },
+                                    ]}>
+                                    <Select
+                                      placeholder="กดเพื่อเลือกรายการ"
+                                      value={[index, 'ingrId']}
+                                      dropdownStyle={{ fontFamily: 'Prompt' }}>
+                                      {dataIngrStuff.map((item, index) => (
+                                        <Option key={index} value={item.id}>
+                                          {item.name} ({item.unit})
+                                        </Option>
+                                      ))}
+                                    </Select>
+                                  </Form.Item>
+                                </ColA>
+                                <ColA span={1} />
+                                <ColA span={6} style={{ textAlign: 'center' }}>
+                                  <Form.Item
+                                    name={[index, 'amountRequired']}
+                                    rules={[
+                                      { required: true, message: 'ใส่จำนวน' },
+                                    ]}>
+                                    <InputNumber
+                                      min="1"
+                                      max="1000"
+                                      style={{
+                                        textAlign: 'center',
+                                        width: '100%',
+                                        textOverflow: 'ellipsis',
+                                      }}
+                                    />
+                                  </Form.Item>
+                                </ColA>
+                                <ColA span={1}>
+                                  <IoIosTrash
+                                    onClick={() => remove(field.name)}
+                                    size={20}
+                                    className="dynamic-delete-button"
+                                    style={{ marginTop: '5px', float: 'right' }}
                                   />
-                                </Form.Item>
-                              </ColA>
-                              <ColA span={1}>
-                                <IoIosTrash
-                                  onClick={() => remove(field.name)}
-                                  size={20}
-                                  className="dynamic-delete-button"
-                                  style={{ marginTop: '5px', float: 'right' }}
-                                />
-                              </ColA>
-                            </RowA>
-                          );
-                        })}
-                        <RowA style={{ justifyContent: 'center' }}>
-                          <Button
-                            variant="codesom"
-                            onClick={() => {
-                              add();
-                            }}
-                            style={{
-                              color: '#97515F',
-                              backgroundColor: 'transparent',
-                              borderStyle: 'none',
-                            }}>
-                            <PlusOutlined />
-                          </Button>
-                        </RowA>
-                      </>
-                    );
-                  }}
-                </Form.List>
-              </Card.Body>
-            </Card>
-          </Col>
+                                </ColA>
+                              </RowA>
+                            );
+                          })}
+                          <RowA style={{ justifyContent: 'center' }}>
+                            <Button
+                              variant="codesom"
+                              onClick={() => {
+                                add();
+                              }}
+                              style={{
+                                color: '#97515F',
+                                backgroundColor: 'transparent',
+                                borderStyle: 'none',
+                              }}>
+                              <PlusOutlined />
+                            </Button>
+                          </RowA>
+                        </>
+                      );
+                    }}
+                  </Form.List>
+                </Card.Body>
+              </Card>
+            </Col>
+          )}
         </Row>
       </Form>
     </>

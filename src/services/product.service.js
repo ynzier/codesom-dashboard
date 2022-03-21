@@ -15,6 +15,12 @@ const createProductWithRecipe = data => {
     headers: authHeader(),
   });
 };
+const updateProductWithRecipe = (productId, data) => {
+  return http.put(prefix + '/updateProductWithRecipe', data, {
+    headers: authHeader(),
+    params: { productId: productId },
+  });
+};
 
 const getAllProducts = () => {
   return http.get(prefix + '/getAllProducts', {
@@ -102,4 +108,5 @@ export default {
   updateRecipe,
   area,
   getProductCreatePromo,
+  updateProductWithRecipe,
 };

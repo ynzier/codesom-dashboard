@@ -50,7 +50,6 @@ const PromotionCreate = () => {
         isDuplicate = true;
       }
     }
-    if (!isDuplicate) setPushProduct(values.productInPromotion);
     if (isDuplicate)
       return alert.show('ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน', {
         type: 'error',
