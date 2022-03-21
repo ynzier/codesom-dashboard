@@ -23,13 +23,14 @@ import { useAlert } from 'react-alert';
 import productService from 'services/product.service';
 import promotionsService from 'services/promotions.service';
 
+let tempCost;
 const PromotionEdit = props => {
   const alert = useAlert();
   const [form] = Form.useForm();
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const { promiseInProgress } = usePromiseTracker({});
-  const [pushProduct, setPushProduct] = useState([]);
+  const [promoCost, setPromoCost] = useState(0);
   const [productData, setProductData] = useState([]);
   const [promoData, setPromoData] = useState({});
   const [base64TextString, setBase64TextString] = useState();
@@ -46,8 +47,8 @@ const PromotionEdit = props => {
       .then(res => {
         if (res.data) {
           setPromoData(res.data);
+          console.log(res.data);
           form.resetFields();
-
           setBase64TextString(res.data?.image?.imgObj);
         }
       })
@@ -73,7 +74,6 @@ const PromotionEdit = props => {
         isDuplicate = true;
       }
     }
-    if (!isDuplicate) setPushProduct(values.productInPromotion);
     if (isDuplicate)
       return alert.show('ทำรายการไม่สำเร็จ เนื่องจากมีการใช้วัตถุดิบซ้ำกัน', {
         type: 'error',
@@ -208,7 +208,8 @@ const PromotionEdit = props => {
               layout="vertical"
               onValuesChange={(_, value) => {
                 if (value.productInPromotion) {
-                  let sumCost = 0;
+                  let sumCost = promoCost;
+                  console.log(promoCost);
                   value.productInPromotion.forEach(e => {
                     if (e != undefined && e.productId && e.count) {
                       const price = productData.filter(
@@ -394,7 +395,10 @@ const PromotionEdit = props => {
                 }}
               </Form.List>
               <RowA style={{ justifyContent: 'flex-end' }}>
-                <Form.Item name="promoCost" label="ราคาปกติ">
+                <Form.Item
+                  name="promoCost"
+                  label="ราคาปกติ"
+                  initialValue={promoData.promoCost}>
                   <InputNumber
                     min="0"
                     precision="2"

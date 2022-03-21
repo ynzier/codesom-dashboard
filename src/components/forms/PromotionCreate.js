@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
+import NumberFormat from 'react-number-format';
 import { IoIosTrash } from 'react-icons/io';
 import {
   Col as ColA,
@@ -28,6 +29,7 @@ const PromotionCreate = () => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const [productData, setProductData] = useState([]);
+  const [promoCost, setPromoCost] = useState(0);
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
   const [loading, setLoading] = useState(false);
@@ -59,7 +61,7 @@ const PromotionCreate = () => {
       promoStart: moment(values.promoDate[0]).startOf('day'),
       promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice,
-      promoCost: values.promoCost,
+      promoCost: promoCost,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
     };
@@ -191,7 +193,7 @@ const PromotionCreate = () => {
                       sumCost = sumCost + price[0].prPrice * e.count;
                     }
                   });
-                  form.setFieldsValue({ promoCost: sumCost });
+                  setPromoCost(sumCost);
                 }
               }}
               onFinish={values => {
@@ -361,15 +363,15 @@ const PromotionCreate = () => {
                 }}
               </Form.List>
               <RowA style={{ justifyContent: 'flex-end' }}>
-                <Form.Item name="promoCost" label="ราคาปกติ">
-                  <InputNumber
-                    min="0"
-                    precision="2"
-                    stringMode
-                    disabled
-                    placeholder="0.00"
-                  />
-                </Form.Item>
+                <NumberFormat
+                  value={promoCost}
+                  decimalScale={2}
+                  fixedDecimalScale={true}
+                  decimalSeparator="."
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={'ราคาปกติ:'}
+                />
               </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>
