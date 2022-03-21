@@ -27,8 +27,6 @@ const PromotionCreate = () => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const { RangePicker } = DatePicker;
-  const { promiseInProgress } = usePromiseTracker({});
-  const [pushProduct, setPushProduct] = useState([]);
   const [productData, setProductData] = useState([]);
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
@@ -61,6 +59,7 @@ const PromotionCreate = () => {
       promoStart: moment(values.promoDate[0]).startOf('day'),
       promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice,
+      promoCost: values.promoCost,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
     };
@@ -86,6 +85,7 @@ const PromotionCreate = () => {
       productService
         .getProductCreatePromo()
         .then(res => {
+          console.log(res.data);
           setProductData(res.data);
         })
         .catch(error => {
@@ -180,6 +180,20 @@ const PromotionCreate = () => {
               name="addPromotion"
               preserve={false}
               layout="vertical"
+              onValuesChange={(_, value) => {
+                if (value.productInPromotion) {
+                  let sumCost = 0;
+                  value.productInPromotion.forEach(e => {
+                    if (e != undefined && e.productId && e.count) {
+                      const price = productData.filter(
+                        data => data.prId == e.productId,
+                      );
+                      sumCost = sumCost + price[0].prPrice * e.count;
+                    }
+                  });
+                  form.setFieldsValue({ promoCost: sumCost });
+                }
+              }}
               onFinish={values => {
                 handleFinish(values);
               }}>
@@ -274,7 +288,6 @@ const PromotionCreate = () => {
                   จำนวน
                 </Col>
               </Row>
-
               <Form.List name="productInPromotion" initialValue={[{}]}>
                 {(fields, { add, remove }, { error }) => {
                   return (
@@ -347,6 +360,17 @@ const PromotionCreate = () => {
                   );
                 }}
               </Form.List>
+              <RowA style={{ justifyContent: 'flex-end' }}>
+                <Form.Item name="promoCost" label="ราคาปกติ">
+                  <InputNumber
+                    min="0"
+                    precision="2"
+                    stringMode
+                    disabled
+                    placeholder="0.00"
+                  />
+                </Form.Item>
+              </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>
                   <div>

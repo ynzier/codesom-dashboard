@@ -85,6 +85,7 @@ const PromotionEdit = props => {
       promoStart: moment(values.promoDate[0]).startOf('day'),
       promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice.toString(),
+      promoCost: values.promoCost,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
     };
@@ -205,6 +206,20 @@ const PromotionEdit = props => {
               preserve={false}
               initialValues={promoData}
               layout="vertical"
+              onValuesChange={(_, value) => {
+                if (value.productInPromotion) {
+                  let sumCost = 0;
+                  value.productInPromotion.forEach(e => {
+                    if (e != undefined && e.productId && e.count) {
+                      const price = productData.filter(
+                        data => data.prId == e.productId,
+                      );
+                      sumCost = sumCost + price[0].prPrice * e.count;
+                    }
+                  });
+                  form.setFieldsValue({ promoCost: sumCost });
+                }
+              }}
               onFinish={values => {
                 handleFinish(values);
               }}>
@@ -378,6 +393,17 @@ const PromotionEdit = props => {
                   );
                 }}
               </Form.List>
+              <RowA style={{ justifyContent: 'flex-end' }}>
+                <Form.Item name="promoCost" label="ราคาปกติ">
+                  <InputNumber
+                    min="0"
+                    precision="2"
+                    stringMode
+                    disabled
+                    placeholder="0.00"
+                  />
+                </Form.Item>
+              </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>
                   <div>
