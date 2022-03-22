@@ -99,8 +99,10 @@ const ProductEdit = ({ prId }) => {
               productStatus: getData.prStatus,
               needProcess: getData.needProcess,
             });
-            setImgId(getData.prImg);
-            setBase64TextString(getData.image.imgObj);
+            if (getData.prImg) {
+              setImgId(getData.prImg);
+              setBase64TextString(getData.image?.imgObj);
+            }
             setNeedProcess(getData.needProcess);
           } else if (getData.needProcess) {
             setProductData({
@@ -113,14 +115,18 @@ const ProductEdit = ({ prId }) => {
               prStatus: getData.prStatus,
               needProcess: getData.needProcess,
               recipeDescription: getData.recipe.description,
+            });
+            form.resetFields();
+            form.setFieldsValue({
               RecipeItem: getData.recipe.recipe_ingredients,
             });
-            setImgId(getData.prImg);
-            setBase64TextString(getData.image.imgObj);
+            if (getData.prImg) {
+              setImgId(getData.prImg);
+              setBase64TextString(getData.image?.imgObj);
+            }
             setNeedProcess(getData.needProcess);
             fetchforRecipe();
           }
-          form.resetFields();
         }
       })
       .catch(error => {
@@ -566,22 +572,20 @@ const ProductEdit = ({ prId }) => {
                               </RowA>
                             );
                           })}
-                          {editable && (
-                            <RowA style={{ justifyContent: 'center' }}>
-                              <Button
-                                variant="codesom"
-                                onClick={() => {
-                                  add();
-                                }}
-                                style={{
-                                  color: '#97515F',
-                                  backgroundColor: 'transparent',
-                                  borderStyle: 'none',
-                                }}>
-                                <PlusOutlined />
-                              </Button>
-                            </RowA>
-                          )}
+                          <RowA style={{ justifyContent: 'center' }}>
+                            <Button
+                              variant="codesom"
+                              onClick={() => {
+                                add();
+                              }}
+                              style={{
+                                color: '#97515F',
+                                backgroundColor: 'transparent',
+                                borderStyle: 'none',
+                              }}>
+                              <PlusOutlined />
+                            </Button>
+                          </RowA>
                         </>
                       );
                     }}

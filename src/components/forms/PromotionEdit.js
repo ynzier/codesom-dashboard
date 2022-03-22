@@ -23,7 +23,6 @@ import { useAlert } from 'react-alert';
 import productService from 'services/product.service';
 import promotionsService from 'services/promotions.service';
 
-let tempCost;
 const PromotionEdit = props => {
   const alert = useAlert();
   const [form] = Form.useForm();
@@ -47,7 +46,6 @@ const PromotionEdit = props => {
       .then(res => {
         if (res.data) {
           setPromoData(res.data);
-          console.log(res.data);
           form.resetFields();
           setBase64TextString(res.data?.image?.imgObj);
         }

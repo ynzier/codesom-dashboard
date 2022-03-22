@@ -68,7 +68,7 @@ const CreateEmployeeForm = () => {
       firstName: values.firstName,
       lastName: values.lastName,
       birthDate: moment(values.birthDate).format('YYYY-MM-DD'),
-      tel: '0' + values.tel,
+      tel: values.tel,
       address: values.address,
       roleId: values.roleId,
       branchId: values.branchId,
@@ -156,13 +156,12 @@ const CreateEmployeeForm = () => {
                   label="เบอร์โทรศัพท์"
                   rules={[
                     { required: true, message: '*ใส่เบอร์โทรศัพท์' },
-                    { max: 9, message: '*ตัวเลขต้องไม่เกิน 9 ตัว' },
-                    { min: 8, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                    { max: 10, message: '*ตัวเลขต้องไม่เกิน 10 ตัว' },
+                    { min: 9, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
                   ]}>
-                  <InputNumber
-                    stringMode
-                    addonBefore="+66"
+                  <Input
                     placeholder="เบอร์โทรศัพท์"
+                    type="number"
                     style={{ width: '100%' }}
                   />
                 </Form.Item>

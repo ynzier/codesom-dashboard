@@ -79,7 +79,7 @@ const EmployeeEdit = ({ ...props }) => {
           firstName: resData.first_name,
           lastName: resData.last_name,
           birthDate: moment(resData.birth_date),
-          tel: '0' + resData.tel,
+          tel: resData.tel,
           address: resData.address,
           roleId: resData.role_id,
           branchId: resData.branch_id,
@@ -103,7 +103,7 @@ const EmployeeEdit = ({ ...props }) => {
       firstName: values.firstName,
       lastName: values.lastName,
       birthDate: moment(values.birthDate).format('YYYY-MM-DD'),
-      tel: '0' + values.tel,
+      tel: values.tel,
       address: values.address,
       roleId: values.roleId,
       branchId: values.branchId,
@@ -113,7 +113,8 @@ const EmployeeEdit = ({ ...props }) => {
     EmployeeService.updateEmp(empId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
-        form.resetFields();
+        fetchEmployeeData(empId);
+        setEditable(false);
       })
       .catch(error => {
         const resMessage =
@@ -192,15 +193,14 @@ const EmployeeEdit = ({ ...props }) => {
                   label="เบอร์โทรศัพท์"
                   rules={[
                     { required: true, message: '*ใส่เบอร์โทรศัพท์' },
-                    { max: 9, message: '*ตัวเลขต้องไม่เกิน 9 ตัว' },
-                    { min: 8, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                    { max: 10, message: '*ตัวเลขต้องไม่เกิน 10 ตัว' },
+                    { min: 9, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
                   ]}>
-                  <InputNumber
-                    stringMode
-                    addonBefore="+66"
-                    placeholder="เบอร์โทรศัพท์"
-                    style={{ textAlign: 'left' }}
+                  <Input
                     disabled={!editable}
+                    placeholder="เบอร์โทรศัพท์"
+                    type="number"
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
