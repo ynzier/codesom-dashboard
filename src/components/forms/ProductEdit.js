@@ -97,12 +97,12 @@ const ProductEdit = ({ prId }) => {
               prType: getData.prType,
               prDetail: getData.prDetail,
               productStatus: getData.prStatus,
-              needProcess: getData.needProcess,
             });
             if (getData.prImg) {
               setImgId(getData.prImg);
               setBase64TextString(getData.image?.imgObj);
             }
+            form.resetFields();
             setNeedProcess(getData.needProcess);
           } else if (getData.needProcess) {
             setProductData({
