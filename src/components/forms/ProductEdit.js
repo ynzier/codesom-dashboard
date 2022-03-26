@@ -474,7 +474,7 @@ const ProductEdit = ({ prId }) => {
               </Card.Body>
             </Card>
           </Col>
-          {needProcess && (
+          {needProcess == 1 && (
             <Col md={4}>
               <Card
                 border="light"
