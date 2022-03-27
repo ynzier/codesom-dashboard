@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment from 'moment-timezone';
-import 'moment/locale/th';
-import locale from 'antd/es/date-picker/locale/th_TH';
-import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { Table, DatePicker } from 'antd';
-import { useHistory } from 'react-router-dom';
-import { useAlert } from 'react-alert';
-
 import {
   faHome,
   faSearch,
   faFileInvoice,
   faEraser,
 } from '@fortawesome/free-solid-svg-icons';
+import { Table, DatePicker } from 'antd';
+import moment from 'moment-timezone';
+import 'moment/locale/th';
+import locale from 'antd/es/date-picker/locale/th_TH';
 import {
   Col,
   Row,
@@ -23,25 +19,19 @@ import {
   Breadcrumb,
   InputGroup,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { Routes } from 'routes';
-import { IngrStffCreateModal } from 'components';
-import requisitionService from 'services/requisition.service';
+import 'antd/dist/antd.min.css';
+import NumberFormat from 'react-number-format';
 
-const RequisitionList = () => {
-  let history = useHistory();
-  const alert = useAlert();
+import historyService from 'services/history.service';
+
+// import CustomerDataService from 'services/customer.service';
+const OrderHistory = props => {
   const { RangePicker } = DatePicker;
-  const { promiseInProgress } = usePromiseTracker({
-    area: requisitionService.area.listAllReq,
-  });
-  const [showCreate, setShowCreate] = useState(false);
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
   const [pickDate, setPickDate] = useState([]);
-
   useEffect(async () => {
     const filterTable = record.filter(obj => {
       // keyword
@@ -105,101 +95,95 @@ const RequisitionList = () => {
     return () => {};
   }, [keyword, option, pickDate]);
 
-  const openRecord = reqId => {
-    history.push('/dashboard/warehouse/getRequisition/' + reqId);
-  };
-  const fetchData = useCallback(() => {
-    trackPromise(
-      requisitionService
-        .listAllReq()
-        .then(res => {
-          setRecord(res.data);
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        }),
-      requisitionService.area.listAllReq,
-    );
-  });
-  useEffect(async () => {
-    document.title = 'รายการวัตถุดิบทั้งหมด';
-    fetchData();
-    return () => {};
+  useEffect(() => {
+    document.title = 'ประวัติการขายสินค้า';
+    let mounted = true;
+    historyService
+      .listOrderDashboard()
+      .then(res => setRecord(res.data))
+      .catch(err => console.log(err));
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const header = [
     {
-      title: 'No.',
-      dataIndex: 'requisitionId',
+      title: 'รหัสรายการ',
+      dataIndex: 'ordId',
+      key: 'ordId',
       align: 'center',
-      width: 120,
+      sorter: {
+        compare: (a, b) => b.ordId - a.ordId,
+      },
+      render: (text, record) => {
+        return <p>{text}</p>;
+      },
+    },
+    {
+      title: 'สาขา',
+      dataIndex: 'brId',
+      align: 'center',
+      render: (text, record) => {
+        return <p>{record.branch.brName}</p>;
+      },
+    },
+    {
+      title: 'ประเภท',
+      dataIndex: 'ordType',
+      align: 'center',
+      render: (text, record) => {
+        if (text == 'takeaway') return <p>รับกลับ</p>;
+        if (text == 'delivery') return <p>เดลิเวอรี่</p>;
+      },
+    },
+    {
+      title: 'ยอดชำระ',
+      dataIndex: 'ordTotal',
+      align: 'center',
+      width: 300,
       render: (text, record) => {
         return (
-          <div style={{ display: 'flex' }}>
-            <span style={{ flex: 1 }}>{text}</span>
-            <FontAwesomeIcon
-              icon={faFileInvoice}
-              size="xl"
-              onClick={() => {
-                const requisitionId = record.requisitionId;
-                openRecord(requisitionId);
-              }}
+          <p>
+            <NumberFormat
+              value={text}
+              decimalScale={2}
+              fixedDecimalScale={true}
+              decimalSeparator="."
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={'฿'}
             />
+          </p>
+        );
+      },
+    },
+    {
+      title: 'วัน/เดือน/ปี ที่สั่งซื้อ',
+      dataIndex: 'rec_date',
+      align: 'center',
+      width: 300,
+      render: (text, record) => {
+        return (
+          <div>
+            <p>{moment(text).locale('th').format('LLL')}</p>
           </div>
         );
       },
     },
     {
-      title: 'สาขา',
-      dataIndex: 'branchName',
-      align: 'center',
-      width: 200,
-    },
-    {
-      title: 'จำนวน',
-      dataIndex: 'itemCount',
-      align: 'center',
-      width: 100,
-      render: (text, record) => {
-        return <div>{record.itemCount}</div>;
-      },
-    },
-    {
-      title: 'อัพเดทล่าสุดเมื่อ',
-      dataIndex: 'updatedAt',
-      align: 'center',
-      width: 250,
-      render: (text, record) => {
-        return (
-          <>
-            <div>{moment(record.updatedAt).locale('th').format('LLL')}</div>
-          </>
-        );
-      },
-    },
-    {
       title: 'สถานะ',
-      dataIndex: 'requisitionStatus',
+      dataIndex: 'ordStatus',
       align: 'center',
-      width: 150,
       render: (text, record) => {
+        var status = text;
+        var message;
+        if (status === 0) message = 'กำลังดำเนินการ';
+        if (status === 1) message = 'เสร็จสิ้น';
+        if (status === 2) message = 'ยกเลิก';
         return (
           <div>
-            {text == 0
-              ? 'รออนุมัติ'
-              : text == 1
-              ? 'อนุมัติแล้ว'
-              : text == 2
-              ? 'กำลังดำเนินการ'
-              : text == 3
-              ? 'เสร็จสิ้น'
-              : 'ยกเลิก'}
+            <p>{message}</p>
           </div>
         );
       },
@@ -207,22 +191,15 @@ const RequisitionList = () => {
   ];
   return (
     <>
-      <IngrStffCreateModal
-        showCreate={showCreate}
-        setShowCreate={setShowCreate}
-        fetchData={fetchData}
-      />
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item active>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ประวัติการเบิกจ่ายสินค้า</Breadcrumb.Item>
+            <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -232,6 +209,7 @@ const RequisitionList = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
@@ -304,23 +282,18 @@ const RequisitionList = () => {
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
-            tableLayout="fixed"
             dataSource={
               keyword != '' || pickDate.length > 0 || option != ''
                 ? filterData
                 : record
             }
             columns={header}
-            rowKey="requisitionId"
-            loading={promiseInProgress}
+            rowKey="receipt_id"
             pagination={{ pageSize: 20 }}
-            style={{
-              fontFamily: 'Prompt',
-            }}
           />
         </Card.Body>
       </Card>
     </>
   );
 };
-export default RequisitionList;
+export default OrderHistory;

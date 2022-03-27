@@ -182,11 +182,16 @@ const App = () => {
             exact
             path={Routes.AddPromotion.path}
             page={Page.AddPromotion}
-          />{' '}
+          />
           <RouteWithSidebar
             exact
             path={Routes.GetPromotion.path}
             page={Page.GetPromotion}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.OrderHistory.path}
+            page={Page.OrderHistory}
           />
           <Redirect to={Routes.NotFound.path} />
         </Switch>

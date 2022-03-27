@@ -40,4 +40,8 @@ export const Routes = {
   PromotionList: { path: '/dashboard/promotion' },
   AddPromotion: { path: '/dashboard/promotion/create' },
   GetPromotion: { path: '/dashboard/promotion/getPromotion/:promoId' },
+
+  //History
+
+  OrderHistory: { path: '/dashboard/history' },
 };
