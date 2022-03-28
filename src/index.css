@@ -380,3 +380,19 @@ textarea.ant-input {
   outline: 0;
   box-shadow: 0 0 0 2px rgba(139, 4, 22, 0.219);
 }
+
+.ant-tabs-ink-bar {
+  position: absolute;
+  background: #97515F;
+  pointer-events: none;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #97515F !important;
+  font-weight: 500;
+}
+
+.ant-tabs-tab:hover {
+  color: #97515F !important;
+  font-weight: 500;
+}

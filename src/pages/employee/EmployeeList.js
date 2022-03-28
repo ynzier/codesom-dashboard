@@ -235,8 +235,8 @@ const EmployeeList = () => {
           <Table
             dataSource={filterData == null ? records : filterData}
             columns={header}
-            rowKey="emp_id"
-            pagination={{ pageSize: 20 }}
+            rowKey="empId"
+            pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{ fontFamily: 'Prompt' }}
           />
         </Card.Body>

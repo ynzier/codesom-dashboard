@@ -12,6 +12,40 @@ const BranchAccDetail = ({ ...props }) => {
   const [brConfirmPassword, setBrConfirmPassword] = useState('');
   const [accStatus, setAccStatus] = useState('');
 
+  const refresh = async () => {
+    await BranchesService.getBranchById(props.brId)
+      .then(res => {
+        if (res.data) {
+          const getData = res.data;
+          setBrName(getData.brName);
+        }
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
+    await BranchesService.checkExistAcc(props.brId)
+      .then(res => {
+        if (res) {
+          setAccStatus(res.data.status);
+          setBrUsername('cs' + props.brId);
+        }
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
+  };
   useEffect(async () => {
     if (props.brId) {
       await BranchesService.getBranchById(props.brId)
@@ -68,7 +102,8 @@ const BranchAccDetail = ({ ...props }) => {
     await BranchesService.createBranchAcc(props.brId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
-        props.setModalShow(true);
+        refresh();
+        props.setModalShow(false);
       })
       .catch(error => {
         const resMessage =
@@ -89,7 +124,8 @@ const BranchAccDetail = ({ ...props }) => {
     await BranchesService.updateBrAcc(props.brId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
-        props.setModalShow(true);
+        refresh();
+        props.setModalShow(false);
       })
       .catch(error => {
         const resMessage =

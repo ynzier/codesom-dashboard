@@ -179,6 +179,9 @@ const EmployeeEdit = ({ ...props }) => {
                   rules={[{ required: true, message: '*ใส่วัน/เดือน/ปีเกิด' }]}>
                   <DatePicker
                     locale={locale}
+                    disabledDate={current => {
+                      return moment() < current;
+                    }}
                     popupStyle={{ fontFamily: 'Prompt' }}
                     size="large"
                     disabled={!editable}

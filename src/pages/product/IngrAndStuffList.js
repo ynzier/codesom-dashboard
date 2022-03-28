@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NumberFormat from 'react-number-format';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Table } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -227,7 +226,7 @@ const IngrAndStuffList = () => {
             columns={header}
             rowKey="prId"
             loading={promiseInProgress}
-            pagination={{ pageSize: 20 }}
+            pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{
               fontFamily: 'Prompt',
             }}

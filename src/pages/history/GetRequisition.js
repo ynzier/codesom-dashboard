@@ -350,7 +350,7 @@ const GetRequisition = ({ ...props }) => {
               <Row>
                 <Col>ผู้ตรวจสอบสินค้า: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {!requisitData.validator ||
+                  {!requisitData.validator &&
                     (requisitData.requisitionStatus != 4 && 'รอยืนยัน')}
                   {requisitData.requisitionStatus == 4 && 'รายการถูกยกเลิก'}
                   {requisitData.validator &&

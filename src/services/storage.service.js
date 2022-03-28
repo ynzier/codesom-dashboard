@@ -22,9 +22,30 @@ const removeList = (productId, branchId) => {
     params: { productId: productId, branchId: branchId },
   });
 };
+const getAllProductInStorage = branchId => {
+  return http.get(prefix + '/getAllProductInStorage', {
+    headers: authHeader(),
+    params: { branchId: branchId },
+  });
+};
+const getAllIngrInStorage = branchId => {
+  return http.get(prefix + '/getAllIngrInStorage', {
+    headers: authHeader(),
+    params: { branchId: branchId },
+  });
+};
+const getAllStuffInStorage = branchId => {
+  return http.get(prefix + '/getAllStuffInStorage', {
+    headers: authHeader(),
+    params: { branchId: branchId },
+  });
+};
 export default {
   getAllBranchThatHaveProduct,
   getDashboardIngrStuffList,
   removeList,
   area,
+  getAllStuffInStorage,
+  getAllIngrInStorage,
+  getAllProductInStorage,
 };

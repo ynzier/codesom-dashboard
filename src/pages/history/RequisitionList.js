@@ -106,7 +106,7 @@ const RequisitionList = () => {
   }, [keyword, option, pickDate]);
 
   const openRecord = reqId => {
-    history.push('/dashboard/warehouse/getRequisition/' + reqId);
+    history.push('/dashboard/history/getRequisition/' + reqId);
   };
   const fetchData = useCallback(() => {
     trackPromise(
@@ -217,10 +217,8 @@ const RequisitionList = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ประวัติการเบิกจ่ายสินค้า</Breadcrumb.Item>
           </Breadcrumb>
@@ -253,7 +251,9 @@ const RequisitionList = () => {
               </Col>
               <Col xs={4} md={3}>
                 <Form.Group>
-                  <Form.Select onChange={e => setOption(e.target.value)}>
+                  <Form.Select
+                    value={option}
+                    onChange={e => setOption(e.target.value)}>
                     <option value="">ทั้งหมด</option>
                     <option value="0">รออนุมัติ</option>
                     <option value="1">อนุมัติแล้ว</option>
@@ -268,6 +268,9 @@ const RequisitionList = () => {
                   locale={locale}
                   size="large"
                   value={pickDate}
+                  disabledDate={current => {
+                    return moment() < current;
+                  }}
                   ranges={{
                     วันนี้: [moment().startOf('day'), moment().endOf('day')],
                     เดือนนี้: [
@@ -275,7 +278,11 @@ const RequisitionList = () => {
                       moment().endOf('month'),
                     ],
                   }}
-                  style={{ borderRadius: '10px', fontFamily: 'Prompt' }}
+                  style={{
+                    borderRadius: '10px',
+                    fontFamily: 'Prompt',
+                    height: '100%',
+                  }}
                   popupStyle={{ fontFamily: 'Prompt' }}
                   onChange={setPickDate}
                 />
@@ -304,7 +311,6 @@ const RequisitionList = () => {
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
-            tableLayout="fixed"
             dataSource={
               keyword != '' || pickDate.length > 0 || option != ''
                 ? filterData
@@ -313,7 +319,8 @@ const RequisitionList = () => {
             columns={header}
             rowKey="requisitionId"
             loading={promiseInProgress}
-            pagination={{ pageSize: 20 }}
+            showSizeChanger={false}
+            pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{
               fontFamily: 'Prompt',
             }}

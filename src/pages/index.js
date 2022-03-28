@@ -23,8 +23,7 @@ export { default as GetBranch } from './branch/GetBranch';
 
 // Ingredient
 export { default as CreateRequisition } from './warehouse/CreateRequisition';
-export { default as RequisitionList } from './warehouse/RequisitionList';
-export { default as GetRequisition } from './warehouse/GetRequisition';
+export { default as BranchWarehouse } from './warehouse/BranchWarehouse';
 
 // Product
 export { default as ProductList } from './product/ProductList';
@@ -38,6 +37,7 @@ export { default as GetPromotion } from './promotion/GetPromotion';
 export { default as PromotionList } from './promotion/PromotionList';
 
 // History
-
 export { default as OrderHistory } from './history/OrderHistory';
 export { default as GetOrder } from './history/GetOrder';
+export { default as RequisitionList } from './history/RequisitionList';
+export { default as GetRequisition } from './history/GetRequisition';

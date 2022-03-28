@@ -93,7 +93,9 @@ const AddReqList = ({ ...props }) => {
                         rules={[{ required: true, message: 'ใส่จำนวน' }]}>
                         <InputNumber
                           min="1"
-                          max="1000"
+                          precision="0"
+                          stringMode
+                          placeholder="1"
                           style={{
                             textAlign: 'center',
                             width: '100%',

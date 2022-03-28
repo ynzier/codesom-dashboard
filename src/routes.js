@@ -28,8 +28,7 @@ export const Routes = {
 
   // Ingredient
   CreateRequisition: { path: '/dashboard/warehouse/createRequisition' },
-  RequisitionList: { path: '/dashboard/warehouse/RequisitionList' },
-  GetRequisition: { path: '/dashboard/warehouse/getRequisition/:reqId' },
+  BranchWarehouse: { path: '/dashboard/warehouse/allBranches' },
 
   // Products
   ProductList: { path: '/dashboard/product' },
@@ -45,4 +44,6 @@ export const Routes = {
 
   OrderHistory: { path: '/dashboard/history' },
   GetOrder: { path: '/dashboard/history/GetOrder/:id' },
+  RequisitionList: { path: '/dashboard/history/RequisitionList' },
+  GetRequisition: { path: '/dashboard/history/getRequisition/:reqId' },
 };

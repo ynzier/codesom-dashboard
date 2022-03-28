@@ -43,6 +43,7 @@ const UserCreateForm = () => {
       .then(res => {
         if (res) {
           alert.show(res.data.message, { type: 'success' });
+          history.back();
           form.resetFields();
         }
       })

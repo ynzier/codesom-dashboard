@@ -96,7 +96,9 @@ const Sidebar = () => {
                 <Link to={Routes.PromotionList.path} />
               </MenuItem>
             </SubMenu>
-            <SubMenu title="ประวัติรายการ" icon={<FaWarehouse color="#9D7463" />}>
+            <SubMenu
+              title="ประวัติรายการ"
+              icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem>
                 ประวัติการขาย
                 <Link to={Routes.OrderHistory.path} />
@@ -112,8 +114,8 @@ const Sidebar = () => {
                 <Link to={Routes.CreateRequisition.path} />
               </MenuItem>
               <MenuItem>
-                ประวัติการเบิกจ่ายสินค้า
-                <Link to={Routes.RequisitionList.path} />
+                คลังสาขา
+                <Link to={Routes.BranchWarehouse.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu

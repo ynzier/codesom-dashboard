@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Table, DatePicker } from 'antd';
+import { Table, DatePicker, Pagination } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import moment from 'moment-timezone';
@@ -37,9 +37,9 @@ const OrderHistory = () => {
       // date
       if (keyword == '' && option == '' && pickDate.length > 0)
         return (
-          moment(obj.updatedAt).unix() >=
+          moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
-          moment(obj.updatedAt).unix() <=
+          moment(obj.createTimestamp).unix() <=
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option
@@ -56,27 +56,27 @@ const OrderHistory = () => {
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
           ) &&
-          moment(obj.updatedAt).unix() >=
+          moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
-          moment(obj.updatedAt).unix() <=
+          moment(obj.createTimestamp).unix() <=
             moment(pickDate[1]).endOf('day').unix()
         );
       // option date
       if (keyword == '' && option != '' && pickDate.length > 0)
         return (
           obj.brId == option &&
-          moment(obj.updatedAt).unix() >=
+          moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
-          moment(obj.updatedAt).unix() <=
+          moment(obj.createTimestamp).unix() <=
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option date
       if (keyword != '' && option != '' && pickDate.length > 0)
         return (
           obj.brId == option &&
-          moment(obj.updatedAt).unix() >=
+          moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
-          moment(obj.updatedAt).unix() <=
+          moment(obj.createTimestamp).unix() <=
             moment(pickDate[1]).endOf('day').unix() &&
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
@@ -258,6 +258,9 @@ const OrderHistory = () => {
                   locale={locale}
                   size="large"
                   value={pickDate}
+                  disabledDate={current => {
+                    return moment() < current;
+                  }}
                   ranges={{
                     วันนี้: [moment().startOf('day'), moment().endOf('day')],
                     เดือนนี้: [
@@ -265,9 +268,16 @@ const OrderHistory = () => {
                       moment().endOf('month'),
                     ],
                   }}
-                  style={{ borderRadius: '10px', fontFamily: 'Prompt' }}
+                  style={{
+                    borderRadius: '10px',
+                    fontFamily: 'Prompt',
+                    height: '100%',
+                  }}
                   popupStyle={{ fontFamily: 'Prompt' }}
-                  onChange={setPickDate}
+                  onChange={date => {
+                    if (!date) return setPickDate([]);
+                    setPickDate(date);
+                  }}
                 />
               </Col>
             </Row>
@@ -301,8 +311,9 @@ const OrderHistory = () => {
                 : record
             }
             columns={header}
-            rowKey="receipt_id"
-            pagination={{ pageSize: 20 }}
+            rowKey="ordId"
+            showSizeChanger={false}
+            pagination={{ pageSize: 20, showSizeChanger: false }}
           />
         </Card.Body>
       </Card>

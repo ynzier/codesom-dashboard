@@ -332,7 +332,7 @@ const ProductList = () => {
             columns={header}
             loading={promiseInProgress}
             rowKey="prId"
-            pagination={{ pageSize: 20 }}
+            pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{
               fontFamily: 'Prompt',
             }}

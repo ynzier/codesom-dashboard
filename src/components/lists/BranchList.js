@@ -51,9 +51,7 @@ const BranchList = () => {
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={record}
-        pagination={{
-          pageSize: 4,
-        }}
+        pagination={{ pageSize: 4, showSizeChanger: false }}
         loading={promiseInProgress}
         renderItem={item => (
           <List.Item>
