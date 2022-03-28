@@ -210,9 +210,10 @@ function BranchEditForm({ ...props }) {
                   </Form.Label>
                   <Col sm="6">
                     <Form.Control
-                      disabled={!props.editable}
+                      disabled={true}
                       type="text"
                       placeholder="ผู้จัดการ"
+                      value={props.manager}
                     />
                   </Col>
                 </Form.Group>
@@ -368,6 +369,7 @@ const BranchEdit = ({ ...props }) => {
   const [brName, setBrName] = useState('');
   const [brAddr, setBrAddr] = useState('');
   const [brTel, setBrTel] = useState('');
+  const [manager, setManager] = useState('');
   const [modalShow, setModalShow] = useState(false);
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
@@ -381,6 +383,9 @@ const BranchEdit = ({ ...props }) => {
           setBrName(getData.brName);
           setBrAddr(getData.brAddr);
           setBrTel(getData.brTel);
+          setManager(
+            getData.employee.firstName + ' ' + getData.employee.lastName,
+          );
           setBase64TextString(getData.image.imgObj);
         }
       })
@@ -389,7 +394,7 @@ const BranchEdit = ({ ...props }) => {
       });
   }, [props.brId]);
   useEffect(async () => {
-    if (base64TextString) {
+    if (base64TextString && editable) {
       await FileService.upload(base64TextString)
         .then(res => {
           if (res && res.data) {
@@ -466,6 +471,7 @@ const BranchEdit = ({ ...props }) => {
             setModalShow={setModalShow}
             setBase64TextString={setBase64TextString}
             base64TextString={base64TextString}
+            manager={manager}
           />
         </Card.Body>
       </Card>
@@ -476,6 +482,7 @@ const BranchEdit = ({ ...props }) => {
         }}
         brId={props.brId}
         editable={editable}
+        setModalShow={setModalShow}
       />
     </>
   );

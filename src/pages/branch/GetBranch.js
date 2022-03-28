@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
@@ -20,13 +19,11 @@ const GetBranch = ({ ...props }) => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.BranchLists.path}> สาขา</Link>
+            <Breadcrumb.Item href={Routes.BranchLists.path}>
+              สาขา
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลสาขา</Breadcrumb.Item>
           </Breadcrumb>

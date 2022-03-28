@@ -94,44 +94,42 @@ const EmployeeList = () => {
   const header = [
     {
       title: 'รหัสพนักงาน',
-      dataIndex: 'emp_id',
+      dataIndex: 'empId',
       align: 'center',
-      width: 300,
+      width: 200,
     },
     {
       title: 'ชื่อ',
-      dataIndex: 'first_name',
+      dataIndex: 'firstName',
       align: 'center',
       width: 300,
     },
     {
       title: 'นามสกุล',
-      dataIndex: 'last_name',
+      dataIndex: 'lastName',
       align: 'center',
       width: 300,
     },
     {
       title: 'ตำแหน่ง',
-      dataIndex: 'role_name',
+      dataIndex: 'roleName',
       align: 'center',
       width: 300,
     },
     {
       title: 'สาขา',
-      dataIndex: 'br_name',
+      dataIndex: 'brName',
       align: 'center',
       width: 300,
     },
     {
       title: 'Action',
-      key: 'key',
-      dataIndex: 'key',
       render: (text, record) => {
         return (
           <div>
             <span
               onClick={() => {
-                const empId = record.emp_id;
+                const empId = record.empId;
                 openRecord(empId);
               }}>
               <i className="far fa-edit action mr-2"></i>
@@ -184,10 +182,8 @@ const EmployeeList = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item active>พนักงาน</Breadcrumb.Item>
           </Breadcrumb>

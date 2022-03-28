@@ -1,27 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faHome,
-  faSearch,
-  faFileInvoice,
-  faEraser,
-} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Table, DatePicker } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Link } from 'react-router-dom';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
-import {
-  Col,
-  Row,
-  Form,
-  Button,
-  Card,
-  Breadcrumb,
-  InputGroup,
-} from 'react-bootstrap';
+import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import NumberFormat from 'react-number-format';
 
@@ -29,7 +15,7 @@ import historyService from 'services/history.service';
 import BranchesService from 'services/branches.service';
 
 var getBranchData = [];
-const OrderHistory = props => {
+const OrderHistory = () => {
   const { RangePicker } = DatePicker;
   let history = useHistory();
   const [record, setRecord] = useState([]);
@@ -142,7 +128,7 @@ const OrderHistory = props => {
       sorter: {
         compare: (a, b) => b.ordId - a.ordId,
       },
-      render: (text, record) => {
+      render: text => {
         return (
           <a
             onClick={() => {
@@ -163,28 +149,26 @@ const OrderHistory = props => {
       title: 'ประเภท',
       dataIndex: 'ordType',
       align: 'center',
-      render: (text, record) => {
-        if (text == 'takeaway') return <p>รับกลับ</p>;
-        if (text == 'delivery') return <p>เดลิเวอรี่</p>;
+      render: text => {
+        if (text == 'takeaway') return 'รับกลับ';
+        if (text == 'delivery') return 'เดลิเวอรี';
       },
     },
     {
       title: 'ยอดชำระ',
       dataIndex: 'ordTotal',
       align: 'center',
-      render: (text, record) => {
+      render: text => {
         return (
-          <p>
-            <NumberFormat
-              value={text}
-              decimalScale={2}
-              fixedDecimalScale={true}
-              decimalSeparator="."
-              displayType={'text'}
-              thousandSeparator={true}
-              suffix={' บาท'}
-            />
-          </p>
+          <NumberFormat
+            value={text}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={' บาท'}
+          />
         );
       },
     },
@@ -197,29 +181,21 @@ const OrderHistory = props => {
           moment(b.createTimestamp).valueOf() -
           moment(a.createTimestamp).valueOf(),
       },
-      render: (text, record) => {
-        return (
-          <div>
-            <p>{moment(text).locale('th').format('LLL')}</p>
-          </div>
-        );
+      render: text => {
+        return moment(text).locale('th').format('LLL');
       },
     },
     {
       title: 'สถานะ',
       dataIndex: 'ordStatus',
       align: 'center',
-      render: (text, record) => {
+      render: text => {
         var status = text;
         var message;
         if (status === 0) message = 'กำลังดำเนินการ';
         if (status === 1) message = 'เสร็จสิ้น';
         if (status === 2) message = 'ยกเลิก';
-        return (
-          <div>
-            <p>{message}</p>
-          </div>
-        );
+        return message;
       },
     },
   ];

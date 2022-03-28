@@ -328,7 +328,7 @@ const ProductList = () => {
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
-            dataSource={filterData.length < 1 ? record : filterData}
+            dataSource={keyword != '' || option != '' ? filterData : record}
             columns={header}
             loading={promiseInProgress}
             rowKey="prId"

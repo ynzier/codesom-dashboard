@@ -18,12 +18,12 @@ const AddPermission = () => {
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
             <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
+              <Breadcrumb.Item href={Routes.Home.path}>
                 <FontAwesomeIcon icon={faHome} />
-              </Link>
+              </Breadcrumb.Item>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.UserList.path}>ผู้ใช้งาน</Link>
+            <Breadcrumb.Item href={Routes.UserList.path}>
+              ผู้ใช้งาน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>เพิ่มสิทธิ์ผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>
@@ -31,7 +31,7 @@ const AddPermission = () => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <UserCreateForm  />
+          <UserCreateForm />
         </Col>
       </Row>
     </>

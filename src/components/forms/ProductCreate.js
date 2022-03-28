@@ -103,6 +103,7 @@ const ProductCreate = () => {
       prPrice: e.productPrice,
       prImg: imgId,
       prType: e.productType,
+      prUnit: e.productUnit,
       prDetail: e.productDetail,
     };
     ProductService.createProduct(data)
@@ -131,6 +132,7 @@ const ProductCreate = () => {
         prImg: imgId,
         prType: e.productType,
         prDetail: e.productDetail,
+        prUnit: e.productUnit,
         needProcess: needProcess,
       },
       recipeData: {
@@ -279,6 +281,20 @@ const ProductCreate = () => {
                         />
                       </Form.Item>
                     </Row>
+                    <Row>
+                      <Col md={12} className="mb-3">
+                        <Form.Item
+                          name="needProcess"
+                          label="การผสม"
+                          valuePropName="checked">
+                          <Switch
+                            onChange={e => {
+                              setNeedProcess(e);
+                            }}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   </Col>
                   <Col md={6} className="mb-3">
                     <Row>
@@ -349,16 +365,16 @@ const ProductCreate = () => {
                       </Col>
                     </Row>
                     <Row>
-                      <Col md={12} className="mb-3">
+                      <Col className="mb-3">
                         <Form.Item
-                          name="needProcess"
-                          label="การผสม"
-                          valuePropName="checked">
-                          <Switch
-                            onChange={e => {
-                              setNeedProcess(e);
-                            }}
-                          />
+                          name="productUnit"
+                          label="หน่วยของสินค้า"
+                          rules={[
+                            { required: true, message: '*ใส่หน่วยของสินค้า' },
+                            { max: 10, message: '*ไม่เกิน 10 ตัวอักษร' },
+                            { min: 2, message: '*ขั้นต่ำ 2 ตัวอักษร' },
+                          ]}>
+                          <Input placeholder="หน่วยของสินค้า" />
                         </Form.Item>
                       </Col>
                     </Row>

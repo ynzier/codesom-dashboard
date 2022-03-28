@@ -324,6 +324,47 @@ const GetOrder = props => {
                   />
                 </Col>
               </Row>
+              <Row>
+                <Col>การรับสินค้า: </Col>
+                <Col
+                  style={{
+                    textAlign: 'right',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}>
+                  {orderDetail.ordType == 'takeaway' && 'รับกลับ'}
+                  {orderDetail.ordType == 'delivery' && 'เดลิเวอรี'}
+                </Col>
+              </Row>
+              {orderDetail.ordType == 'delivery' && (
+                <>
+                  <Row>
+                    <Col>แพลตฟอร์ม: </Col>
+                    <Col
+                      style={{
+                        textAlign: 'right',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}>
+                      {orderDetail.delivery_platform.platformName}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>รหัสอ้างอิง: </Col>
+                    <Col
+                      style={{
+                        textAlign: 'right',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}>
+                      {orderDetail.ordRefNo}
+                    </Col>
+                  </Row>
+                </>
+              )}
             </Card.Body>
           </Card>
           <Card

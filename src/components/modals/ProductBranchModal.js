@@ -142,6 +142,7 @@ const ProductBranchModal = ({ editable, prId, needProcess }) => {
           fontSize: 14,
           textDecoration: 'underline',
           textAlign: 'right',
+          float: 'right',
         }}
         onClick={() => setShow(true)}>
         แสดงรายชื่อสาขา

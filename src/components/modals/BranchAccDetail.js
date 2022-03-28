@@ -6,10 +6,7 @@ import BranchesService from 'services/branches.service';
 const BranchAccDetail = ({ ...props }) => {
   const alert = useAlert();
 
-  const [brId, setBrId] = useState();
-  const [authData, setAuthData] = useState();
   const [brName, setBrName] = useState('');
-  const [brTel, setBrTel] = useState('');
   const [brUsername, setBrUsername] = useState('');
   const [brPassword, setBrPassword] = useState('');
   const [brConfirmPassword, setBrConfirmPassword] = useState('');
@@ -68,10 +65,10 @@ const BranchAccDetail = ({ ...props }) => {
       brPassword: brPassword,
       brConfirmPassword: brConfirmPassword,
     };
-    console.log(data);
     await BranchesService.createBranchAcc(props.brId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
+        props.setModalShow(true);
       })
       .catch(error => {
         const resMessage =
@@ -89,10 +86,10 @@ const BranchAccDetail = ({ ...props }) => {
       brPassword: brPassword,
       brConfirmPassword: brConfirmPassword,
     };
-    console.log(data);
     await BranchesService.updateBrAcc(props.brId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
+        props.setModalShow(true);
       })
       .catch(error => {
         const resMessage =

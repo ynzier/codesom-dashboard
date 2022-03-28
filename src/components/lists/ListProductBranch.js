@@ -32,6 +32,7 @@ const ListProductBranch = ({ prId, editable }) => {
     await storageService
       .removeList(prId, branchId)
       .then(res => {
+        alert.show("ลบข้อมูลออกจากคลังสินค้าสำเร็จ!", { type: 'success' });
         if (record.length == 1) {
           setRecord([]);
         }

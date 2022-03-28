@@ -34,14 +34,14 @@ const UserList = ({ ...props }) => {
     setfilterData(filterTable);
   };
 
-  const openRecord = id => {
-    console.log(id);
-    props.history.push('/record/' + id);
-  };
-  const refreshList = () => {
+  useEffect(() => {
+    document.title = 'รายชื่อผู้ใช้งานแดชบอร์ด';
+    let mounted = true;
     UserService.getUserList()
       .then(res => {
-        setRecord(res.data);
+        if (mounted) {
+          setRecord(res.data);
+        }
       })
       .catch(error => {
         const resMessage =
@@ -51,21 +51,6 @@ const UserList = ({ ...props }) => {
           error.message ||
           error.toString();
         alert.show(resMessage, { type: 'error' });
-      });
-  };
-
-  useEffect(() => {
-    document.title = 'รายชื่อผู้ใช้งานแดชบอร์ด';
-    let mounted = true;
-    UserService.getUserList()
-      .then(res => {
-        if (mounted) {
-          console.log(res.data);
-          setRecord(res.data);
-        }
-      })
-      .catch(e => {
-        console.log(e);
       });
     return () => (mounted = false);
   }, []);
@@ -163,10 +148,8 @@ const UserList = ({ ...props }) => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>

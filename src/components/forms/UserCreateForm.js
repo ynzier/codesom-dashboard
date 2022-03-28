@@ -17,14 +17,10 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 const UserCreateForm = () => {
   const alert = useAlert();
   const [form] = Form.useForm();
-  const initialRecordState = {
-    userName: '',
-    password: '',
-    confirmPassword: '',
-  };
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [found, setFound] = useState(false);
 
   const [empId, setEmpId] = useState('');
   const checkInput = e => {
@@ -32,14 +28,6 @@ const UserCreateForm = () => {
     setEmpId(onlyDigits);
   };
   const [validEmpId, setValidEmpId] = useState('');
-  const [record, setRecord] = useState(initialRecordState);
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setRecord({
-      ...record,
-      [name]: value,
-    });
-  };
 
   const sendData = async values => {
     var data = {
@@ -96,6 +84,7 @@ const UserCreateForm = () => {
                     type="tel"
                     maxLength="10"
                     value={empId}
+                    disabled={found}
                     autoComplete="new-password"
                     placeholder="รหัสพนักงาน"
                     onChange={e => checkInput(e)}
@@ -103,7 +92,8 @@ const UserCreateForm = () => {
                   <Button
                     variant="outline-codesom"
                     style={{ zIndex: 5 }}
-                    onClick={e => {
+                    disabled={found}
+                    onClick={() => {
                       EmployeeService.getEmployeeByIdForUserCreate(empId)
                         .then(response => {
                           const RecievedData = response && response.data;
@@ -114,7 +104,7 @@ const UserCreateForm = () => {
                           setLastName(RecievedData.resData[0].last_name);
                           setValidEmpId(empId);
                           form.resetFields();
-                          e.disabled = true;
+                          setFound(true);
                         })
                         .catch(error => {
                           const resMessage =
@@ -212,12 +202,18 @@ const UserCreateForm = () => {
                 <Button
                   variant="outline-danger"
                   onClick={() => {
+                    setFound(false);
+                    setEmpId('');
+                    setFirstName('');
+                    setLastName('');
                     form.resetFields();
+                    form.setFieldsValue({ firstName: '', lastName: '' });
                   }}
                   style={{
                     borderRadius: '10px',
                     width: '100%',
                     boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    borderWidth: 0,
                   }}>
                   ล้างข้อมูล
                 </Button>

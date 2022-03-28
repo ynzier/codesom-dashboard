@@ -60,7 +60,6 @@ const ProductEdit = ({ prId }) => {
       sendRecipeProduct(values);
     }
     if (!needProcess) sendData(values);
-    setEditable(false);
   };
 
   useEffect(() => {
@@ -94,6 +93,7 @@ const ProductEdit = ({ prId }) => {
               prCost: getData.prCost,
               prPrice: getData.prPrice,
               prImg: getData.prImg,
+              prUnit: getData.prUnit,
               prType: getData.prType,
               prDetail: getData.prDetail,
               productStatus: getData.prStatus,
@@ -111,6 +111,7 @@ const ProductEdit = ({ prId }) => {
               prPrice: getData.prPrice,
               prImg: getData.prImg,
               prType: getData.prType,
+              prUnit: getData.prUnit,
               prDetail: getData.prDetail,
               prStatus: getData.prStatus,
               needProcess: getData.needProcess,
@@ -163,6 +164,7 @@ const ProductEdit = ({ prId }) => {
       prPrice: e.prPrice,
       prImg: imgId,
       prType: e.prType,
+      prUnit: e.prUnit,
       prDetail: e.prDetail,
       prStatus: e.prStatus,
     };
@@ -192,6 +194,7 @@ const ProductEdit = ({ prId }) => {
         prPrice: e.prPrice,
         prImg: imgId,
         prType: e.prType,
+        prUnit: e.prUnit,
         prDetail: e.prDetail,
         needProcess: needProcess,
       },
@@ -410,6 +413,23 @@ const ProductEdit = ({ prId }) => {
                       </Col>
                     </Row>
                     <Row>
+                      <Col className="mb-3">
+                        <Form.Item
+                          name="prUnit"
+                          label="หน่วยของสินค้า"
+                          rules={[
+                            { required: true, message: '*ใส่หน่วยของสินค้า' },
+                            { max: 10, message: '*ไม่เกิน 10 ตัวอักษร' },
+                            { min: 2, message: '*ขั้นต่ำ 2 ตัวอักษร' },
+                          ]}>
+                          <Input
+                            placeholder="หน่วยของสินค้า"
+                            disabled={!editable}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
                       <Col md={{ offset: 6, span: 6 }}>
                         <ProductBranchModal
                           editable={editable}
@@ -426,7 +446,12 @@ const ProductEdit = ({ prId }) => {
                       <Button
                         variant="outline-secondary"
                         onClick={() => history.back()}
-                        style={{ width: '100%', borderWidth: 0 }}>
+                        style={{
+                          width: '100%',
+                          borderWidth: 0,
+                          height: 50,
+                          boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                        }}>
                         ย้อนกลับ
                       </Button>
                     </div>

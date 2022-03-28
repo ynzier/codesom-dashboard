@@ -17,6 +17,8 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (type == '')
+      return alert.show('เลือกชนิดสินค้าก่อน!', { type: 'error' });
     sendData();
   };
 
@@ -137,7 +139,7 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
                     name="itemType"
                     value={type}
                     onChange={e => setType(e.target.value)}>
-                    <option>ชนิดสินค้า</option>
+                    <option value="">ชนิดสินค้า</option>
                     <option value="วัตถุดิบ">วัตถุดิบ</option>
                     <option value="อื่นๆ">อื่นๆ</option>
                   </Form.Select>
