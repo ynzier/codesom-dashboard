@@ -5,6 +5,7 @@
   "homepage": "http://knt-dev.online",
   "version": "1.0.0",
   "dependencies": {
+    "@ant-design/charts": "^1.3.6",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",

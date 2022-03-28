@@ -46,4 +46,7 @@ export const Routes = {
   GetOrder: { path: '/dashboard/history/GetOrder/:id' },
   RequisitionList: { path: '/dashboard/history/RequisitionList' },
   GetRequisition: { path: '/dashboard/history/getRequisition/:reqId' },
+
+  //Report
+  ReportSale: { path: '/dashboard/report/salereport' },
 };
