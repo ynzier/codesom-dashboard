@@ -44,4 +44,5 @@ export const Routes = {
   //History
 
   OrderHistory: { path: '/dashboard/history' },
+  GetOrder: { path: '/dashboard/history/GetOrder/:id' },
 };

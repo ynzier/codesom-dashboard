@@ -7,6 +7,9 @@ import {
   faEraser,
 } from '@fortawesome/free-solid-svg-icons';
 import { Table, DatePicker } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { Routes } from 'routes';
+import { Link } from 'react-router-dom';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
@@ -23,17 +26,20 @@ import 'antd/dist/antd.min.css';
 import NumberFormat from 'react-number-format';
 
 import historyService from 'services/history.service';
+import BranchesService from 'services/branches.service';
 
-// import CustomerDataService from 'services/customer.service';
+var getBranchData = [];
 const OrderHistory = props => {
   const { RangePicker } = DatePicker;
+  let history = useHistory();
   const [record, setRecord] = useState([]);
+  const [branchData, setbranchData] = useState([]);
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
   const [pickDate, setPickDate] = useState([]);
   useEffect(async () => {
-    const filterTable = record.filter(obj => {
+    var filterTable = record.filter(obj => {
       // keyword
       if (keyword != '' && option == '' && pickDate.length < 1)
         return Object.keys(obj).some(k =>
@@ -41,7 +47,7 @@ const OrderHistory = props => {
         );
       // option
       if (keyword == '' && option != '' && pickDate.length < 1)
-        return obj.requisitionStatus == option;
+        return obj.brId == option;
       // date
       if (keyword == '' && option == '' && pickDate.length > 0)
         return (
@@ -53,7 +59,7 @@ const OrderHistory = props => {
       // keyword option
       if (keyword != '' && option != '' && pickDate.length < 1)
         return (
-          obj.requisitionStatus == option &&
+          obj.brId == option &&
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
           )
@@ -72,7 +78,7 @@ const OrderHistory = props => {
       // option date
       if (keyword == '' && option != '' && pickDate.length > 0)
         return (
-          obj.requisitionStatus == option &&
+          obj.brId == option &&
           moment(obj.updatedAt).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
           moment(obj.updatedAt).unix() <=
@@ -81,7 +87,7 @@ const OrderHistory = props => {
       // keyword option date
       if (keyword != '' && option != '' && pickDate.length > 0)
         return (
-          obj.requisitionStatus == option &&
+          obj.brId == option &&
           moment(obj.updatedAt).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
           moment(obj.updatedAt).unix() <=
@@ -102,10 +108,30 @@ const OrderHistory = props => {
       .listOrderDashboard()
       .then(res => setRecord(res.data))
       .catch(err => console.log(err));
+    BranchesService.getAllBranch()
+      .then(res => {
+        if (mounted) {
+          getBranchData = res.data;
+          setbranchData(getBranchData);
+        }
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
     return () => {
       mounted = false;
     };
   }, []);
+
+  const openRecord = id => {
+    history.push('/dashboard/history/GetOrder/' + id);
+  };
 
   const header = [
     {
@@ -117,16 +143,21 @@ const OrderHistory = props => {
         compare: (a, b) => b.ordId - a.ordId,
       },
       render: (text, record) => {
-        return <p>{text}</p>;
+        return (
+          <a
+            onClick={() => {
+              openRecord(text);
+            }}
+            style={{ textDecorationLine: 'underline' }}>
+            {text}
+          </a>
+        );
       },
     },
     {
       title: 'สาขา',
-      dataIndex: 'brId',
+      dataIndex: 'brName',
       align: 'center',
-      render: (text, record) => {
-        return <p>{record.branch.brName}</p>;
-      },
     },
     {
       title: 'ประเภท',
@@ -141,7 +172,6 @@ const OrderHistory = props => {
       title: 'ยอดชำระ',
       dataIndex: 'ordTotal',
       align: 'center',
-      width: 300,
       render: (text, record) => {
         return (
           <p>
@@ -152,7 +182,7 @@ const OrderHistory = props => {
               decimalSeparator="."
               displayType={'text'}
               thousandSeparator={true}
-              prefix={'฿'}
+              suffix={' บาท'}
             />
           </p>
         );
@@ -160,9 +190,13 @@ const OrderHistory = props => {
     },
     {
       title: 'วัน/เดือน/ปี ที่สั่งซื้อ',
-      dataIndex: 'rec_date',
+      dataIndex: 'createTimestamp',
       align: 'center',
-      width: 300,
+      sorter: {
+        compare: (a, b) =>
+          moment(b.createTimestamp).valueOf() -
+          moment(a.createTimestamp).valueOf(),
+      },
       render: (text, record) => {
         return (
           <div>
@@ -196,10 +230,10 @@ const OrderHistory = props => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item active>
+            <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
+            <Breadcrumb.Item active>ประวัติออเดอร์</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -231,13 +265,15 @@ const OrderHistory = props => {
               </Col>
               <Col xs={4} md={3}>
                 <Form.Group>
-                  <Form.Select onChange={e => setOption(e.target.value)}>
+                  <Form.Select
+                    value={option}
+                    onChange={e => setOption(e.target.value)}>
                     <option value="">ทั้งหมด</option>
-                    <option value="0">รออนุมัติ</option>
-                    <option value="1">อนุมัติแล้ว</option>
-                    <option value="2">กำลังดำเนินการ</option>
-                    <option value="3">เสร็จสิ้น</option>
-                    <option value="4">ยกเลิก</option>
+                    {branchData.map((item, index) => (
+                      <option key={index} value={item.brId}>
+                        {item.brName}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -259,6 +295,7 @@ const OrderHistory = props => {
                 />
               </Col>
             </Row>
+
             <Row>
               <div>
                 <a

@@ -193,6 +193,11 @@ const App = () => {
             path={Routes.OrderHistory.path}
             page={Page.OrderHistory}
           />
+          <RouteWithSidebar
+            exact
+            path={Routes.GetOrder.path}
+            page={Page.GetOrder}
+          />
           <Redirect to={Routes.NotFound.path} />
         </Switch>
       </AlertProvider>

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment-timezone';
 import { faHome, faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { TailSpin } from 'react-loader-spinner';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import requisitionService from 'services/requisition.service';
 import { Routes } from 'routes';

@@ -3,7 +3,6 @@ export { default as NotFound } from './errors/NotFound';
 export { default as ServerError } from './errors/ServerError';
 export { default as CustomerList } from './customer/CustomerList';
 export { default as Receipts } from './history/OrderHistory';
-export { default as Record } from './history/Record';
 export { default as Setting } from './setting/Setting';
 
 // Home
@@ -41,3 +40,4 @@ export { default as PromotionList } from './promotion/PromotionList';
 // History
 
 export { default as OrderHistory } from './history/OrderHistory';
+export { default as GetOrder } from './history/GetOrder';
