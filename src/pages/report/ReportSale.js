@@ -15,7 +15,6 @@ import { Line, Pie, G2 } from '@ant-design/plots';
 const { TabPane } = Tabs;
 const { Option } = Select;
 import 'antd/dist/antd.min.css';
-import storageService from 'services/storage.service';
 import reportService from 'services/report.service';
 
 const TopSalePie = ({ data }) => {
@@ -46,59 +45,116 @@ const TopSalePie = ({ data }) => {
   return <Pie {...config} />;
 };
 
+const LineChart = ({ data, type }) => {
+  const config = {
+    data,
+    xField: 'date',
+    yField: type,
+    seriesField: 'type',
+    legend: {
+      position: 'top',
+    },
+    smooth: true,
+    theme: {
+      styleSheet: {
+        fontFamily: 'Prompt',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 5000,
+      },
+    },
+    slider: {
+      start: 0,
+      end: 1,
+    },
+  };
+  return <Line {...config} />;
+};
+
+const BenefitChart = ({ data }) => {
+  const config = {
+    data,
+    xField: 'date',
+    yField: 'value',
+    seriesField: 'type',
+    legend: {
+      position: 'top',
+    },
+    smooth: true,
+    theme: {
+      styleSheet: {
+        fontFamily: 'Prompt',
+      },
+    },
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 5000,
+      },
+    },
+    slider: {
+      start: 0,
+      end: 1,
+    },
+  };
+  return <Line {...config} />;
+};
+
 const ReportSale = () => {
   const { RangePicker } = DatePicker;
   const [branchId, setBranchId] = useState([]);
   const [branchData, setbranchData] = useState([]);
   const [pickDate, setPickDate] = useState([]);
-  const [data, setData] = useState([]);
   const [report, setReport] = useState({});
   const [topSale, setTopSale] = useState([]);
   const [totalItems, setTotalItems] = useState();
-
-  const asyncFetch = () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/55424a73-7cb8-4f79-b60d-3ab627ac5698.json',
-    )
-      .then(response => response.json())
-      .then(json => setData(json))
-      .catch(error => {
-        console.log('fetch data failed', error);
-      });
-  };
-  const config = {
-    data,
-    xField: 'year',
-    yField: 'value',
-    seriesField: 'category',
-    yAxis: {
-      label: {
-        // 数值格式化为千分位
-        formatter: v => `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, s => `${s},`),
-      },
-    },
-  };
+  const [graphTotal, setGraphTotal] = useState([]);
+  const [benefitGraph, setBenefitGraph] = useState([]);
 
   const fetchReport = async (branchId, date) => {
-    var data = date || null;
-    console.log(branchId, data);
+    var reqDate = date || null;
     await reportService
-      .getDateReport({ branchId: branchId, reqDate: data })
-      .then(res => setReport(res.data))
+      .getDateReport({ branchId: branchId, reqDate: reqDate })
+      .then(res => {
+        setReport(res.data);
+      })
       .catch(err => console.log(err));
     await reportService
-      .getDateTopSale({ branchId: branchId, reqDate: data })
+      .getDateTopSale({ branchId: branchId, reqDate: reqDate })
       .then(res => {
         setTopSale(res.data.result);
         setTotalItems(res.data.totalItems);
       })
       .catch(err => console.log(err));
   };
+  const fetchChart = async branchId => {
+    await reportService
+      .getBestSeller({ branchId: branchId })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+    await reportService
+      .getChartReport({ branchId: branchId })
+      .then(res => {
+        setGraphTotal(res.data.dateReport);
+        setBenefitGraph(res.data.benefitReport);
+      })
+      .catch(err => console.log(err));
+  };
   useEffect(() => {
     document.title = 'รายงานยอดจำหน่าย';
     let mounted = true;
-    asyncFetch();
     fetchReport();
+    fetchChart();
     BranchesService.getAllBranchName()
       .then(res => {
         if (mounted) {
@@ -128,7 +184,7 @@ const ReportSale = () => {
     if (pickDate.length > 0 && branchId.length < 1) {
       fetchReport(branchId, pickDate);
     }
-
+    if (branchId) fetchChart(branchId);
     return () => {};
   }, [branchId, pickDate]);
 
@@ -545,7 +601,17 @@ const ReportSale = () => {
                       </Col>
                     </Row>
                     <Row>
-                      <Line {...config} />
+                      <Tabs defaultActiveKey="1" centered>
+                        <TabPane tab="ยอดขาย" key="1">
+                          <LineChart data={graphTotal} type="totalValue" />
+                        </TabPane>
+                        <TabPane tab="จำนวนรายการ" key="2">
+                          <LineChart data={graphTotal} type="total" />
+                        </TabPane>
+                        <TabPane tab="ต้นทุน/ยอดขาย" key="3">
+                          <BenefitChart data={benefitGraph} />
+                        </TabPane>
+                      </Tabs>
                     </Row>
                   </Card.Body>
                 </Card>
