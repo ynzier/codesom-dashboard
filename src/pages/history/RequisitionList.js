@@ -284,7 +284,10 @@ const RequisitionList = () => {
                     height: '100%',
                   }}
                   popupStyle={{ fontFamily: 'Prompt' }}
-                  onChange={setPickDate}
+                  onChange={date => {
+                    if (!date) return setPickDate([]);
+                    setPickDate(date);
+                  }}
                 />
               </Col>
             </Row>

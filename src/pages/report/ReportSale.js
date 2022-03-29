@@ -48,13 +48,14 @@ const TopSalePie = ({ data }) => {
 
 const ReportSale = () => {
   const { RangePicker } = DatePicker;
-  const [branchId, setBranchId] = useState();
+  const [branchId, setBranchId] = useState([]);
   const [branchData, setbranchData] = useState([]);
   const [pickDate, setPickDate] = useState([]);
   const [data, setData] = useState([]);
   const [report, setReport] = useState({});
   const [topSale, setTopSale] = useState([]);
   const [totalItems, setTotalItems] = useState();
+
   const asyncFetch = () => {
     fetch(
       'https://gw.alipayobjects.com/os/bmw-prod/55424a73-7cb8-4f79-b60d-3ab627ac5698.json',
@@ -78,16 +79,16 @@ const ReportSale = () => {
     },
   };
 
-  const fetchReport = async date => {
+  const fetchReport = async (branchId, date) => {
     var data = date || null;
+    console.log(branchId, data);
     await reportService
-      .getDateReport({ reqDate: data })
+      .getDateReport({ branchId: branchId, reqDate: data })
       .then(res => setReport(res.data))
       .catch(err => console.log(err));
     await reportService
-      .getDateTopSale({ reqDate: data })
+      .getDateTopSale({ branchId: branchId, reqDate: data })
       .then(res => {
-        console.log(res.data.result);
         setTopSale(res.data.result);
         setTotalItems(res.data.totalItems);
       })
@@ -98,7 +99,7 @@ const ReportSale = () => {
     let mounted = true;
     asyncFetch();
     fetchReport();
-    BranchesService.getAllBranch()
+    BranchesService.getAllBranchName()
       .then(res => {
         if (mounted) {
           setbranchData(res.data);
@@ -115,6 +116,21 @@ const ReportSale = () => {
       });
     return () => (mounted = false);
   }, []);
+
+  useEffect(() => {
+    if (pickDate.length < 1 && branchId.length < 1) fetchReport(branchId);
+    if (pickDate.length > 0 && branchId.length > 0) {
+      fetchReport(branchId, pickDate);
+    }
+    if (pickDate.length < 1 && branchId.length > 0) {
+      fetchReport(branchId);
+    }
+    if (pickDate.length > 0 && branchId.length < 1) {
+      fetchReport(branchId, pickDate);
+    }
+
+    return () => {};
+  }, [branchId, pickDate]);
 
   return (
     <>
@@ -145,11 +161,12 @@ const ReportSale = () => {
                 <h2>รายงานยอดจำหน่าย</h2>
                 <Row style={{ height: '100%' }} className="mb-3">
                   <Col md={4} style={{ height: '100%' }}>
-                    <div>ชื่อสาขา</div>
+                    <div style={{ fontWeight: 600 }}>ชื่อสาขา</div>
                     <Select
                       className="mb-3"
                       showSearch
                       label="สาขา"
+                      mode="multiple"
                       style={{
                         width: 300,
                         fontFamily: 'Prompt',
@@ -158,16 +175,13 @@ const ReportSale = () => {
                       value={branchId}
                       optionFilterProp="children"
                       dropdownStyle={{ fontFamily: 'Prompt' }}
-                      onChange={value => setBranchId(value)}
+                      onChange={value => {
+                        setBranchId(value);
+                      }}
                       filterOption={(input, option) =>
                         option.children
                           .toLowerCase()
                           .indexOf(input.toLowerCase()) >= 0
-                      }
-                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                          .toLowerCase()
-                          .localeCompare(optionB.children.toLowerCase())
                       }>
                       {branchData.map(option => (
                         <Option key={option.brId} value={option.brId}>
@@ -177,7 +191,7 @@ const ReportSale = () => {
                     </Select>
                   </Col>
                   <Col md={4}>
-                    <div>ช่วงวันที่</div>
+                    <div style={{ fontWeight: 600 }}>ช่วงวันที่</div>
                     <RangePicker
                       locale={locale}
                       size="large"
@@ -201,9 +215,9 @@ const ReportSale = () => {
                         height: 43.59,
                       }}
                       popupStyle={{ fontFamily: 'Prompt' }}
-                      onChange={values => {
-                        setPickDate(values);
-                        fetchReport(values);
+                      onChange={date => {
+                        if (!date) return setPickDate([]);
+                        setPickDate(date);
                       }}
                     />
                   </Col>
@@ -211,23 +225,58 @@ const ReportSale = () => {
                 <Card>
                   <Card.Body>
                     <Row style={{ textAlign: 'center' }} className="mb-2">
-                      <Col>จำนวนออเดอร์</Col>
-                      <Col>จำนวนสินค้าที่ขาย</Col>
+                      <Col md={{ offset: 2, span: 4 }}>จำนวนออเดอร์</Col>
+                      <Col md="4">จำนวนสินค้าที่ขาย</Col>
+                    </Row>
+                    <Row style={{ textAlign: 'center' }} className="mb-3">
+                      <Col md={{ offset: 2, span: 4 }}>
+                        <div className="box-report">{report.totalOrder}</div>
+                      </Col>
+                      <Col md="4">
+                        <div className="box-report">{totalItems}</div>
+                      </Col>
+                    </Row>
+                    <Row style={{ textAlign: 'center' }} className="mb-2">
+                      <Col>ยอดขาย</Col>
                       <Col>ต้นทุน</Col>
                       <Col>กำไร</Col>
                     </Row>
                     <Row style={{ textAlign: 'center' }} className="mb-3">
                       <Col>
-                        <div className="box-report">{report.totalOrder}</div>
+                        <div className="box-report">
+                          <NumberFormat
+                            value={report.subTotal}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        </div>
                       </Col>
                       <Col>
-                        <div className="box-report">{totalItems}</div>
+                        <div className="box-report">
+                          <NumberFormat
+                            value={report.totalCost}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        </div>
                       </Col>
                       <Col>
-                        <div className="box-report">-</div>
-                      </Col>
-                      <Col>
-                        <div className="box-report">-</div>
+                        <div className="box-report">
+                          <NumberFormat
+                            value={report.totalBenefit}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        </div>
                       </Col>
                     </Row>
                     <Row className="my-5">
