@@ -107,6 +107,34 @@ const BenefitChart = ({ data }) => {
   };
   return <Line {...config} />;
 };
+const BestSellerChart = ({ data, type }) => {
+  const config = {
+    data,
+    xField: 'date',
+    yField: type,
+    seriesField: 'productName',
+    legend: {
+      position: 'top',
+    },
+    smooth: true,
+    theme: {
+      styleSheet: {
+        fontFamily: 'Prompt',
+      },
+    },
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 5000,
+      },
+    },
+    slider: {
+      start: 0,
+      end: 1,
+    },
+  };
+  return <Line {...config} />;
+};
 
 const ReportSale = () => {
   const { RangePicker } = DatePicker;
@@ -118,6 +146,7 @@ const ReportSale = () => {
   const [totalItems, setTotalItems] = useState();
   const [graphTotal, setGraphTotal] = useState([]);
   const [benefitGraph, setBenefitGraph] = useState([]);
+  const [bestSeller, setBestSeller] = useState([]);
 
   const fetchReport = async (branchId, date) => {
     var reqDate = date || null;
@@ -137,9 +166,9 @@ const ReportSale = () => {
   };
   const fetchChart = async branchId => {
     await reportService
-      .getBestSeller({ branchId: branchId })
+      .getProductChart({ branchId: branchId })
       .then(res => {
-        console.log(res.data);
+        setBestSeller(res.data.result);
       })
       .catch(err => console.log(err));
     await reportService
@@ -415,7 +444,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalTakeAway}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -438,7 +467,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalLineman}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -461,7 +490,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalRobinhood}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -484,7 +513,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalGrab}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -507,7 +536,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalOff}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -530,7 +559,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalETC}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -557,7 +586,7 @@ const ReportSale = () => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalCash}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -598,6 +627,24 @@ const ReportSale = () => {
                       <Col>
                         <h5>สินค้าขายดี</h5>
                         <TopSalePie data={topSale} />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Tabs defaultActiveKey="1" centered>
+                          <TabPane tab="ตามจำนวน" key="1">
+                            <BestSellerChart
+                              data={bestSeller}
+                              type="totalCount"
+                            />
+                          </TabPane>
+                          <TabPane tab="ตามยอดขาย" key="2">
+                            <BestSellerChart
+                              data={bestSeller}
+                              type="totalValue"
+                            />
+                          </TabPane>
+                        </Tabs>
                       </Col>
                     </Row>
                     <Row>

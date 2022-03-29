@@ -17,8 +17,8 @@ const getChartReport = async date => {
     headers: authHeader(),
   });
 };
-const getBestSeller = async branchId => {
-  return await http.post(prefix + '/getBestSeller', branchId, {
+const getProductChart = async branchId => {
+  return await http.post(prefix + '/getProductChart', branchId, {
     headers: authHeader(),
   });
 };
@@ -26,5 +26,5 @@ export default {
   getDateTopSale,
   getDateReport,
   getChartReport,
-  getBestSeller,
+  getProductChart,
 };
