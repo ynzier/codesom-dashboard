@@ -7,6 +7,11 @@ const getEmployeeList = () => {
     headers: authHeader(),
   });
 };
+const getAdminManagerList = () => {
+  return http.get(prefix + '/getAdminManagerList', {
+    headers: authHeader(),
+  });
+};
 
 const createNewEmployee = data => {
   return http.post(prefix + '/createNewEmployee', data, {
@@ -45,4 +50,5 @@ export default {
   deleteEmp,
   getEmployeeByIdForUserCreate,
   getEmpById,
+  getAdminManagerList,
 };

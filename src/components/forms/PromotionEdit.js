@@ -46,6 +46,7 @@ const PromotionEdit = props => {
       .then(res => {
         if (res.data) {
           setPromoData(res.data);
+          setPromoCost(res.data.promoCost);
           form.resetFields();
           setBase64TextString(res.data?.image?.imgObj);
         }
@@ -83,7 +84,7 @@ const PromotionEdit = props => {
       promoStart: moment(values.promoDate[0]).startOf('day'),
       promoEnd: moment(values.promoDate[1]).endOf('day'),
       promoPrice: values.promoPrice.toString(),
-      promoCost: values.promoCost,
+      promoCost: promoCost,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
     };
@@ -206,8 +207,7 @@ const PromotionEdit = props => {
               layout="vertical"
               onValuesChange={(_, value) => {
                 if (value.productInPromotion) {
-                  let sumCost = promoCost;
-                  console.log(promoCost);
+                  let sumCost = 0;
                   value.productInPromotion.forEach(e => {
                     if (e != undefined && e.productId && e.count) {
                       const price = productData.filter(
@@ -216,7 +216,7 @@ const PromotionEdit = props => {
                       sumCost = sumCost + price[0].prPrice * e.count;
                     }
                   });
-                  form.setFieldsValue({ promoCost: sumCost });
+                  setPromoCost(sumCost);
                 }
               }}
               onFinish={values => {
@@ -392,19 +392,18 @@ const PromotionEdit = props => {
                   );
                 }}
               </Form.List>
-              <RowA style={{ justifyContent: 'flex-end' }}>
-                <Form.Item
-                  name="promoCost"
-                  label="ราคาปกติ"
-                  initialValue={promoData.promoCost}>
+              <RowA style={{ justifyContent: 'flex-end' }} className="mb-3">
+                <Col md={4}>
+                  <div style={{ fontWeight: 600 }}>ราคาปกติ</div>
                   <InputNumber
                     min="0"
                     precision="2"
                     stringMode
                     disabled
                     placeholder="0.00"
+                    value={promoCost}
                   />
-                </Form.Item>
+                </Col>
               </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>

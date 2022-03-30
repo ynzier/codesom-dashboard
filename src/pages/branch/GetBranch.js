@@ -30,7 +30,7 @@ const GetBranch = ({ ...props }) => {
         </div>
       </div>
       <Row className="mb-4">
-        <Col xs={12} xl={10}>
+        <Col xs={12} xl={8}>
           <BranchEdit brId={brId} />
         </Col>
       </Row>

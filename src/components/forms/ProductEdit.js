@@ -26,6 +26,7 @@ const ProductEdit = ({ prId }) => {
   const [editable, setEditable] = useState(false);
   const [dataIngrStuff, setDataIngrStuff] = useState([]);
   const [productData, setProductData] = useState({});
+  const [prCost, setPrCost] = useState(0);
   const [typeData, setTypeData] = useState([]);
   const [needProcess, setNeedProcess] = useState(false);
   const [imgId, setImgId] = useState();
@@ -125,6 +126,7 @@ const ProductEdit = ({ prId }) => {
               setImgId(getData.prImg);
               setBase64TextString(getData.image?.imgObj);
             }
+            setPrCost(getData.prCost);
             setNeedProcess(getData.needProcess);
             fetchforRecipe();
           }
@@ -190,7 +192,7 @@ const ProductEdit = ({ prId }) => {
     var data = {
       productData: {
         prName: e.prName,
-        prCost: e.prCost,
+        prCost: prCost,
         prPrice: e.prPrice,
         prImg: imgId,
         prType: e.prType,
@@ -280,10 +282,22 @@ const ProductEdit = ({ prId }) => {
     <>
       <Form
         form={form}
-        name="addPromotion"
+        name="editProduct"
         preserve={false}
         layout="vertical"
         initialValues={productData}
+        onValuesChange={(_, value) => {
+          if (value.RecipeItem) {
+            let sumCost = 0;
+            value.RecipeItem.forEach(e => {
+              if (e != undefined && e.ingrId && e.amountRequired) {
+                const price = dataIngrStuff.filter(data => data.id == e.ingrId);
+                sumCost = sumCost + price[0].cost * e.amountRequired;
+              }
+            });
+            setPrCost(sumCost);
+          }
+        }}
         onFinish={values => {
           handleSubmit(values);
         }}>
@@ -357,18 +371,34 @@ const ProductEdit = ({ prId }) => {
                     </Row>
                     <Row>
                       <Col md={6} className="mb-3">
-                        <Form.Item
-                          name="prCost"
-                          label="ราคาทุน"
-                          rules={[{ required: true, message: '*ใส่ราคา' }]}>
-                          <InputNumber
-                            min="0"
-                            precision="2"
-                            disabled={!editable}
-                            stringMode
-                            placeholder="0.00"
-                          />
-                        </Form.Item>
+                        {needProcess ? (
+                          <div>
+                            <div style={{ fontWeight: 600, marginBottom: 9 }}>
+                              ราคาทุน
+                            </div>
+                            <InputNumber
+                              min="0"
+                              precision="2"
+                              stringMode
+                              placeholder="0.00"
+                              disabled={needProcess}
+                              value={prCost}
+                            />
+                          </div>
+                        ) : (
+                          <Form.Item
+                            name="prCost"
+                            label="ราคาทุน"
+                            rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                            <InputNumber
+                              min="0"
+                              precision="2"
+                              stringMode
+                              disabled={!editable}
+                              placeholder="0.00"
+                            />
+                          </Form.Item>
+                        )}
                       </Col>
                       <Col md={6} className="mb-3">
                         <Form.Item

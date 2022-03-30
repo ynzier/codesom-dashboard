@@ -127,6 +127,7 @@ const Sidebar = () => {
             <SubMenu
               title="รายงาน"
               icon={<CgFileDocument color="#9D7463" size="16px" />}>
+              <MenuItem>รายงานประจำวัน</MenuItem>
               <MenuItem>
                 รายงานยอดจำหน่าย
                 <Link to={Routes.ReportSale.path} />

@@ -34,6 +34,7 @@ const ProductCreate = () => {
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
   const [loading, setLoading] = useState(false);
+  const [productCost, setProductCost] = useState(0);
 
   useEffect(() => {
     document.title = 'เพิ่มสินค้า';
@@ -41,7 +42,6 @@ const ProductCreate = () => {
   }, []);
 
   const handleSubmit = values => {
-    console.log(values);
     if (needProcess) {
       var isDuplicate = false;
       if (values.RecipeItem) {
@@ -127,7 +127,7 @@ const ProductCreate = () => {
     var data = {
       productData: {
         prName: e.productName,
-        prCost: e.productCost,
+        prCost: productCost,
         prPrice: e.productPrice,
         prImg: imgId,
         prType: e.productType,
@@ -230,6 +230,18 @@ const ProductCreate = () => {
         name="addPromotion"
         preserve={false}
         layout="vertical"
+        onValuesChange={(_, value) => {
+          if (value.RecipeItem) {
+            let sumCost = 0;
+            value.RecipeItem.forEach(e => {
+              if (e != undefined && e.ingrId && e.amountRequired) {
+                const price = dataIngrStuff.filter(data => data.id == e.ingrId);
+                sumCost = sumCost + price[0].cost * e.amountRequired;
+              }
+            });
+            setProductCost(sumCost);
+          }
+        }}
         onFinish={values => {
           handleSubmit(values);
         }}>
@@ -312,17 +324,33 @@ const ProductCreate = () => {
                     </Row>
                     <Row>
                       <Col md={6} className="mb-3">
-                        <Form.Item
-                          name="productCost"
-                          label="ราคาทุน"
-                          rules={[{ required: true, message: '*ใส่ราคา' }]}>
-                          <InputNumber
-                            min="0"
-                            precision="2"
-                            stringMode
-                            placeholder="0.00"
-                          />
-                        </Form.Item>
+                        {needProcess ? (
+                          <div>
+                            <div style={{ fontWeight: 600, marginBottom: 9 }}>
+                              ราคาทุน
+                            </div>
+                            <InputNumber
+                              min="0"
+                              precision="2"
+                              stringMode
+                              placeholder="0.00"
+                              disabled={needProcess}
+                              value={productCost}
+                            />
+                          </div>
+                        ) : (
+                          <Form.Item
+                            name="productCost"
+                            label="ราคาทุน"
+                            rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                            <InputNumber
+                              min="0"
+                              precision="2"
+                              stringMode
+                              placeholder="0.00"
+                            />
+                          </Form.Item>
+                        )}
                       </Col>
                       <Col md={6} className="mb-3">
                         <Form.Item

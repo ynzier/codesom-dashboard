@@ -2,24 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Card } from 'react-bootstrap';
 import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form, InputNumber, Input, Upload, Button as ButtonA } from 'antd';
+import {
+  Form,
+  InputNumber,
+  Input,
+  Upload,
+  Button as ButtonA,
+  TimePicker,
+  Select,
+} from 'antd';
 import { useAlert } from 'react-alert';
+import moment from 'moment-timezone';
+import 'moment/locale/th';
 
+const { RangePicker } = TimePicker;
 // services
 import BranchService from 'services/branches.service';
+import employeeService from 'services/employee.service';
 
 const BranchCreate = () => {
   const alert = useAlert();
   const [form] = Form.useForm();
+  const { Option } = Select;
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
+  const [managerList, setManagerList] = useState([]);
+
+  const fetchAdminManager = () => {
+    employeeService
+      .getAdminManagerList()
+      .then(res => setManagerList(res.data))
+      .catch(err => console.log(err));
+  };
+  useEffect(() => {
+    fetchAdminManager();
+
+    return () => {};
+  }, []);
 
   const handleSubmit = async value => {
     var data = {
       brName: value.brName,
       brAddr: value.address,
-      brTel: '0' + value.tel, //on start
+      brTel: value.tel, //on start
       brImg: imgId,
+      brManager: value.brManager,
+      brOpenTime: moment(value.openClose[0]).format('HH:mm'),
+      brCloseTime: moment(value.openClose[1]).format('HH:mm'),
     };
     await BranchService.createNewBranch(data)
       .then(response => {
@@ -114,8 +143,8 @@ const BranchCreate = () => {
               handleSubmit(values);
             }}>
             <h2 className="mb-4">เพิ่มสาขา</h2>
-            <Row className="mb-3">
-              <Col sm={{ span: 6, offset: 3 }}>
+            <Row>
+              <Col sm={{ span: 6 }}>
                 <Upload
                   name="productImg"
                   listType="picture-card"
@@ -138,44 +167,86 @@ const BranchCreate = () => {
                   )}
                 </Upload>
               </Col>
+              <Col>
+                <Form.Item
+                  name="brName"
+                  label="ชื่อสาขา"
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อสาขา' },
+                    { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อสาขา" />
+                </Form.Item>
+                <Form.Item
+                  name="tel"
+                  label="เบอร์โทรศัพท์"
+                  rules={[
+                    { required: true, message: '*ใส่เบอร์โทรศัพท์' },
+                    { max: 10, message: '*ตัวเลขต้องไม่เกิน 10 ตัว' },
+                    { min: 9, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                  ]}>
+                  <Input
+                    placeholder="เบอร์โทรศัพท์"
+                    type="number"
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
             </Row>
             <Row>
               <Col>
-                <Col md={12} xl={12} className="mb-3">
-                  <Form.Item
-                    name="brName"
-                    label="ชื่อสาขา"
-                    rules={[
-                      { required: true, message: '*ใส่ชื่อสาขา' },
-                      { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
-                    ]}>
-                    <Input placeholder="ชื่อสาขา" />
-                  </Form.Item>
-                </Col>
-
                 <Row>
-                  <Col md={12} xl={12} className="mb-3">
+                  <Col>
                     <Form.Item
-                      name="tel"
-                      label="เบอร์โทรศัพท์"
+                      name="openClose"
+                      label="เวลาทำการ"
                       rules={[
-                        { required: true, message: '*ใส่เบอร์โทรศัพท์' },
-                        { max: 9, message: '*ตัวเลขต้องไม่เกิน 9 ตัว' },
-                        { min: 8, message: '*ใส่เบอร์โทรศัพท์ให้ครบ' },
+                        {
+                          required: true,
+                          message: '*เลือกช่วงเวลาเปิด-ปิดสาขา',
+                        },
                       ]}>
-                      <InputNumber
-                        stringMode
-                        addonBefore="+66"
-                        placeholder="เบอร์โทรศัพท์"
-                        style={{ width: '100%' }}
+                      <RangePicker
+                        format={'HH:mm'}
+                        placeholder={['เวลาเปิด', 'เวลาปิด']}
                       />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="mb-3">
+                    <Form.Item
+                      name="brManager"
+                      label="ผู้จัดการสาขา"
+                      rules={[
+                        {
+                          required: true,
+                          message: '*เลือกช่วงเวลาเปิด-ปิดสาขา',
+                        },
+                      ]}>
+                      <Select
+                        placeholder="เลือกผู้จัดการ"
+                        showSearch
+                        dropdownStyle={{ fontFamily: 'Prompt' }}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }>
+                        {managerList.map((item, index) => (
+                          <Option key={index} value={item.empId}>
+                            {item.information}
+                          </Option>
+                        ))}
+                      </Select>
                     </Form.Item>
                   </Col>
                 </Row>
               </Col>
               <Col>
                 <Row>
-                  <Col md={12} xl={12} className="mb-3">
+                  <Col className="mb-3">
                     <Form.Item
                       name="address"
                       label="ที่อยู่"
