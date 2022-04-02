@@ -15,7 +15,8 @@ const { TabPane } = Tabs;
 const { Option } = Select;
 import 'antd/dist/antd.min.css';
 import storageService from 'services/storage.service';
-const BranchWarehouse = () => {
+const BranchWarehouse = props => {
+  const { selectBranch } = props;
   const [branchData, setbranchData] = useState([]);
   const { promiseInProgress } = usePromiseTracker();
   const [productList, setProductList] = useState([]);
@@ -24,23 +25,48 @@ const BranchWarehouse = () => {
   useEffect(() => {
     document.title = 'คลังสาขา';
     let mounted = true;
-    BranchesService.getAllBranch()
-      .then(res => {
-        if (mounted) {
-          setbranchData(res.data);
-        }
-      })
-      .catch(error => {
+    if (!selectBranch)
+      BranchesService.getAllBranch()
+        .then(res => {
+          if (mounted) {
+            setbranchData(res.data);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
+    return () => (mounted = false);
+  }, []);
+  useEffect(async () => {
+    if (selectBranch)
+      try {
+        await storageService
+          .getAllProductInStorage(selectBranch)
+          .then(res => setProductList(res.data));
+        await storageService
+          .getAllIngrInStorage(selectBranch)
+          .then(res => setIngrList(res.data));
+        await storageService
+          .getAllStuffInStorage(selectBranch)
+          .then(res => setStuffList(res.data));
+      } catch (error) {
         const resMessage =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||
           error.message ||
           error.toString();
+        console.log(error);
         alert.show(resMessage, { type: 'error' });
-      });
-    return () => (mounted = false);
-  }, []);
+      }
+    return () => {};
+  }, [selectBranch]);
 
   const handleBranchChange = async value => {
     try {
@@ -85,30 +111,32 @@ const BranchWarehouse = () => {
             <Card.Body>
               <Col md={12} xl={12} className="mb-3">
                 <h2>รายการที่มีในคลังสินค้า</h2>
-                <Select
-                  showSearch
-                  label="สาขา"
-                  style={{ width: 300, fontFamily: 'Prompt' }}
-                  placeholder="เลือกสาขา"
-                  optionFilterProp="children"
-                  dropdownStyle={{ fontFamily: 'Prompt' }}
-                  onChange={value => handleBranchChange(value)}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }>
-                  {branchData.map(option => (
-                    <Option key={option.brId} value={option.brId}>
-                      {option.brName}
-                    </Option>
-                  ))}
-                </Select>
+                {!selectBranch && (
+                  <Select
+                    showSearch
+                    label="สาขา"
+                    style={{ width: 300, fontFamily: 'Prompt' }}
+                    placeholder="เลือกสาขา"
+                    optionFilterProp="children"
+                    dropdownStyle={{ fontFamily: 'Prompt' }}
+                    onChange={value => handleBranchChange(value)}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }>
+                    {branchData.map(option => (
+                      <Option key={option.brId} value={option.brId}>
+                        {option.brName}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
               </Col>
               <Tabs>
                 {!promiseInProgress ? (

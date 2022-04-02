@@ -11,7 +11,7 @@ import {
   Button,
   Modal,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Table, Input } from 'antd';
 import { useAlert } from 'react-alert';
@@ -19,7 +19,10 @@ import { useAlert } from 'react-alert';
 import 'antd/dist/antd.min.css';
 
 import EmployeeService from 'services/employee.service';
-const EmployeeList = () => {
+const EmployeeList = props => {
+  const { selectBranch } = props;
+  let location = useLocation();
+
   let history = useHistory();
   const alert = useAlert();
 
@@ -59,21 +62,39 @@ const EmployeeList = () => {
   useEffect(() => {
     document.title = 'รายชื่อพนักงานทั้งหมด';
     let mounted = true;
-    EmployeeService.getEmployeeList()
-      .then(res => {
-        if (mounted) {
-          setRecord(res.data);
-        }
-      })
-      .catch(e => {
-        const resMessage =
-          (e.response && e.response.data && e.response.data.message) ||
-          e.message ||
-          e.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
+    if (!location.state?.isManager)
+      EmployeeService.getEmployeeList()
+        .then(res => {
+          if (mounted) {
+            setRecord(res.data);
+          }
+        })
+        .catch(e => {
+          const resMessage =
+            (e.response && e.response.data && e.response.data.message) ||
+            e.message ||
+            e.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
     return () => (mounted = false);
   }, []);
+  useEffect(() => {
+    if (selectBranch) {
+      EmployeeService.getEmployeeBranch(selectBranch)
+        .then(res => {
+          setRecord(res.data);
+        })
+        .catch(e => {
+          const resMessage =
+            (e.response && e.response.data && e.response.data.message) ||
+            e.message ||
+            e.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
+    }
+
+    return () => {};
+  }, [selectBranch]);
 
   const deleteRecord = () => {
     EmployeeService.deleteEmp(deleteData.empId)
@@ -136,17 +157,41 @@ const EmployeeList = () => {
               }}>
               <i className="far fa-edit action mr-2"></i>
             </span>
+
             <span>&nbsp;&nbsp;</span>
             <span
               onClick={() => {
                 setDeleteData(record);
                 setModalShow(true);
               }}>
-              <i className="fas fa-trash action"></i>
+              <i className="fas fa-trash action" />
             </span>
           </div>
         );
       },
+    },
+  ];
+  const headerManager = [
+    {
+      title: 'รหัสพนักงาน',
+      dataIndex: 'empId',
+      align: 'center',
+    },
+    {
+      title: 'ชื่อ',
+      dataIndex: 'firstName',
+      align: 'center',
+    },
+    {
+      title: 'นามสกุล',
+      dataIndex: 'lastName',
+      align: 'center',
+    },
+    { title: 'เบอร์โทร', dataIndex: 'tel', align: 'center' },
+    {
+      title: 'ตำแหน่ง',
+      dataIndex: 'roleName',
+      align: 'center',
     },
   ];
 
@@ -209,20 +254,22 @@ const EmployeeList = () => {
             </Col>
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
-              <Button
-                className="w-100"
-                as={Link}
-                to={Routes.CreateNewEmployee.path}
-                variant="codesom"
-                style={{
-                  color: '#fff',
-                  height: '50px',
-                  paddingTop: '0.75rem',
-                  borderRadius: '10px',
-                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                }}>
-                เพิ่มข้อมูลพนักงาน
-              </Button>
+              {!location.state?.isManager && (
+                <Button
+                  className="w-100"
+                  as={Link}
+                  to={Routes.CreateNewEmployee.path}
+                  variant="codesom"
+                  style={{
+                    color: '#fff',
+                    height: '50px',
+                    paddingTop: '0.75rem',
+                    borderRadius: '10px',
+                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  }}>
+                  เพิ่มข้อมูลพนักงาน
+                </Button>
+              )}
             </Col>
           </Row>
         </Card.Header>
@@ -231,7 +278,7 @@ const EmployeeList = () => {
           style={{ marginTop: 30, height: '100%', width: '100%' }}>
           <Table
             dataSource={filterData == null ? records : filterData}
-            columns={header}
+            columns={location.state?.isManager ? headerManager : header}
             rowKey="empId"
             pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{ fontFamily: 'Prompt' }}

@@ -15,7 +15,7 @@ import {
   Breadcrumb,
   InputGroup,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
@@ -23,6 +23,7 @@ import storageService from 'services/storage.service';
 
 const IngrAndStuffList = () => {
   let history = useHistory();
+  let location = useLocation();
   const alert = useAlert();
 
   const { promiseInProgress } = usePromiseTracker({
@@ -131,6 +132,7 @@ const IngrAndStuffList = () => {
     },
     {
       key: 'key',
+      title: 'Action',
       dataIndex: 'key',
       render: (text, record) => {
         return (
@@ -144,6 +146,52 @@ const IngrAndStuffList = () => {
             </span>
           </div>
         );
+      },
+    },
+  ];
+  const headerManager = [
+    {
+      title: 'รหัสสินค้า',
+      dataIndex: 'id',
+      align: 'center',
+      width: 200,
+    },
+    {
+      title: 'ชื่อสินค้า',
+      dataIndex: 'name',
+      align: 'center',
+      width: 300,
+      render: (text, record) => {
+        return (
+          <>
+            <div
+              style={{
+                textAlign: 'center',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}>
+              {record.name}
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      title: 'ประเภทสินค้า',
+      dataIndex: 'type',
+      align: 'center',
+      width: 300,
+      render: (text, record) => {
+        return <div>{record.type}</div>;
+      },
+    },
+    {
+      title: 'หน่วย',
+      dataIndex: 'unit',
+      align: 'center',
+      width: 200,
+      render: (text, record) => {
+        return <div>{record.unit}</div>;
       },
     },
   ];
@@ -202,28 +250,30 @@ const IngrAndStuffList = () => {
                   </Form.Select>
                 </Form.Group>
               </Col>
-              <Col xs={5} xl={{ span: 2, offset: 3 }}>
-                <Button
-                  className="w-100"
-                  variant="codesom"
-                  onClick={() => setShowCreate(true)}
-                  style={{
-                    color: '#fff',
-                    height: '50px',
-                    paddingTop: '0.75rem',
-                    borderRadius: '10px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                  }}>
-                  เพิ่มรายการ
-                </Button>
-              </Col>
+              {!location.state?.isManager && (
+                <Col xs={5} xl={{ span: 2, offset: 3 }}>
+                  <Button
+                    className="w-100"
+                    variant="codesom"
+                    onClick={() => setShowCreate(true)}
+                    style={{
+                      color: '#fff',
+                      height: '50px',
+                      paddingTop: '0.75rem',
+                      borderRadius: '10px',
+                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    }}>
+                    เพิ่มรายการ
+                  </Button>
+                </Col>
+              )}
             </Row>
           </div>
         </Card.Header>
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             dataSource={keyword != '' || option != '' ? filterData : record}
-            columns={header}
+            columns={location.state?.isManager ? headerManager : header}
             rowKey="prId"
             loading={promiseInProgress}
             pagination={{ pageSize: 20, showSizeChanger: false }}

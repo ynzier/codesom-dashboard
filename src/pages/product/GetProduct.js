@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { ProductEdit } from 'components';
-const GetProduct = ({ ...props }) => {
-  const [prId, setPrId] = useState();
+const GetProduct = () => {
+  let { prId } = useParams();
+
   useEffect(() => {
     document.title = 'ข้อมูลสินค้า';
-    console.log(props.match.params.prId);
-    setPrId(props.match.params.prId);
   }, [prId]);
 
   return (
@@ -21,13 +20,11 @@ const GetProduct = ({ ...props }) => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.ProductList.path}>รายการสินค้า</Link>
+            <Breadcrumb.Item href={Routes.ProductList.path}>
+              รายการสินค้า
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลสินค้า</Breadcrumb.Item>
           </Breadcrumb>

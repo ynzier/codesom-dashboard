@@ -40,7 +40,7 @@ const AddReqList = ({ ...props }) => {
         type: 'error',
       });
 
-    if (props.selectedBranchId) {
+    if (props.selectedBranchId || props.selectBranch) {
       inputData.forEach(obj => {
         props.availableItem.forEach(data => {
           if (obj.reqItemKey == data.key) {
@@ -168,6 +168,7 @@ const AddReqList = ({ ...props }) => {
 
 const IngrReqList = ({ ...props }) => {
   const alert = useAlert();
+  const { selectBranch } = props;
   const { promiseInProgress } = usePromiseTracker();
   const [branchData, setbranchData] = useState([]);
   const [selectedBranchId, setBranchId] = useState('');
@@ -180,68 +181,114 @@ const IngrReqList = ({ ...props }) => {
       },
       requisitionItems: props.reqData,
     };
-    void trackPromise(
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(
-            requisitionService
-              .createRequisit(prepareData, selectedBranchId)
-              .then(res => {
-                if (res.data && res.data.message) {
-                  alert.show(res.data.message, { type: 'success' });
-                  props.setReqData([]);
-                  setBranchId('');
-                  form.resetFields();
-                }
-              })
-              .catch(error => {
-                const resMessage =
-                  (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                  error.message ||
-                  error.toString();
-                alert.show(resMessage, { type: 'error' });
-              }),
-          );
-        }, 2000);
-      }),
-    );
+    if (selectBranch) {
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .createRequisit(prepareData, selectBranch)
+                .then(res => {
+                  if (res.data && res.data.message) {
+                    alert.show(res.data.message, { type: 'success' });
+                    props.setReqData([]);
+                    setBranchId('');
+                    form.resetFields();
+                  }
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 2000);
+        }),
+      );
+    } else {
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .createRequisit(prepareData, selectedBranchId)
+                .then(res => {
+                  if (res.data && res.data.message) {
+                    alert.show(res.data.message, { type: 'success' });
+                    props.setReqData([]);
+                    setBranchId('');
+                    form.resetFields();
+                  }
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 2000);
+        }),
+      );
+    }
   };
   useEffect(() => {
     let mounted = true;
-    BranchesService.getAllBranch()
-      .then(res => {
-        if (mounted) {
-          getBranchData = res.data;
-          setbranchData(getBranchData);
-        }
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
+    if (!selectBranch)
+      BranchesService.getAllBranch()
+        .then(res => {
+          if (mounted) {
+            getBranchData = res.data;
+            setbranchData(getBranchData);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
     return () => (mounted = false);
   }, []);
   useEffect(() => {
-    requisitionService
-      .getItemMakeRequest(selectedBranchId)
-      .then(res => setAvailableItem(res.data))
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
-  }, [selectedBranchId]);
+    if (selectBranch) {
+      requisitionService
+        .getItemMakeRequest(selectBranch)
+        .then(res => setAvailableItem(res.data))
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
+    } else {
+      requisitionService
+        .getItemMakeRequest(selectedBranchId)
+        .then(res => setAvailableItem(res.data))
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
+    }
+  }, [selectedBranchId, selectBranch]);
   const [form] = Form.useForm();
 
   const header = [
@@ -294,25 +341,27 @@ const IngrReqList = ({ ...props }) => {
                 ? 'ตรวจสอบรายการ'
                 : 'รายการสินค้าที่เบิก'}
             </h2>
-            <Row>
-              <Col md={6} xl={6} className="mb-3">
-                <FormBS.Group id="branch">
-                  <FormBS.Label>สาขา</FormBS.Label>
-                  <FormBS.Select
-                    required
-                    disabled={props.reqData.length > 0}
-                    value={selectedBranchId}
-                    onChange={e => setBranchId(e.target.value)}>
-                    <option value="">เลือกสาขา</option>
-                    {branchData.map(option => (
-                      <option key={option.brId} value={option.brId}>
-                        {option.brName} ({option.brId})
-                      </option>
-                    ))}
-                  </FormBS.Select>
-                </FormBS.Group>
-              </Col>
-            </Row>
+            {!selectBranch && (
+              <Row>
+                <Col md={6} xl={6} className="mb-3">
+                  <FormBS.Group id="branch">
+                    <FormBS.Label>สาขา</FormBS.Label>
+                    <FormBS.Select
+                      required
+                      disabled={props.reqData.length > 0}
+                      value={selectedBranchId}
+                      onChange={e => setBranchId(e.target.value)}>
+                      <option value="">เลือกสาขา</option>
+                      {branchData.map(option => (
+                        <option key={option.brId} value={option.brId}>
+                          {option.brName} ({option.brId})
+                        </option>
+                      ))}
+                    </FormBS.Select>
+                  </FormBS.Group>
+                </Col>
+              </Row>
+            )}
           </FormBS>
           <Card
             border="light"
@@ -395,6 +444,7 @@ const IngrReqList = ({ ...props }) => {
                   <AddReqList
                     form={form}
                     availableItem={availableItem}
+                    selectBranch={selectBranch}
                     setReqData={props.setReqData}
                     selectedBranchId={selectedBranchId}
                   />

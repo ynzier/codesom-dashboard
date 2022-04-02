@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment-timezone';
 import { faHome, faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import requisitionService from 'services/requisition.service';
 import { Routes } from 'routes';
@@ -14,7 +14,8 @@ import { useAlert } from 'react-alert';
 const GetRequisition = ({ ...props }) => {
   const { Step } = Steps;
   const alert = useAlert();
-  const reqId = props.match.params.reqId;
+  const { reqId } = useParams();
+
   const { promiseInProgress } = usePromiseTracker({ area: 'getReqDetailById' });
   const customDot = dot => <span>{dot}</span>;
   const [requisitData, setRequisitData] = useState({});
@@ -311,7 +312,7 @@ const GetRequisition = ({ ...props }) => {
             <Card.Header>
               <Row>
                 <h5>ใบเบิกจ่ายคลังสินค้า</h5>
-                <div># {props.match.params.reqId}</div>
+                <div># {reqId}</div>
               </Row>
             </Card.Header>
             <Card.Body>
@@ -351,7 +352,8 @@ const GetRequisition = ({ ...props }) => {
                 <Col>ผู้ตรวจสอบสินค้า: </Col>
                 <Col style={{ textAlign: 'right' }}>
                   {!requisitData.validator &&
-                    (requisitData.requisitionStatus != 4 && 'รอยืนยัน')}
+                    requisitData.requisitionStatus != 4 &&
+                    'รอยืนยัน'}
                   {requisitData.requisitionStatus == 4 && 'รายการถูกยกเลิก'}
                   {requisitData.validator &&
                     requisitData.validator.firstName}{' '}

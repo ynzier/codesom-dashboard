@@ -43,6 +43,11 @@ const getEmployeeByIdForUserCreate = empId => {
     params: { empId: empId },
   });
 };
+const getEmployeeBranch = brId => {
+  return http.get(prefix + '/getEmployeeBranch', {
+    params: { brId: brId },
+  });
+};
 export default {
   getEmployeeList,
   createNewEmployee,
@@ -51,4 +56,5 @@ export default {
   getEmployeeByIdForUserCreate,
   getEmpById,
   getAdminManagerList,
+  getEmployeeBranch,
 };

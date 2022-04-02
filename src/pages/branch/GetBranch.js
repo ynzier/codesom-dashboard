@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Routes } from 'routes';
+import { useParams } from 'react-router-dom';
+
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchEdit } from 'components';
 const GetBranch = ({ ...props }) => {
-  const [brId, setbrId] = useState();
+  const { brId } = useParams();
   useEffect(() => {
     document.title = 'ข้อมูลสาขา';
-    setbrId(props.match.params.brId);
-  }, [brId]);
+  }, []);
 
   return (
     <>

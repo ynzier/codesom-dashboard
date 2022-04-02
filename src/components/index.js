@@ -5,10 +5,11 @@ export { default as RecordEdit } from './forms/RecordEdit';
 export { default as SettingForm } from './forms/SettingForm';
 export { default as Navbar } from './navbar';
 export { default as Preloader } from './preloader';
-export { default as Sidebar } from './sidebar';
 export { default as Spinner } from './spinner';
 export { default as AlertTemplate } from './alert';
 
+export { default as AdminSidebar } from './sidebar/admin';
+export { default as ManagerSidebar } from './sidebar/manager';
 // employee
 export { default as EmployeeCreate } from './forms/EmployeeCreate';
 export { default as EmployeeEdit } from './forms/EmployeeEdit';

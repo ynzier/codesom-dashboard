@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-import { AlertTemplate } from 'components';
 
 // Components
-import { Sidebar, Navbar, Preloader } from 'components';
 import './index.css';
-import './my-antd.less';
+import {
+  AlertTemplate,
+  ManagerSidebar,
+  AdminSidebar,
+  Navbar,
+  Preloader,
+} from 'components';
 import AuthService from 'services/auth.service';
 
 // Error Pages
@@ -26,8 +30,8 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
   let history = useHistory();
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
+  useEffect(async () => {
+    const user = await AuthService.getCurrentUser();
     if (!currentUser && user) {
       setCurrentUser(user);
     }
@@ -56,13 +60,21 @@ const App = () => {
     );
   };
   const RouteWithSidebar = ({ page: Component, ...rest }) => {
+    const [selectBranch, setSelectBranch] = useState();
     return (
       <Route
         {...rest}
         render={props => (
           <>
             {!currentUser && history.push('/')}
-            <Sidebar />
+            {currentUser?.authPayload?.roleId == 1 ? (
+              <AdminSidebar />
+            ) : (
+              <ManagerSidebar
+                selectBranch={selectBranch}
+                setSelectBranch={setSelectBranch}
+              />
+            )}
             <main
               className="content"
               style={{
@@ -70,8 +82,11 @@ const App = () => {
                 minHeight: '100vh',
               }}>
               <Navbar />
-
-              <Component {...props} />
+              {currentUser?.authPayload?.roleId == 1 ? (
+                <Component />
+              ) : (
+                <Component {...props} selectBranch={selectBranch} />
+              )}
             </main>
           </>
         )}

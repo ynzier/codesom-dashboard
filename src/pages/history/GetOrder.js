@@ -5,6 +5,8 @@ import { Routes } from 'routes';
 import { Table, Steps } from 'antd';
 import NumberFormat from 'react-number-format';
 import moment from 'moment-timezone';
+import { useParams } from 'react-router-dom';
+
 import 'moment/locale/th';
 import { Image } from 'antd';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
@@ -15,7 +17,7 @@ import historyService from 'services/history.service';
 
 const GetOrder = props => {
   const { promiseInProgress } = usePromiseTracker();
-  const [data, setData] = useState();
+  const { id } = useParams();
   const customDot = dot => <span>{dot}</span>;
   const [orderItems, setOrderItems] = useState([]);
   const [receiptData, setReceiptData] = useState({});
@@ -25,8 +27,8 @@ const GetOrder = props => {
   const alert = useAlert();
   useEffect(() => {
     document.title = 'ประวัติออเดอร์';
-    fetchRecDetail(props.match.params.id);
-  }, [props.match.params.id]);
+    fetchRecDetail(id);
+  }, []);
   const fetchRecDetail = id => {
     historyService
       .getOrderItemsByIdDashboard(id)
@@ -62,7 +64,7 @@ const GetOrder = props => {
               ประวัติออเดอร์
             </Breadcrumb.Item>
             <Breadcrumb.Item active>
-              หมายเลขออเดอร์: {props.match.params.id}
+              หมายเลขออเดอร์: {id}
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
@@ -226,7 +228,7 @@ const GetOrder = props => {
             <Card.Header>
               <Row>
                 <h5>ประวัติออเดอร์</h5>
-                <div># {props.match.params.id}</div>
+                <div># {id}</div>
               </Row>
             </Card.Header>
             <Card.Body>

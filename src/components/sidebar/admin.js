@@ -54,7 +54,7 @@ const Sidebar = () => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           }}>
-          Codesom
+          Codesom (Admin)
         </SidebarHeader>
         <SidebarContent>
           <Menu iconShape="circle">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Table, DatePicker, Pagination } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Routes } from 'routes';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
@@ -15,9 +15,12 @@ import historyService from 'services/history.service';
 import BranchesService from 'services/branches.service';
 
 var getBranchData = [];
-const OrderHistory = () => {
+const OrderHistory = props => {
   const { RangePicker } = DatePicker;
   let history = useHistory();
+  let location = useLocation();
+  const { selectBranch } = props;
+
   const [record, setRecord] = useState([]);
   const [branchData, setbranchData] = useState([]);
   const [filterData, setfilterData] = useState([]);
@@ -90,31 +93,60 @@ const OrderHistory = () => {
   useEffect(() => {
     document.title = 'ประวัติการขายสินค้า';
     let mounted = true;
-    historyService
-      .listOrderDashboard()
-      .then(res => setRecord(res.data))
-      .catch(err => console.log(err));
-    BranchesService.getAllBranch()
-      .then(res => {
-        if (mounted) {
-          getBranchData = res.data;
-          setbranchData(getBranchData);
-        }
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        console.log(error);
-        alert.show(resMessage, { type: 'error' });
-      });
+    if (!selectBranch) {
+      historyService
+        .listOrderDashboard()
+        .then(res => setRecord(res.data))
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          console.log(error);
+          alert.show(resMessage, { type: 'error' });
+        });
+      BranchesService.getAllBranch()
+        .then(res => {
+          if (mounted) {
+            getBranchData = res.data;
+            setbranchData(getBranchData);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          console.log(error);
+          alert.show(resMessage, { type: 'error' });
+        });
+    }
     return () => {
       mounted = false;
     };
   }, []);
+  useEffect(() => {
+    if (selectBranch)
+      historyService
+        .listOrderDashboardByBranch(selectBranch)
+        .then(res => setRecord(res.data))
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          console.log(error);
+          alert.show(resMessage, { type: 'error' });
+        });
+
+    return () => {};
+  }, [selectBranch]);
 
   const openRecord = id => {
     history.push('/dashboard/history/GetOrder/' + id);
@@ -145,6 +177,81 @@ const OrderHistory = () => {
       title: 'สาขา',
       dataIndex: 'brName',
       align: 'center',
+    },
+    {
+      title: 'ประเภท',
+      dataIndex: 'ordType',
+      align: 'center',
+      render: text => {
+        if (text == 'takeaway') return 'รับกลับ';
+        if (text == 'delivery') return 'เดลิเวอรี';
+      },
+    },
+    {
+      title: 'ยอดชำระ',
+      dataIndex: 'ordTotal',
+      align: 'center',
+      render: text => {
+        return (
+          <NumberFormat
+            value={text}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={' บาท'}
+          />
+        );
+      },
+    },
+    {
+      title: 'วัน/เดือน/ปี ที่สั่งซื้อ',
+      dataIndex: 'createTimestamp',
+      align: 'center',
+      sorter: {
+        compare: (a, b) =>
+          moment(b.createTimestamp).valueOf() -
+          moment(a.createTimestamp).valueOf(),
+      },
+      render: text => {
+        return moment(text).locale('th').format('LLL');
+      },
+    },
+    {
+      title: 'สถานะ',
+      dataIndex: 'ordStatus',
+      align: 'center',
+      render: text => {
+        var status = text;
+        var message;
+        if (status === 0) message = 'กำลังดำเนินการ';
+        if (status === 1) message = 'เสร็จสิ้น';
+        if (status === 2) message = 'ยกเลิก';
+        return message;
+      },
+    },
+  ];
+  const headerManager = [
+    {
+      title: 'รหัสรายการ',
+      dataIndex: 'ordId',
+      key: 'ordId',
+      align: 'center',
+      sorter: {
+        compare: (a, b) => b.ordId - a.ordId,
+      },
+      render: text => {
+        return (
+          <a
+            onClick={() => {
+              openRecord(text);
+            }}
+            style={{ textDecorationLine: 'underline' }}>
+            {text}
+          </a>
+        );
+      },
     },
     {
       title: 'ประเภท',
@@ -234,25 +341,31 @@ const OrderHistory = () => {
                     <Form.Control
                       type="text"
                       value={keyword}
-                      placeholder="ค้นหารหัส/ชื่อสาขา"
+                      placeholder={
+                        !location.state?.isManager
+                          ? 'ค้นหารหัส/ชื่อสาขา'
+                          : 'ค้นหารหัส'
+                      }
                       onChange={e => setKeyword(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
               </Col>
               <Col xs={4} md={3}>
-                <Form.Group>
-                  <Form.Select
-                    value={option}
-                    onChange={e => setOption(e.target.value)}>
-                    <option value="">ทั้งหมด</option>
-                    {branchData.map((item, index) => (
-                      <option key={index} value={item.brId}>
-                        {item.brName}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                {!location.state?.isManager && (
+                  <Form.Group>
+                    <Form.Select
+                      value={option}
+                      onChange={e => setOption(e.target.value)}>
+                      <option value="">ทั้งหมด</option>
+                      {branchData.map((item, index) => (
+                        <option key={index} value={item.brId}>
+                          {item.brName}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                )}
               </Col>
               <Col md="4">
                 <RangePicker
@@ -287,9 +400,13 @@ const OrderHistory = () => {
               <div>
                 <a
                   onClick={() => {
-                    setKeyword('');
-                    setOption('');
-                    setPickDate([]);
+                    if (!location.state?.isManager) {
+                      setKeyword('');
+                      setOption('');
+                      setPickDate([]);
+                    } else {
+                      setPickDate([]);
+                    }
                   }}
                   style={{
                     fontFamily: 'Prompt',
@@ -311,7 +428,7 @@ const OrderHistory = () => {
                 ? filterData
                 : record
             }
-            columns={header}
+            columns={location.state?.isManager ? headerManager : header}
             rowKey="ordId"
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}

@@ -16,6 +16,7 @@ const { TabPane } = Tabs;
 const { Option } = Select;
 import 'antd/dist/antd.min.css';
 import reportService from 'services/report.service';
+import TokenService from 'services/token.service';
 
 const TopSalePie = ({ data }) => {
   const config = {
@@ -136,7 +137,8 @@ const BestSellerChart = ({ data, type }) => {
   return <Line {...config} />;
 };
 
-const ReportSale = () => {
+const ReportSale = props => {
+  const { selectBranch } = props;
   const { RangePicker } = DatePicker;
   const [branchId, setBranchId] = useState([]);
   const [branchData, setbranchData] = useState([]);
@@ -164,6 +166,7 @@ const ReportSale = () => {
       })
       .catch(err => console.log(err));
   };
+
   const fetchChart = async branchId => {
     await reportService
       .getProductChart({ branchId: branchId })
@@ -179,41 +182,78 @@ const ReportSale = () => {
       })
       .catch(err => console.log(err));
   };
-  useEffect(() => {
+  useEffect(async () => {
     document.title = 'รายงานยอดจำหน่าย';
     let mounted = true;
-    fetchReport();
-    fetchChart();
-    BranchesService.getAllBranchName()
-      .then(res => {
-        if (mounted) {
-          setbranchData(res.data);
-        }
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
-    return () => (mounted = false);
+    const role = await TokenService.getUser().authPayload.roleId;
+    if (role == 1) {
+      fetchReport();
+      fetchChart();
+      BranchesService.getAllBranchName()
+        .then(res => {
+          if (mounted) {
+            setbranchData(res.data);
+          }
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        });
+    }
+    return () => {
+      mounted = false;
+    };
   }, []);
+  useEffect(async () => {
+    if (selectBranch) {
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(fetchChart([selectBranch]));
+          }, 500);
+        }),
+      );
+      if (pickDate.length > 0) {
+        await trackPromise(
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(fetchReport([selectBranch], pickDate));
+            }, 500);
+          }),
+        );
+      } else {
+        await trackPromise(
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(fetchReport([selectBranch]));
+            }, 500);
+          }),
+        );
+      }
+    }
+    return () => {};
+  }, [selectBranch, pickDate]);
 
-  useEffect(() => {
-    if (pickDate.length < 1 && branchId.length < 1) fetchReport(branchId);
-    if (pickDate.length > 0 && branchId.length > 0) {
-      fetchReport(branchId, pickDate);
+  useEffect(async () => {
+    const role = await TokenService.getUser().authPayload.roleId;
+    if (role == 1) {
+      if (pickDate.length < 1 && branchId.length < 1) fetchReport(branchId);
+      if (pickDate.length > 0 && branchId.length > 0) {
+        fetchReport(branchId, pickDate);
+      }
+      if (pickDate.length < 1 && branchId.length > 0) {
+        fetchReport(branchId);
+      }
+      if (pickDate.length > 0 && branchId.length < 1) {
+        fetchReport(branchId, pickDate);
+      }
+      if (branchId) fetchChart(branchId);
     }
-    if (pickDate.length < 1 && branchId.length > 0) {
-      fetchReport(branchId);
-    }
-    if (pickDate.length > 0 && branchId.length < 1) {
-      fetchReport(branchId, pickDate);
-    }
-    if (branchId) fetchChart(branchId);
     return () => {};
   }, [branchId, pickDate]);
 
@@ -245,36 +285,38 @@ const ReportSale = () => {
               <Col md={12} xl={12} className="mb-3">
                 <h2>รายงานยอดจำหน่าย</h2>
                 <Row style={{ height: '100%' }} className="mb-3">
-                  <Col md={4} style={{ height: '100%' }}>
-                    <div style={{ fontWeight: 600 }}>ชื่อสาขา</div>
-                    <Select
-                      className="mb-3"
-                      showSearch
-                      label="สาขา"
-                      mode="multiple"
-                      style={{
-                        width: 300,
-                        fontFamily: 'Prompt',
-                      }}
-                      placeholder="เลือกสาขา"
-                      value={branchId}
-                      optionFilterProp="children"
-                      dropdownStyle={{ fontFamily: 'Prompt' }}
-                      onChange={value => {
-                        setBranchId(value);
-                      }}
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }>
-                      {branchData.map(option => (
-                        <Option key={option.brId} value={option.brId}>
-                          {option.brName}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Col>
+                  {!selectBranch && (
+                    <Col md={4} style={{ height: '100%' }}>
+                      <div style={{ fontWeight: 600 }}>ชื่อสาขา</div>
+                      <Select
+                        className="mb-3"
+                        showSearch
+                        label="สาขา"
+                        mode="multiple"
+                        style={{
+                          width: 300,
+                          fontFamily: 'Prompt',
+                        }}
+                        placeholder="เลือกสาขา"
+                        value={branchId}
+                        optionFilterProp="children"
+                        dropdownStyle={{ fontFamily: 'Prompt' }}
+                        onChange={value => {
+                          setBranchId(value);
+                        }}
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }>
+                        {branchData.map(option => (
+                          <Option key={option.brId} value={option.brId}>
+                            {option.brName}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  )}
                   <Col md={4}>
                     <div style={{ fontWeight: 600 }}>ช่วงวันที่</div>
                     <RangePicker

@@ -12,24 +12,15 @@ import {
   faHome,
   faSearch,
   faFileInvoice,
-  faEraser,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  Col,
-  Row,
-  Form,
-  Button,
-  Card,
-  Breadcrumb,
-  InputGroup,
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
 import requisitionService from 'services/requisition.service';
 
-const RequisitionList = () => {
+const RequisitionList = props => {
   let history = useHistory();
+  const { selectBranch } = props;
   const alert = useAlert();
   const { RangePicker } = DatePicker;
   const { promiseInProgress } = usePromiseTracker({
@@ -108,28 +99,49 @@ const RequisitionList = () => {
   const openRecord = reqId => {
     history.push('/dashboard/history/getRequisition/' + reqId);
   };
-  const fetchData = useCallback(() => {
-    trackPromise(
-      requisitionService
-        .listAllReq()
-        .then(res => {
-          setRecord(res.data);
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        }),
-      requisitionService.area.listAllReq,
-    );
+  const fetchData = useCallback(async id => {
+    if (id) {
+      await trackPromise(
+        requisitionService
+          .listAllReqByBranch(id)
+          .then(res => {
+            setRecord(res.data);
+          })
+          .catch(error => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+            alert.show(resMessage, { type: 'error' });
+          }),
+        requisitionService.area.listAllReq,
+      );
+    } else {
+      await trackPromise(
+        requisitionService
+          .listAllReq()
+          .then(res => {
+            setRecord(res.data);
+          })
+          .catch(error => {
+            const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+            alert.show(resMessage, { type: 'error' });
+          }),
+        requisitionService.area.listAllReq,
+      );
+    }
   });
   useEffect(async () => {
-    document.title = 'รายการวัตถุดิบทั้งหมด';
-    fetchData();
+    document.title = 'รายการเบิกจ่ายสินค้าทั้งหมด';
+    if (!selectBranch) fetchData();
+    if (selectBranch) fetchData(selectBranch);
     return () => {};
   }, []);
 
@@ -143,14 +155,16 @@ const RequisitionList = () => {
         return (
           <div style={{ display: 'flex' }}>
             <span style={{ flex: 1 }}>{text}</span>
-            <FontAwesomeIcon
-              icon={faFileInvoice}
-              size="xl"
-              onClick={() => {
-                const requisitionId = record.requisitionId;
-                openRecord(requisitionId);
-              }}
-            />
+            <a>
+              <FontAwesomeIcon
+                icon={faFileInvoice}
+                size="xl"
+                onClick={() => {
+                  const requisitionId = record.requisitionId;
+                  openRecord(requisitionId);
+                }}
+              />
+            </a>
           </div>
         );
       },
@@ -205,6 +219,73 @@ const RequisitionList = () => {
       },
     },
   ];
+  const headerManager = [
+    {
+      title: 'No.',
+      dataIndex: 'requisitionId',
+      align: 'center',
+      width: 120,
+      render: (text, record) => {
+        return (
+          <div style={{ display: 'flex' }}>
+            <span style={{ flex: 1 }}>{text}</span>
+            <a>
+              <FontAwesomeIcon
+                icon={faFileInvoice}
+                size="xl"
+                onClick={() => {
+                  const requisitionId = record.requisitionId;
+                  openRecord(requisitionId);
+                }}
+              />
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: 'ผู้ทำรายการ',
+      dataIndex: 'creatorName',
+      align: 'center',
+      width: 200,
+    },
+    {
+      title: 'จำนวน',
+      dataIndex: 'itemCount',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: 'อัพเดทล่าสุดเมื่อ',
+      dataIndex: 'updatedAt',
+      align: 'center',
+      width: 250,
+      render: (text, record) => {
+        return <div>{moment(record.updatedAt).locale('th').format('LLL')}</div>;
+      },
+    },
+    {
+      title: 'สถานะ',
+      dataIndex: 'requisitionStatus',
+      align: 'center',
+      width: 150,
+      render: (text) => {
+        return (
+          <div>
+            {text == 0
+              ? 'รออนุมัติ'
+              : text == 1
+              ? 'อนุมัติแล้ว'
+              : text == 2
+              ? 'กำลังดำเนินการ'
+              : text == 3
+              ? 'เสร็จสิ้น'
+              : 'ยกเลิก'}
+          </div>
+        );
+      },
+    },
+  ];
   return (
     <>
       <IngrStffCreateModal
@@ -243,7 +324,9 @@ const RequisitionList = () => {
                     <Form.Control
                       type="text"
                       value={keyword}
-                      placeholder="ค้นหารหัส/ชื่อสาขา"
+                      placeholder={
+                        selectBranch ? 'ค้นหารหัส' : 'ค้นหารหัส/ชื่อสาขา'
+                      }
                       onChange={e => setKeyword(e.target.value)}
                     />
                   </InputGroup>
@@ -319,7 +402,7 @@ const RequisitionList = () => {
                 ? filterData
                 : record
             }
-            columns={header}
+            columns={selectBranch ? headerManager : header}
             rowKey="requisitionId"
             loading={promiseInProgress}
             showSizeChanger={false}

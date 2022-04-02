@@ -4,13 +4,12 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { EmployeeEdit } from 'components';
 import { Routes } from 'routes';
-import { Link } from 'react-router-dom';
-const GetEmployee = ({ ...props }) => {
-  const [empId, setEmpId] = useState();
+import { useParams } from 'react-router-dom';
+const GetEmployee = () => {
+  const { empId } = useParams();
   useEffect(() => {
     document.title = 'ข้อมูลพนักงาน';
-    setEmpId(props.match.params.empId);
-  }, [empId]);
+  }, []);
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">

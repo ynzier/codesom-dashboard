@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { PromotionEdit } from 'components';
-const GetPromotion = ({ ...props }) => {
-  const [promoId, setPromoId] = useState();
+const GetPromotion = () => {
+  const { promoId } = useParams();
   useEffect(() => {
     document.title = 'ข้อมูลสินค้า';
-    console.log(props.match.params.promoId);
-    setPromoId(props.match.params.promoId);
-  }, [promoId]);
+  }, []);
 
   return (
     <>
@@ -21,10 +19,8 @@ const GetPromotion = ({ ...props }) => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <Link to={Routes.ProductList.path}>รายการสินค้า</Link>

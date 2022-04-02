@@ -65,6 +65,12 @@ const getRecipeById = productId => {
     params: { productId: productId },
   });
 };
+const getManagerAllProductInBranch = branchId => {
+  return http.get(prefix + '/getManagerAllProductInBranch', {
+    headers: authHeader(),
+    params: { branchId: branchId },
+  });
+};
 const updateProduct = (prId, data) => {
   return http.put(prefix + '/updateProduct', data, {
     headers: authHeader(),
@@ -109,4 +115,5 @@ export default {
   area,
   getProductCreatePromo,
   updateProductWithRecipe,
+  getManagerAllProductInBranch,
 };

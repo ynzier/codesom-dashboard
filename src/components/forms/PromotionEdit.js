@@ -22,12 +22,15 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useAlert } from 'react-alert';
 import productService from 'services/product.service';
 import promotionsService from 'services/promotions.service';
+import TokenService from 'services/token.service';
 
 const PromotionEdit = props => {
   const alert = useAlert();
   const [form] = Form.useForm();
   const { Option } = Select;
   const { RangePicker } = DatePicker;
+  const [editable, setEditable] = useState(false);
+  const [isManager, setIsManager] = useState(false);
   const { promiseInProgress } = usePromiseTracker({});
   const [promoCost, setPromoCost] = useState(0);
   const [productData, setProductData] = useState([]);
@@ -184,6 +187,8 @@ const PromotionEdit = props => {
     if (productData.length < 1) {
       fetchProducts();
     }
+    const user = TokenService.getUser();
+    if (user.authPayload.roleId == 2) setIsManager(true);
     return () => {};
   }, []);
 
@@ -231,6 +236,7 @@ const PromotionEdit = props => {
                       listType="picture-card"
                       className="avatar-uploader mb-1"
                       showUploadList={false}
+                      disabled={!editable}
                       customRequest={() => {}}
                       beforeUpload={beforeUpload}
                       onChange={handleFileChange}>
@@ -254,6 +260,7 @@ const PromotionEdit = props => {
                       <Input.TextArea
                         autoSize={{ minRows: 2, maxRows: 6 }}
                         placeholder="คำอธิบายโปรโมชัน"
+                        disabled={!editable}
                       />
                     </Form.Item>
                   </Stack>
@@ -267,7 +274,7 @@ const PromotionEdit = props => {
                         { required: true, message: '*ใส่ชื่อโปรโมชัน' },
                         { max: 30, message: '*ไม่เกิน 30 ตัวอักษร' },
                       ]}>
-                      <Input placeholder="ชื่อโปรโมชัน" />
+                      <Input placeholder="ชื่อโปรโมชัน" disabled={!editable} />
                     </Form.Item>
                     <Form.Item
                       name="promoDate"
@@ -282,6 +289,7 @@ const PromotionEdit = props => {
                       <RangePicker
                         locale={locale}
                         size="large"
+                        disabled={!editable}
                         ranges={{
                           วันนี้: [
                             moment().startOf('day'),
@@ -301,6 +309,7 @@ const PromotionEdit = props => {
                       rules={[{ required: true, message: '*ใส่ราคา' }]}>
                       <InputNumber
                         min="0"
+                        disabled={!editable}
                         precision="2"
                         stringMode
                         placeholder="0.00"
@@ -335,6 +344,7 @@ const PromotionEdit = props => {
                                 ]}>
                                 <Select
                                   placeholder="กดเพื่อเลือกรายการ"
+                                  disabled={!editable}
                                   value={[index, 'productId']}
                                   dropdownStyle={{ fontFamily: 'Prompt' }}>
                                   {productData.map((item, index) => (
@@ -355,6 +365,7 @@ const PromotionEdit = props => {
                                 <InputNumber
                                   min="1"
                                   max="1000"
+                                  disabled={!editable}
                                   style={{
                                     textAlign: 'center',
                                     width: '100%',
@@ -368,7 +379,11 @@ const PromotionEdit = props => {
                                 onClick={() => remove(field.name)}
                                 size={20}
                                 className="dynamic-delete-button"
-                                style={{ marginTop: '5px', float: 'right' }}
+                                style={{
+                                  marginTop: '5px',
+                                  float: 'right',
+                                  display: editable ? 'block' : 'none',
+                                }}
                               />
                             </ColA>
                           </RowA>
@@ -384,6 +399,7 @@ const PromotionEdit = props => {
                             color: '#97515F',
                             backgroundColor: 'transparent',
                             borderStyle: 'none',
+                            display: editable ? 'block' : 'none',
                           }}>
                           <PlusOutlined />
                         </Button>
@@ -405,34 +421,59 @@ const PromotionEdit = props => {
                   />
                 </Col>
               </RowA>
-              <Row>
-                <Col md={{ span: 3, offset: 6 }}>
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => history.back()}
-                      style={{ width: '100%', borderWidth: 0 }}>
-                      ย้อนกลับ
-                    </Button>
-                  </div>
-                </Col>
-                <Col md={3}>
-                  <ButtonA
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '10px',
-                      borderWidth: '0',
-                      color: 'white',
-                      fontSize: '16px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      backgroundColor: '#2DC678',
-                    }}
-                    htmlType="submit">
-                    ยืนยัน
-                  </ButtonA>
-                </Col>
-              </Row>
+              {!isManager && (
+                <Row>
+                  <Col md={{ span: 3, offset: 6 }}>
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => history.back()}
+                        style={{ width: '100%', borderWidth: 0 }}>
+                        ย้อนกลับ
+                      </Button>
+                    </div>
+                  </Col>
+                  <Col md={3}>
+                    <div>
+                      {editable ? (
+                        <ButtonA
+                          style={{
+                            flex: 2,
+                            width: '100%',
+                            height: 50,
+                            borderRadius: '10px',
+                            borderWidth: '0',
+                            color: 'white',
+                            fontSize: '16px',
+                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                            backgroundColor: '#2DC678',
+                          }}
+                          htmlType="submit">
+                          ยืนยัน
+                        </ButtonA>
+                      ) : (
+                        <Button
+                          style={{
+                            flex: 2,
+                            width: '100%',
+                            height: 50,
+                            borderRadius: '10px',
+                            borderWidth: '0',
+                            color: 'white',
+                            fontSize: '16px',
+                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                            backgroundColor: '#2DC678',
+                          }}
+                          onClick={() => {
+                            setEditable(true);
+                          }}>
+                          แก้ไข
+                        </Button>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+              )}
             </Form>
           </Card.Body>
         </Card>
