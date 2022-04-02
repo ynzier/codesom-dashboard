@@ -29,8 +29,8 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
                 ProductService.disableType(record.typeId)
                   .then(response => {
                     fetchProductType();
-
                     alert.show(response.data.message, { type: 'success' });
+                    handleClose();
                   })
                   .catch(error => {
                     const resMessage =
@@ -40,6 +40,7 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
                       error.message ||
                       error.toString();
                     alert.show(resMessage, { type: 'error' });
+                    handleClose();
                   });
               }}>
               <i className="fas fa-trash action"></i>
@@ -64,7 +65,7 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
               <InputGroup>
                 <Form.Control
                   type="text"
-                  maxLength="40"
+                  maxLength="20"
                   placeholder="เพิ่มชนิดสินค้า"
                   onChange={e => setNewType(e.target.value)}
                 />
@@ -72,12 +73,12 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
                   variant="outline-tertiary"
                   style={{ zIndex: 5 }}
                   onClick={e => {
-                    console.log(newType);
                     ProductService.createType(newType)
                       .then(response => {
                         fetchProductType();
                         alert.show(response.data.message, { type: 'success' });
 
+                        handleClose();
                         e.disabled = true;
                       })
                       .catch(error => {
@@ -88,6 +89,7 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
                           error.message ||
                           error.toString();
                         alert.show(resMessage, { type: 'error' });
+                        handleClose();
                       });
                   }}>
                   เพิ่ม

@@ -108,6 +108,7 @@ const OrderHistory = () => {
             error.response.data.message) ||
           error.message ||
           error.toString();
+        console.log(error);
         alert.show(resMessage, { type: 'error' });
       });
     return () => {

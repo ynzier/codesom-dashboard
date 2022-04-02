@@ -215,15 +215,7 @@ const BranchCreate = () => {
                 </Row>
                 <Row>
                   <Col className="mb-3">
-                    <Form.Item
-                      name="brManager"
-                      label="ผู้จัดการสาขา"
-                      rules={[
-                        {
-                          required: true,
-                          message: '*เลือกช่วงเวลาเปิด-ปิดสาขา',
-                        },
-                      ]}>
+                    <Form.Item name="brManager" label="ผู้จัดการสาขา">
                       <Select
                         placeholder="เลือกผู้จัดการ"
                         showSearch

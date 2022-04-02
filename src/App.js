@@ -7,6 +7,7 @@ import { AlertTemplate } from 'components';
 // Components
 import { Sidebar, Navbar, Preloader } from 'components';
 import './index.css';
+import './my-antd.less';
 import AuthService from 'services/auth.service';
 
 // Error Pages

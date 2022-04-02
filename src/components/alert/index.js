@@ -57,10 +57,13 @@ const buttonStyle = {
 };
 
 const AlertTemplate = ({ message, options, style, close }) => {
-  if (message == 'เซสชั่นหมดอายุ กรุณาล็อคอินใหม่อีกครั้ง') {
+  if (
+    message == 'เซสชันหมดอายุ กรุณาล็อคอินใหม่อีกครั้ง' ||
+    message == 'ไม่พบเซสชันโทเคนในระบบ!'
+  ) {
     setTimeout(() => {
       AuthService.logoutDashboard();
-    }, 5000);
+    }, 3000);
   }
   return (
     <>

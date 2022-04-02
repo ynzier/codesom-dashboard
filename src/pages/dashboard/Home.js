@@ -4,8 +4,17 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Preloader } from 'components';
 import { Row, Card, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
+import tokenService from 'services/token.service';
 
 const Home = () => {
+  const [user, setUser] = useState({});
+  useEffect(async () => {
+    const getUser = await tokenService.getUser();
+    setUser(getUser);
+    console.log(getUser);
+
+    return () => {};
+  }, []);
 
   return (
     <>
@@ -26,6 +35,7 @@ const Home = () => {
           <div className="table-settings mb-4">
             <Row className="justify-content-between align-items-center">
               Dashboard
+              <div>{user?.authPayload?.empId}</div>
             </Row>
           </div>
         </Card.Header>

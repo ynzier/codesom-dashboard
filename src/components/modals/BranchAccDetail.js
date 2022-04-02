@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAlert } from 'react-alert';
-import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
+import { Col, Row, Form, Button, Modal } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 
 const BranchAccDetail = ({ ...props }) => {

@@ -55,7 +55,21 @@
 .ant-input-number-handler:hover .ant-input-number-handler-down-inner {
   color: #9d7463;
 }
-
+.ant-input-search-button {
+  height: 40px;
+}
+.ant-input-search-button:hover {
+  border-color: #9d7463 !important;
+  border: 1px;
+}
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 0 8px 8px 0;
+}
 .ant-btn:hover,
 .ant-btn:focus {
   color: #97515f;
@@ -76,10 +90,38 @@
   background: transparent;
   content: '';
 }
-.ant-btn:active {
-  color: #97515f;
-  background: rgb(116, 238, 146) !important;
+.ant-btn-custom:active {
+  color: #fff;
+  background: #692a37 !important;
   border-color: #97515f;
+}
+.ant-btn-custom {
+  line-height: 1.5715;
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  height: 50px;
+  padding: 4px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  color: #fff;
+  border: 1px solid #d9d9d9;
+  background: #97515f;
+  box-shadow: rgb(0 0 0 / 25%) 0px 0rem 0.7rem;
+}
+.ant-btn {
+  height: 50px;
 }
 .ant-btn:active > a:only-child {
   color: currentColor;
@@ -233,7 +275,12 @@
   border-radius: 8px;
   transition: all 0.3s;
 }
-
+.ant-btn {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-family: 'Prompt';
+}
 .ant-input-number {
   box-sizing: border-box;
   margin: 0;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { WarningFilled } from '@ant-design/icons';
+
 import {
   Col,
   Row,
@@ -8,20 +10,18 @@ import {
   Card,
   Breadcrumb,
   InputGroup,
-  Button,
 } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Table } from 'antd';
-
-import 'antd/dist/antd.min.css';
+import { Table, Popconfirm, Button } from 'antd';
 
 import UserService from 'services/users.service';
+import usersService from 'services/users.service';
 const UserList = ({ ...props }) => {
   const alert = useAlert();
-
+  let history = useHistory();
   const [records, setRecord] = useState([]);
   const [filterData, setfilterData] = useState();
   const search = value => {
@@ -33,6 +33,43 @@ const UserList = ({ ...props }) => {
 
     setfilterData(filterTable);
   };
+  const fetchUser = () => {
+    UserService.getUserList()
+      .then(res => {
+        setRecord(res.data);
+      })
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
+  };
+  const confirm = id =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(
+          usersService
+            .deleteUser(id)
+            .then(res => {
+              alert.show(res.data.message, { type: 'success' });
+              fetchUser();
+            })
+            .catch(error => {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              alert.show(resMessage, { type: 'error' });
+            }),
+        );
+      }, 1000);
+    });
 
   useEffect(() => {
     document.title = 'รายชื่อผู้ใช้งานแดชบอร์ด';
@@ -55,23 +92,6 @@ const UserList = ({ ...props }) => {
     return () => (mounted = false);
   }, []);
 
-  // const deleteRecord = () => {
-  //   UserService.deleteEmp(deleteData.emp_id)
-  //     .then(response => {
-  //       refreshList();
-  //       generate('success', response.data.message);
-  //       setModalShow(false);
-  //     })
-  //     .catch(error => {
-  //       const resMessage =
-  //         (error.response &&
-  //           error.response.data &&
-  //           error.response.data.message) ||
-  //         error.message ||
-  //         error.toString();
-  //       generate('danger', resMessage);
-  //     });
-  // };
   const header = [
     {
       title: 'รหัสผู้ใช้งาน',
@@ -106,41 +126,30 @@ const UserList = ({ ...props }) => {
     {
       title: 'Action',
       key: 'key',
+      align: 'center',
       dataIndex: 'key',
       render: (text, record) => {
         return (
-          <div>
-            <span onClick={() => {}}>
-              <i className="far fa-edit action mr-2"></i>
-            </span>
-          </div>
+          <Popconfirm
+            icon={<WarningFilled style={{ color: 'red' }} />}
+            title={() => (
+              <div style={{ fontFamily: 'Prompt' }}>ลบบัญชีผู้ใช้งาน</div>
+            )}
+            okText="ยืนยัน"
+            showCancel={false}
+            onConfirm={() => confirm(record.id)}
+            okButtonProps={{
+              style: { height: 40, background: 'red', borderWidth: 0 },
+            }}>
+            <a href="" style={{ color: '#646464' }}>
+              <i className="fa fa-ban action mr-2" />
+            </a>
+          </Popconfirm>
         );
       },
     },
   ];
 
-  // const DeleteModal = props => {
-  //   return (
-  //     <Modal {...props}>
-  //       <Modal.Header closeButton>
-  //         <Modal.Title>ลบข้อมูลพนักงาน</Modal.Title>
-  //       </Modal.Header>
-  //       <Modal.Body>
-  //         <p>ข้อมูลของพนักงานที่ต้องการลบ</p>
-  //         <p>
-  //           ชื่อ: {deleteData.first_name} {deleteData.last_name}
-  //         </p>
-  //         <p>ตำแหน่ง: {deleteData.role_name}</p>
-  //         <p>สาขา: {deleteData.br_name}</p>
-  //       </Modal.Body>
-  //       <Modal.Footer>
-  //         <Button variant="danger" onClick={deleteRecord}>
-  //           ลบข้อมูล
-  //         </Button>
-  //       </Modal.Footer>
-  //     </Modal>
-  //   );
-  // };
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
@@ -179,16 +188,10 @@ const UserList = ({ ...props }) => {
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
               <Button
-                className="w-100"
-                as={Link}
-                to={Routes.AddPermission.path}
-                variant="codesom"
-                style={{
-                  color: '#fff',
-                  height: '50px',
-                  paddingTop: '0.75rem',
-                  borderRadius: '10px',
-                  boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                className="w-100 ant-btn-custom"
+                type="button"
+                onClick={() => {
+                  history.push(Routes.AddPermission.path);
                 }}>
                 เพิ่มผู้ใช้งานใหม่
               </Button>

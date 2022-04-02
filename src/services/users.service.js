@@ -1,17 +1,33 @@
 import http from 'http-common';
 const prefix = '/user';
-import authHeader from './auth-header';
 
-const getUserList = () => {
-  return http.get(prefix + '/getUserList', {
-    headers: authHeader(),
+const getUsername = userId => {
+  return http.get(prefix + '/getUsername', {
+    params: { empId: userId },
   });
+};
+const updateUser = (userId, data) => {
+  return http.put(prefix + '/updateUser', data, {
+    params: { empId: userId },
+  });
+};
+const getUserList = () => {
+  return http.get(prefix + '/getUserList');
 };
 
 const createNewUser = data => {
-  return http.post(prefix + '/createNewUser', data, {
-    headers: authHeader(),
-  });
+  return http.post(prefix + '/createNewUser', data);
 };
 
-export default { getUserList, createNewUser };
+const deleteUser = empId => {
+  return http.delete(`${prefix}/deleteUser`, {
+    params: { empId: empId },
+  });
+};
+export default {
+  getUsername,
+  getUserList,
+  createNewUser,
+  updateUser,
+  deleteUser,
+};

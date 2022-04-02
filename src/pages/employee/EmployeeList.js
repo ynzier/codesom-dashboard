@@ -13,7 +13,7 @@ import {
 } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Table } from 'antd';
+import { Table, Input } from 'antd';
 import { useAlert } from 'react-alert';
 
 import 'antd/dist/antd.min.css';
@@ -76,7 +76,7 @@ const EmployeeList = () => {
   }, []);
 
   const deleteRecord = () => {
-    EmployeeService.deleteEmp(deleteData.emp_id)
+    EmployeeService.deleteEmp(deleteData.empId)
       .then(response => {
         refreshList();
         alert.show(response.data.message, { type: 'success' });
@@ -124,6 +124,8 @@ const EmployeeList = () => {
     },
     {
       title: 'Action',
+      width: 300,
+      align: 'center',
       render: (text, record) => {
         return (
           <div>
@@ -157,10 +159,10 @@ const EmployeeList = () => {
         <Modal.Body>
           <p>ข้อมูลของพนักงานที่ต้องการลบ</p>
           <p>
-            ชื่อ: {deleteData.first_name} {deleteData.last_name}
+            ชื่อ: {deleteData.firstName} {deleteData.lastName}
           </p>
-          <p>ตำแหน่ง: {deleteData.role_name}</p>
-          <p>สาขา: {deleteData.br_name}</p>
+          <p>ตำแหน่ง: {deleteData.roleName}</p>
+          <p>สาขา: {deleteData.brName}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -195,20 +197,15 @@ const EmployeeList = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
-              <InputGroup style={{ height: '50px' }}>
-                <InputGroup.Text>
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  placeholder="ค้นหาพนักงาน"
-                  onChange={e => search(e.target.value)}
-                />
-              </InputGroup>
+              <Input
+                onChange={e => search(e.target.value)}
+                placeholder="ค้นหาพนักงาน"
+              />
             </Col>
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
