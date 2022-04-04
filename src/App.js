@@ -4,6 +4,7 @@ import { Routes } from 'routes';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 import 'antd/dist/antd.css';
 // Components
+import 'antd/dist/antd.min.css';
 import './index.css';
 import {
   AlertTemplate,

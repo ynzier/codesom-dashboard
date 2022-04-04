@@ -25,59 +25,13 @@ import promotionsService from 'services/promotions.service';
 
 const { Meta } = CardA;
 
-const PromotionList = () => {
+const PromotionList = props => {
   let history = useHistory();
+  const { selectBranch } = props;
   const { promiseInProgress } = usePromiseTracker();
   const alert = useAlert();
 
-  const [showRecipe, setShowRecipe] = useState(false);
-  const [recipeId, setRecipeId] = useState();
   const [record, setRecord] = useState([]);
-  const [filterData, setfilterData] = useState([]);
-  const [keyword, setKeyword] = useState('');
-  const [option, setOption] = useState('');
-
-  useEffect(async () => {
-    const filterTable = record.filter(obj => {
-      // keyword
-      if (keyword != '' && option == '')
-        return Object.keys(obj).some(k => {
-          if (
-            k != 'image' &&
-            k != 'recipeId' &&
-            k != 'prImg' &&
-            k != 'prType' &&
-            k != 'product_type' &&
-            k != 'prUnit'
-          ) {
-            return String(obj[k]).toLowerCase().includes(keyword.toLowerCase());
-          }
-        });
-      // option
-      if (keyword == '' && option != '') return obj.prType == option;
-      // keyword option
-      if (keyword != '' && option != '')
-        return (
-          obj.prType == option &&
-          Object.keys(obj).some(k => {
-            if (
-              k != 'image' &&
-              k != 'recipeId' &&
-              k != 'prImg' &&
-              k != 'prType' &&
-              k != 'product_type' &&
-              k != 'prUnit'
-            ) {
-              return String(obj[k])
-                .toLowerCase()
-                .includes(keyword.toLowerCase());
-            }
-          })
-        );
-    });
-    setfilterData(filterTable);
-    return () => {};
-  }, [keyword, option]);
 
   const openRecord = promoId => {
     history.push('/dashboard/promotion/getPromotion/' + promoId);
@@ -113,11 +67,6 @@ const PromotionList = () => {
 
   return (
     <>
-      <RecipeLookUp
-        recipeId={recipeId}
-        showRecipe={showRecipe}
-        setShowRecipe={setShowRecipe}
-      />
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
@@ -143,22 +92,24 @@ const PromotionList = () => {
               <Col xs={8} md={6} lg={3} xl={4}>
                 <h2>สินค้าโปรโมชัน</h2>
               </Col>
-              <Col xs={5} xl={{ span: 2, offset: 6 }}>
-                <Button
-                  className="w-100"
-                  as={Link}
-                  to={Routes.AddPromotion.path}
-                  variant="codesom"
-                  style={{
-                    color: '#fff',
-                    height: '50px',
-                    paddingTop: '0.75rem',
-                    borderRadius: '10px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                  }}>
-                  เพิ่มโปรโมชัน
-                </Button>
-              </Col>
+              {!selectBranch && (
+                <Col xs={5} xl={{ span: 2, offset: 6 }}>
+                  <Button
+                    className="w-100"
+                    as={Link}
+                    to={Routes.AddPromotion.path}
+                    variant="codesom"
+                    style={{
+                      color: '#fff',
+                      height: '50px',
+                      paddingTop: '0.75rem',
+                      borderRadius: '10px',
+                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    }}>
+                    เพิ่มโปรโมชัน
+                  </Button>
+                </Col>
+              )}
             </Row>
           </div>
         </Card.Header>
