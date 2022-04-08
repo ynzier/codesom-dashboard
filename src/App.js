@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-import 'antd/dist/antd.css';
 // Components
 import 'antd/dist/antd.min.css';
 import './index.css';

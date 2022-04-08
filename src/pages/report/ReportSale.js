@@ -10,20 +10,72 @@ import NumberFormat from 'react-number-format';
 import BranchesService from 'services/branches.service';
 import { Row, Col, Breadcrumb, Card } from 'react-bootstrap';
 import { Select, Tabs, DatePicker } from 'antd';
-import { Line, Pie, Scatter } from '@ant-design/plots';
-
+import { Line, Pie } from '@ant-design/plots';
 const { TabPane } = Tabs;
 const { Option } = Select;
-import 'antd/dist/antd.min.css';
 import reportService from 'services/report.service';
 import TokenService from 'services/token.service';
 
-const TopSalePie = ({ data }) => {
+const TopSalePie = ({ data, type }) => {
   const config = {
     appendPadding: 10,
     data,
-    angleField: 'totalCount',
+    angleField: type,
     colorField: 'productName',
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <>
+            <div style={{ marginTop: 16 }}>{title}</div>
+            <ul
+              style={{
+                paddingLeft: 0,
+                paddingTop: 8,
+              }}>
+              {items?.map((item, index) => {
+                const { name, value, color } = item;
+                return (
+                  <li
+                    key={item.productName}
+                    data-index={index}
+                    style={{
+                      marginBottom: 8,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <span
+                      className="g2-tooltip-marker"
+                      style={{ backgroundColor: color }}></span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}>
+                      <span style={{ marginRight: 16 }}>{name}:</span>
+                      <span className="g2-tooltip-list-item-value">
+                        {type == 'totalValue' ? (
+                          <NumberFormat
+                            value={value}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        ) : (
+                          value
+                        )}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        );
+      },
+    },
     radius: 0.8,
     theme: {
       styleSheet: {
@@ -71,16 +123,21 @@ const LineChart = ({ data, type }) => {
         return (
           <>
             <div style={{ marginTop: 16 }}>{title}</div>
-            <ul style={{ paddingLeft: 0 }}>
+            <ul
+              style={{
+                paddingLeft: 0,
+                columnCount: parseInt(items.length / 5),
+                paddingTop: 8,
+                columnGap: 16,
+              }}>
               {items?.map((item, index) => {
                 const { name, value, color } = item;
                 return (
                   <li
                     key={item.hour}
-                    className="g2-tooltip-list-item"
                     data-index={index}
                     style={{
-                      marginBottom: 4,
+                      marginBottom: 8,
                       display: 'flex',
                       alignItems: 'center',
                     }}>
@@ -167,16 +224,21 @@ const TimeChart = ({ data, type }) => {
         return (
           <>
             <div style={{ marginTop: 16 }}>{title}:00</div>
-            <ul style={{ paddingLeft: 0 }}>
+            <ul
+              style={{
+                paddingLeft: 0,
+                columnCount: parseInt(items.length / 5),
+                paddingTop: 8,
+                columnGap: 16,
+              }}>
               {items?.map((item, index) => {
                 const { name, value, color } = item;
                 return (
                   <li
                     key={item.hour}
-                    className="g2-tooltip-list-item"
                     data-index={index}
                     style={{
-                      marginBottom: 4,
+                      marginBottom: 8,
                       display: 'flex',
                       alignItems: 'center',
                     }}>
@@ -268,16 +330,21 @@ const BenefitChart = ({ data }) => {
         return (
           <>
             <div style={{ marginTop: 16 }}>{title}</div>
-            <ul style={{ paddingLeft: 0 }}>
+            <ul
+              style={{
+                paddingLeft: 0,
+                columnCount: parseInt(items.length / 5),
+                paddingTop: 8,
+                columnGap: 16,
+              }}>
               {items?.map((item, index) => {
                 const { name, value, color } = item;
                 return (
                   <li
                     key={item.hour}
-                    className="g2-tooltip-list-item"
                     data-index={index}
                     style={{
-                      marginBottom: 4,
+                      marginBottom: 8,
                       display: 'flex',
                       alignItems: 'center',
                     }}>
@@ -343,16 +410,21 @@ const BestSellerChart = ({ data, type }) => {
         return (
           <>
             <div style={{ marginTop: 16 }}>{title}</div>
-            <ul style={{ paddingLeft: 0 }}>
+            <ul
+              style={{
+                paddingLeft: 0,
+                columnCount: parseInt(items.length / 5),
+                paddingTop: 8,
+                columnGap: 16,
+              }}>
               {items?.map((item, index) => {
                 const { name, value, color } = item;
                 return (
                   <li
                     key={item.hour}
-                    className="g2-tooltip-list-item"
                     data-index={index}
                     style={{
-                      marginBottom: 4,
+                      marginBottom: 8,
                       display: 'flex',
                       alignItems: 'center',
                     }}>
@@ -914,7 +986,7 @@ const ReportSale = props => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalQR}
-                              decimalScale={0}
+                              decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
                               thousandSeparator={true}
@@ -928,22 +1000,19 @@ const ReportSale = props => {
                       style={{ height: 1, backgroundColor: '#d6d6d6' }}
                       className="my-3 mx-4"
                     />
-                    <Row className="my-3 mx-4">
-                      <Col>
-                        <h4>สินค้าขายดี</h4>
-                        <TopSalePie data={topSale} />
-                      </Col>
-                    </Row>
                     <Row>
+                      <h4>สินค้าขายดี</h4>
                       <Col>
                         <Tabs defaultActiveKey="1" centered>
                           <TabPane tab="ยอดขาย" key="1">
+                            <TopSalePie data={topSale} type="totalValue" />
                             <BestSellerChart
                               data={bestSeller}
                               type="totalValue"
                             />
                           </TabPane>
                           <TabPane tab="จำนวนสินค้า" key="2">
+                            <TopSalePie data={topSale} type="totalCount" />
                             <BestSellerChart
                               data={bestSeller}
                               type="totalCount"

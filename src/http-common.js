@@ -1,10 +1,11 @@
 import * as axios from 'axios';
+import authService from 'services/auth.service';
 import TokenService from 'services/token.service';
 
 const instance = axios.create({
   // local http://localhost:4000
   // online https://api.knt-dev.online
-  baseURL: 'https://api.knt-dev.online/',
+  baseURL: 'http://localhost:4000/',
   timeout: 3000,
   timeoutErrorMessage: 'การเชื่อมต่อขัดข้อง',
   headers: {
@@ -44,6 +45,12 @@ instance.interceptors.response.use(
           return Promise.reject(_error);
         }
       }
+    }
+    if (
+      err.response.data.message == 'เซสชันหมดอายุ กรุณาล็อคอินใหม่อีกครั้ง' ||
+      err.response.data.message == 'ไม่พบเซสชันโทเคนในระบบ!'
+    ) {
+      authService.logoutDashboard();
     }
     return Promise.reject(err);
   },
