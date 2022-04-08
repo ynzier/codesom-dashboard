@@ -63,9 +63,7 @@ const GetOrder = props => {
             <Breadcrumb.Item href={Routes.OrderHistory.path}>
               ประวัติออเดอร์
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>
-              หมายเลขออเดอร์: {id}
-            </Breadcrumb.Item>
+            <Breadcrumb.Item active>หมายเลขออเดอร์: {id}</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>{' '}
@@ -228,7 +226,13 @@ const GetOrder = props => {
             <Card.Header>
               <Row>
                 <h5>ประวัติออเดอร์</h5>
-                <div># {id}</div>
+              </Row>
+              <Row>
+                <Col># {id}</Col>
+                <Col style={{ textAlign: 'right' }}>
+                  {orderDetail.receipt?.paidType === 'qr' && 'Omise QR'}
+                  {orderDetail.receipt?.paidType === 'cash' && 'เงินสด'}
+                </Col>
               </Row>
             </Card.Header>
             <Card.Body>
@@ -277,6 +281,26 @@ const GetOrder = props => {
                   }}>
                   <NumberFormat
                     value={orderDetail.ordDiscount}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    decimalSeparator="."
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    suffix=" บาท"
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col>ราคา Net: </Col>
+                <Col
+                  style={{
+                    textAlign: 'right',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}>
+                  <NumberFormat
+                    value={receiptData.net}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."

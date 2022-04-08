@@ -10,7 +10,7 @@ import NumberFormat from 'react-number-format';
 import BranchesService from 'services/branches.service';
 import { Row, Col, Breadcrumb, Card } from 'react-bootstrap';
 import { Select, Tabs, DatePicker } from 'antd';
-import { Line, Pie, G2 } from '@ant-design/plots';
+import { Line, Pie, Scatter } from '@ant-design/plots';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -66,6 +66,57 @@ const LineChart = ({ data, type }) => {
         beginAtZero: true,
       },
     },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <>
+            <div style={{ marginTop: 16 }}>{title}</div>
+            <ul style={{ paddingLeft: 0 }}>
+              {items?.map((item, index) => {
+                const { name, value, color } = item;
+                return (
+                  <li
+                    key={item.hour}
+                    className="g2-tooltip-list-item"
+                    data-index={index}
+                    style={{
+                      marginBottom: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <span
+                      className="g2-tooltip-marker"
+                      style={{ backgroundColor: color }}></span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}>
+                      <span style={{ marginRight: 16 }}>{name}:</span>
+                      <span className="g2-tooltip-list-item-value">
+                        {type == 'totalValue' ? (
+                          <NumberFormat
+                            value={value}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        ) : (
+                          value
+                        )}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        );
+      },
+    },
     animation: {
       appear: {
         animation: 'path-in',
@@ -75,6 +126,113 @@ const LineChart = ({ data, type }) => {
     slider: {
       start: 0,
       end: 1,
+    },
+  };
+  return <Line {...config} />;
+};
+
+const TimeChart = ({ data, type }) => {
+  const config = {
+    data,
+    xField: 'hour',
+    yField: type,
+    seriesField: 'branch',
+    legend: {
+      position: 'top',
+    },
+    smooth: true,
+    theme: {
+      styleSheet: {
+        fontFamily: 'Prompt',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    yAxis: {
+      label:
+        type === 'ordTotal'
+          ? {
+              formatter: v =>
+                `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, s => `${s},`),
+            }
+          : {
+              formatter: v => v,
+            },
+    },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <>
+            <div style={{ marginTop: 16 }}>{title}:00</div>
+            <ul style={{ paddingLeft: 0 }}>
+              {items?.map((item, index) => {
+                const { name, value, color } = item;
+                return (
+                  <li
+                    key={item.hour}
+                    className="g2-tooltip-list-item"
+                    data-index={index}
+                    style={{
+                      marginBottom: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <span
+                      className="g2-tooltip-marker"
+                      style={{ backgroundColor: color }}></span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}>
+                      <span style={{ marginRight: 16 }}>{name}:</span>
+                      <span className="g2-tooltip-list-item-value">
+                        {type == 'ordTotal' ? (
+                          <NumberFormat
+                            value={value}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        ) : (
+                          value
+                        )}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        );
+      },
+    },
+
+    xAxis: {
+      min: 0,
+      max: 23,
+      tickInterval: 1,
+      label: { formatter: v => v + ':00' },
+
+      grid: {
+        line: {
+          style: {
+            stroke: '#eee',
+          },
+        },
+      },
+    },
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 5000,
+      },
     },
   };
   return <Line {...config} />;
@@ -105,6 +263,53 @@ const BenefitChart = ({ data }) => {
       start: 0,
       end: 1,
     },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <>
+            <div style={{ marginTop: 16 }}>{title}</div>
+            <ul style={{ paddingLeft: 0 }}>
+              {items?.map((item, index) => {
+                const { name, value, color } = item;
+                return (
+                  <li
+                    key={item.hour}
+                    className="g2-tooltip-list-item"
+                    data-index={index}
+                    style={{
+                      marginBottom: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <span
+                      className="g2-tooltip-marker"
+                      style={{ backgroundColor: color }}></span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}>
+                      <span style={{ marginRight: 16 }}>{name}:</span>
+                      <span className="g2-tooltip-list-item-value">
+                        <NumberFormat
+                          value={value}
+                          decimalScale={2}
+                          fixedDecimalScale={true}
+                          decimalSeparator="."
+                          displayType={'text'}
+                          thousandSeparator={true}
+                        />{' '}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        );
+      },
+    },
   };
   return <Line {...config} />;
 };
@@ -133,6 +338,57 @@ const BestSellerChart = ({ data, type }) => {
       start: 0,
       end: 1,
     },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <>
+            <div style={{ marginTop: 16 }}>{title}</div>
+            <ul style={{ paddingLeft: 0 }}>
+              {items?.map((item, index) => {
+                const { name, value, color } = item;
+                return (
+                  <li
+                    key={item.hour}
+                    className="g2-tooltip-list-item"
+                    data-index={index}
+                    style={{
+                      marginBottom: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <span
+                      className="g2-tooltip-marker"
+                      style={{ backgroundColor: color }}></span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}>
+                      <span style={{ marginRight: 16 }}>{name}:</span>
+                      <span className="g2-tooltip-list-item-value">
+                        {type == 'totalValue' ? (
+                          <NumberFormat
+                            value={value}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            decimalSeparator="."
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                        ) : (
+                          value
+                        )}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        );
+      },
+    },
   };
   return <Line {...config} />;
 };
@@ -149,6 +405,7 @@ const ReportSale = props => {
   const [graphTotal, setGraphTotal] = useState([]);
   const [benefitGraph, setBenefitGraph] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
+  const [scatterData, setScatterData] = useState([]);
 
   const fetchReport = async (branchId, date) => {
     var reqDate = date || null;
@@ -163,6 +420,12 @@ const ReportSale = props => {
       .then(res => {
         setTopSale(res.data.result);
         setTotalItems(res.data.totalItems);
+      })
+      .catch(err => console.log(err));
+    await reportService
+      .getTimeChart({ branchId: branchId, reqDate: reqDate })
+      .then(res => {
+        setScatterData(res.data.result);
       })
       .catch(err => console.log(err));
   };
@@ -667,37 +930,66 @@ const ReportSale = props => {
                     />
                     <Row className="my-3 mx-4">
                       <Col>
-                        <h5>สินค้าขายดี</h5>
+                        <h4>สินค้าขายดี</h4>
                         <TopSalePie data={topSale} />
                       </Col>
                     </Row>
                     <Row>
                       <Col>
                         <Tabs defaultActiveKey="1" centered>
-                          <TabPane tab="ตามจำนวน" key="1">
-                            <BestSellerChart
-                              data={bestSeller}
-                              type="totalCount"
-                            />
-                          </TabPane>
-                          <TabPane tab="ตามยอดขาย" key="2">
+                          <TabPane tab="ยอดขาย" key="1">
                             <BestSellerChart
                               data={bestSeller}
                               type="totalValue"
                             />
                           </TabPane>
+                          <TabPane tab="จำนวนสินค้า" key="2">
+                            <BestSellerChart
+                              data={bestSeller}
+                              type="totalCount"
+                            />
+                          </TabPane>
                         </Tabs>
                       </Col>
                     </Row>
+                    <Row
+                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                      className="my-3"
+                    />
                     <Row>
+                      <h4>ช่องทางการจำหน่าย</h4>
                       <Tabs defaultActiveKey="1" centered>
                         <TabPane tab="ยอดขาย" key="1">
                           <LineChart data={graphTotal} type="totalValue" />
                         </TabPane>
-                        <TabPane tab="จำนวนรายการ" key="2">
+                        <TabPane tab="จำนวนออเดอร์" key="2">
                           <LineChart data={graphTotal} type="total" />
                         </TabPane>
-                        <TabPane tab="ต้นทุน/ยอดขาย" key="3">
+                      </Tabs>
+                    </Row>
+                    <Row
+                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                      className="my-3"
+                    />
+                    <Row>
+                      <h4>ยอดขายตามช่วงเวลา</h4>
+                      <Tabs defaultActiveKey="1" centered>
+                        <TabPane tab="ยอดขาย" key="1">
+                          <TimeChart data={scatterData} type="ordTotal" />
+                        </TabPane>
+                        <TabPane tab="จำนวนออเดอร์" key="2">
+                          <TimeChart data={scatterData} type="ordDuplicate" />
+                        </TabPane>
+                      </Tabs>
+                    </Row>
+                    <Row
+                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                      className="my-3"
+                    />
+                    <Row>
+                      <h4>ต้นทุน/ยอดขาย</h4>
+                      <Tabs defaultActiveKey="1" centered>
+                        <TabPane tab="ต้นทุน/ยอดขาย" key="1">
                           <BenefitChart data={benefitGraph} />
                         </TabPane>
                       </Tabs>

@@ -49,4 +49,5 @@ export const Routes = {
 
   //Report
   ReportSale: { path: '/dashboard/report/salereport' },
+  ReportIngr: { path: '/dashboard/report/ingrreport' },
 };
