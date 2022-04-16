@@ -507,3 +507,17 @@ textarea.ant-input {
 .ant-select-selection-search-input {
   margin: 6px 0px !important;
 }
+.get-current-location {
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+}
+
+.gm-style-cc:last-child {
+  display: none !important;
+}
+
+a[title='Report errors in the road map or imagery to Google'] {
+  display: none !important;
+}

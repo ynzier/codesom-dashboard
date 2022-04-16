@@ -3,10 +3,11 @@ import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Row, Card, Button } from 'react-bootstrap';
 import moment from 'moment-timezone';
+import { Map } from 'components/maps/Map';
 import 'moment/locale/th';
 import {
   Form,
-  InputNumber,
+  Switch,
   Input,
   Upload,
   Button as ButtonA,
@@ -25,6 +26,9 @@ const { RangePicker } = TimePicker;
 
 const BranchEdit = ({ ...props }) => {
   const [editable, setEditable] = useState(false);
+  const [isDelivery, setIsDelivery] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(undefined);
+  const [mapCenter, setMapCenter] = useState(undefined);
   const alert = useAlert();
   const [form] = Form.useForm();
   const { Option } = Select;
@@ -78,6 +82,28 @@ const BranchEdit = ({ ...props }) => {
           console.log(getData);
           setBranchData(getData);
           setBase64TextString(res.data?.image?.imgObj);
+          if (getData.isDelivery) {
+            setIsDelivery(getData.isDelivery);
+            setMapCenter({
+              lat: getData.coordinateLat,
+              lng: getData.coordinateLng,
+            });
+            setMarkerPosition({
+              lat: getData.coordinateLat,
+              lng: getData.coordinateLng,
+            });
+          } else {
+            navigator.geolocation.getCurrentPosition(position => {
+              setMapCenter({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+              setMarkerPosition({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+            });
+          }
           form.resetFields();
         }
       })
@@ -130,7 +156,26 @@ const BranchEdit = ({ ...props }) => {
       brManager: value.brManager,
       brOpenTime: moment(value.openClose[0]).format('HH:mm'),
       brCloseTime: moment(value.openClose[1]).format('HH:mm'),
+      isDelivery: isDelivery,
+      coordinateLat: null,
+      coordinateLng: null,
+      brDeliveryInfo: null,
     };
+    if (isDelivery) {
+      data = {
+        brName: value.brName,
+        brAddr: value.brAddr,
+        brTel: value.brTel, //on start
+        brImg: imgId,
+        brManager: value.brManager,
+        brOpenTime: moment(value.openClose[0]).format('HH:mm'),
+        brCloseTime: moment(value.openClose[1]).format('HH:mm'),
+        coordinateLat: markerPosition.lat,
+        coordinateLng: markerPosition.lng,
+        brDeliveryInfo: value.brDeliveryInfo,
+        isDelivery: isDelivery,
+      };
+    }
     await BranchService.updateBranch(props.brId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
@@ -272,7 +317,7 @@ const BranchEdit = ({ ...props }) => {
               </Col>
               <Col>
                 <Row>
-                  <Col className="mb-3">
+                  <Col>
                     <Form.Item
                       name="brAddr"
                       label="ที่อยู่"
@@ -281,7 +326,7 @@ const BranchEdit = ({ ...props }) => {
                         { required: true, message: '*ใส่ที่อยู่' },
                       ]}>
                       <Input.TextArea
-                        autoSize={{ minRows: 2, maxRows: 6 }}
+                        autoSize={{ minRows: 1, maxRows: 6 }}
                         placeholder="ที่อยู่"
                         disabled={!editable}
                       />
@@ -290,6 +335,51 @@ const BranchEdit = ({ ...props }) => {
                 </Row>
               </Col>
             </Row>
+            <hr />
+            <Row>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                <Switch
+                  disabled={!editable}
+                  style={{ marginRight: 8, marginTop: 6 }}
+                  size="small"
+                  checked={isDelivery}
+                  onChange={e => {
+                    setIsDelivery(e);
+                  }}
+                />
+                <h5>เดลิเวอรี</h5>
+              </div>
+            </Row>
+            {isDelivery && (
+              <Row>
+                <Map
+                  zoom={18}
+                  center={mapCenter}
+                  onCenterChanged={setMarkerPosition}
+                  setMapCenter={setMapCenter}
+                  marker={markerPosition}
+                  editable={editable}
+                />
+                <Form.Item
+                  name="brDeliveryInfo"
+                  label="ข้อมูลการเดินทาง"
+                  rules={[
+                    { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
+                    { required: true, message: '*ใส่ข้อมูลการเดินทาง' },
+                  ]}
+                  style={{ marginTop: 16 }}>
+                  <Input.TextArea
+                    autoSize={{ minRows: 2, maxRows: 6 }}
+                    placeholder="อาคาร ชั้น ตึก ที่ตั้งของสาขา"
+                    disabled={!editable}
+                  />
+                </Form.Item>
+              </Row>
+            )}
             <Row>
               <Col>
                 <div
@@ -339,6 +429,7 @@ const BranchEdit = ({ ...props }) => {
                     variant="outline-danger"
                     onClick={() => {
                       fetchBranchData(props.brId);
+                      setEditable(false);
                     }}
                     style={{
                       borderRadius: '10px',
