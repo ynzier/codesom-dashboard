@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Row, Card, Button } from 'react-bootstrap';
@@ -25,10 +25,12 @@ import { BranchAccDetail } from 'components';
 const { RangePicker } = TimePicker;
 
 const BranchEdit = ({ ...props }) => {
+  const mapRef = useRef(null);
   const [editable, setEditable] = useState(false);
   const [isDelivery, setIsDelivery] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(undefined);
   const [mapCenter, setMapCenter] = useState(undefined);
+  const [currentPosition, setCurrentPosition] = useState(undefined);
   const alert = useAlert();
   const [form] = Form.useForm();
   const { Option } = Select;
@@ -44,6 +46,10 @@ const BranchEdit = ({ ...props }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+  const handleBackToLocation = () => {
+    setMarkerPosition(currentPosition);
+    setMapCenter(currentPosition);
+  };
   const beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
@@ -115,6 +121,12 @@ const BranchEdit = ({ ...props }) => {
   useEffect(async () => {
     document.title = 'ข้อมูลสาขา';
     fetchBranchData(props.brId);
+    navigator.geolocation.getCurrentPosition(position => {
+      setCurrentPosition({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
   }, [props.brId]);
   const fetchAdminManager = () => {
     employeeService
@@ -362,6 +374,7 @@ const BranchEdit = ({ ...props }) => {
                   onCenterChanged={setMarkerPosition}
                   setMapCenter={setMapCenter}
                   marker={markerPosition}
+                  handleBackToLocation={handleBackToLocation}
                   editable={editable}
                 />
                 <Form.Item

@@ -14,6 +14,7 @@ import {
   Upload,
   Button as ButtonA,
   Switch,
+  Space,
 } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType, ProductBranchModal } from 'components';
@@ -31,6 +32,7 @@ const ProductEdit = ({ prId }) => {
   const [needProcess, setNeedProcess] = useState(false);
   const [imgId, setImgId] = useState();
   const [base64TextString, setBase64TextString] = useState();
+  const [isDelivery, setIsDelivery] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -63,10 +65,6 @@ const ProductEdit = ({ prId }) => {
     if (!needProcess) sendData(values);
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   const fetchforRecipe = useCallback(() => {
     ingredientService
       .ingredientForRecipe()
@@ -88,6 +86,7 @@ const ProductEdit = ({ prId }) => {
       .then(res => {
         if (res.data) {
           var getData = res.data;
+          setIsDelivery(getData.isDelivery);
           if (!getData.needProcess) {
             setProductData({
               prName: getData.prName,
@@ -98,6 +97,7 @@ const ProductEdit = ({ prId }) => {
               prType: getData.prType,
               prDetail: getData.prDetail,
               productStatus: getData.prStatus,
+              weight: getData.weight,
             });
             if (getData.prImg) {
               setImgId(getData.prImg);
@@ -116,6 +116,7 @@ const ProductEdit = ({ prId }) => {
               prDetail: getData.prDetail,
               prStatus: getData.prStatus,
               needProcess: getData.needProcess,
+              weight: getData.weight,
               recipeDescription: getData.recipe.description,
             });
             form.resetFields();
@@ -130,6 +131,8 @@ const ProductEdit = ({ prId }) => {
             setNeedProcess(getData.needProcess);
             fetchforRecipe();
           }
+          if (getData.isDelivery)
+            form.setFieldsValue({ weight: getData.weight });
         }
       })
       .catch(error => {
@@ -169,8 +172,9 @@ const ProductEdit = ({ prId }) => {
       prUnit: e.prUnit,
       prDetail: e.prDetail,
       prStatus: e.prStatus,
+      weight: e.weight,
+      isDelivery: isDelivery,
     };
-    console.log(data);
     ProductService.updateProduct(prId, data)
       .then(res => {
         alert.show(res.data.message, { type: 'success' });
@@ -198,6 +202,7 @@ const ProductEdit = ({ prId }) => {
         prType: e.prType,
         prUnit: e.prUnit,
         prDetail: e.prDetail,
+        weight: e.weight,
         needProcess: needProcess,
       },
       recipeData: {
@@ -314,11 +319,11 @@ const ProductEdit = ({ prId }) => {
               <Card.Body>
                 <h5 className="mb-4">ข้อมูลสินค้า / Goods Info</h5>
                 <Row>
-                  <Col md={6} className="mb-3">
+                  <Col md={6}>
                     <Upload
                       name="productImg"
                       listType="picture-card"
-                      className="avatar-uploader mb-4"
+                      className="avatar-uploader mb-1"
                       showUploadList={false}
                       customRequest={() => {}}
                       disabled={!editable}
@@ -337,24 +342,53 @@ const ProductEdit = ({ prId }) => {
                         uploadButton
                       )}
                     </Upload>
+
+                    <Form.Item
+                      name="prDetail"
+                      label="คำอธิบายของสินค้า"
+                      rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
+                      <Input.TextArea
+                        autoSize={{ minRows: 2, maxRows: 6 }}
+                        placeholder="คำอธิบายของสินค้า"
+                        disabled={!editable}
+                      />
+                    </Form.Item>
                     <Row>
-                      <Form.Item
-                        name="prDetail"
-                        label="คำอธิบายของสินค้า"
-                        rules={[
-                          { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
-                        ]}>
-                        <Input.TextArea
-                          autoSize={{ minRows: 2, maxRows: 6 }}
-                          placeholder="คำอธิบายของสินค้า"
+                      <Col>
+                        <Switch
                           disabled={!editable}
+                          style={{
+                            marginRight: 8,
+                            marginTop: 4,
+                            width: 'auto',
+                          }}
+                          size="default"
+                          checked={isDelivery}
+                          onChange={e => {
+                            setIsDelivery(e);
+                          }}
                         />
-                      </Form.Item>
+                        เดลิเวอรี
+                      </Col>
+                      {isDelivery == 1 && (
+                        <Col>
+                          <Form.Item
+                            name="weight"
+                            label="น้ำหนัก (กรัม)"
+                            rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                            <InputNumber
+                              min="1"
+                              disabled={!editable}
+                              placeholder="1"
+                            />
+                          </Form.Item>
+                        </Col>
+                      )}
                     </Row>
                   </Col>
                   <Col md={6} className="mb-3">
                     <Row>
-                      <Col className="mb-3">
+                      <Col>
                         <Form.Item
                           name="prName"
                           label="ชื่อสินค้า"
@@ -370,7 +404,7 @@ const ProductEdit = ({ prId }) => {
                       </Col>
                     </Row>
                     <Row>
-                      <Col md={6} className="mb-3">
+                      <Col md={6}>
                         {needProcess ? (
                           <div>
                             <div style={{ fontWeight: 600, marginBottom: 9 }}>
@@ -400,7 +434,7 @@ const ProductEdit = ({ prId }) => {
                           </Form.Item>
                         )}
                       </Col>
-                      <Col md={6} className="mb-3">
+                      <Col md={6}>
                         <Form.Item
                           name="prPrice"
                           label="ราคาขาย"
@@ -416,7 +450,7 @@ const ProductEdit = ({ prId }) => {
                       </Col>
                     </Row>
                     <Row>
-                      <Col md={12} className="mb-3">
+                      <Col md={12}>
                         <Form.Item
                           name={'prType'}
                           label={[

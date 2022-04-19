@@ -17,6 +17,7 @@ import {
   Upload,
   Button as ButtonA,
   DatePicker,
+  Switch,
 } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useAlert } from 'react-alert';
@@ -38,6 +39,8 @@ const PromotionEdit = props => {
   const [base64TextString, setBase64TextString] = useState();
   const [imgId, setImgId] = useState();
   const [loading, setLoading] = useState(false);
+  const [isStore, setIsStore] = useState(false);
+  const [isDelivery, setIsDelivery] = useState(false);
   useEffect(() => {
     fetchPromoData(props.promoId);
     fetchProducts();
@@ -52,6 +55,8 @@ const PromotionEdit = props => {
           setPromoCost(res.data.promoCost);
           form.resetFields();
           setBase64TextString(res.data?.image?.imgObj);
+          setIsDelivery(res.data.isDelivery);
+          setIsStore(res.data.isStore);
         }
       })
       .catch(error => {
@@ -90,6 +95,8 @@ const PromotionEdit = props => {
       promoCost: promoCost,
       imgId: imgId,
       productInPromotion: values.productInPromotion,
+      isDelivery: isDelivery,
+      isStore: isStore,
     };
     promotionsService
       .updatePromotion(props.promoId, data)
@@ -316,6 +323,35 @@ const PromotionEdit = props => {
                       />
                     </Form.Item>
                   </Stack>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Switch
+                    disabled={!editable}
+                    style={{ marginRight: 8, marginTop: 0, width: 'auto' }}
+                    size="default"
+                    checked={isStore}
+                    onChange={e => {
+                      setIsStore(e);
+                    }}
+                  />
+                  หน้าร้าน
+                  <Switch
+                    disabled={!editable}
+                    style={{
+                      marginLeft: 8,
+                      marginRight: 8,
+                      marginTop: 0,
+                      width: 'auto',
+                    }}
+                    size="default"
+                    checked={isDelivery}
+                    onChange={e => {
+                      setIsDelivery(e);
+                    }}
+                  />
+                  เดลิเวอรี
                 </Col>
               </Row>
               <Row className="mb-3 mt-3">
