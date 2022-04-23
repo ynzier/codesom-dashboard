@@ -46,9 +46,10 @@ instance.interceptors.response.use(
         }
       }
     }
+    console.log(err.message);
     if (
-      err.response.data.message == 'เซสชันหมดอายุ กรุณาล็อคอินใหม่อีกครั้ง' ||
-      err.response.data.message == 'ไม่พบเซสชันโทเคนในระบบ!'
+      err.response?.data?.message == 'เซสชันหมดอายุ กรุณาล็อคอินใหม่อีกครั้ง' ||
+      err.response?.data?.message == 'ไม่พบเซสชันโทเคนในระบบ!'
     ) {
       authService.logoutDashboard();
     }

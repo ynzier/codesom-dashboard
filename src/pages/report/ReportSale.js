@@ -766,7 +766,7 @@ const ReportSale = props => {
                           <Col>ยอดค่าจัดส่ง</Col>
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
-                              value={report.deliveryCost}
+                              value={report.deliveryFare}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               decimalSeparator="."

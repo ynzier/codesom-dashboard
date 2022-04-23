@@ -11,7 +11,6 @@ const Home = () => {
   useEffect(async () => {
     const getUser = await tokenService.getUser();
     setUser(getUser);
-    console.log(getUser);
 
     return () => {};
   }, []);
