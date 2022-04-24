@@ -102,7 +102,7 @@ const GetOrder = props => {
                           title: 'รายการ',
                           align: 'center',
                           render: (text, record) => {
-                            return <span>{record.product.prName}</span>;
+                            return <span>{record.product.productName}</span>;
                           },
                         },
                         {
@@ -117,12 +117,12 @@ const GetOrder = props => {
                         },
                         {
                           title: 'ราคา',
-                          dataIndex: 'prPrice',
+                          dataIndex: 'productPrice',
                           align: 'center',
                           render: (text, record) => {
                             return (
                               <NumberFormat
-                                value={record.prPrice}
+                                value={record.productPrice}
                                 decimalScale={2}
                                 fixedDecimalScale={true}
                                 decimalSeparator="."
@@ -153,7 +153,7 @@ const GetOrder = props => {
                           render: (text, record) => {
                             return (
                               <Image
-                                alt={record.prDetail}
+                                alt={record.productDetail}
                                 width="100%"
                                 style={{ objectFit: 'cover' }}
                                 src={
@@ -260,7 +260,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={orderDetail.ordSubTotal}
+                    value={orderDetail.orderSubTotal}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -280,7 +280,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={orderDetail.ordDiscount}
+                    value={orderDetail.orderDiscount}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -359,11 +359,11 @@ const GetOrder = props => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
-                  {orderDetail.ordType == 'takeaway' && 'รับกลับ'}
-                  {orderDetail.ordType == 'delivery' && 'เดลิเวอรี'}
+                  {orderDetail.orderType == 'takeaway' && 'รับกลับ'}
+                  {orderDetail.orderType == 'delivery' && 'เดลิเวอรี'}
                 </Col>
               </Row>
-              {orderDetail.ordType == 'delivery' && (
+              {orderDetail.orderType == 'delivery' && (
                 <>
                   <Row>
                     <Col>แพลตฟอร์ม: </Col>
@@ -386,7 +386,7 @@ const GetOrder = props => {
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                       }}>
-                      {orderDetail.ordRefNo}
+                      {orderDetail.orderRefNo}
                     </Col>
                   </Row>
                 </>
@@ -414,7 +414,7 @@ const GetOrder = props => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
-                  {orderDetail.branch?.brName}
+                  {orderDetail.branch?.branchName}
                 </Col>
               </Row>
               <Row>
@@ -426,13 +426,13 @@ const GetOrder = props => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
-                  {orderDetail.branch?.brAddr}
+                  {orderDetail.branch?.branchAddr}
                 </Col>
               </Row>
               <Row>
                 <Col>เบอร์ติดต่อสาขา: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {orderDetail.branch?.brTel}
+                  {orderDetail.branch?.branchTel}
                 </Col>
               </Row>
               <Row>
@@ -467,24 +467,24 @@ const GetOrder = props => {
             <Card.Body>
               <h5>สถานะดำเนินการ</h5>
               <Steps
-                current={orderDetail.ordStatus}
+                current={orderDetail.orderStatus}
                 progressDot={customDot}
                 size="small"
                 style={{ marginTop: 20 }}
                 responsive={true}>
                 <Step
                   title={
-                    orderDetail.ordStatus == 0
+                    orderDetail.orderStatus == 0
                       ? 'กำลังดำเนินการ'
                       : 'กำลังดำเนินการ'
                   }
                 />
                 <Step
-                  title={orderDetail.ordStatus == 2 ? 'ยกเลิก' : 'เสร็จสิ้น'}
+                  title={orderDetail.orderStatus == 2 ? 'ยกเลิก' : 'เสร็จสิ้น'}
                   status={
-                    orderDetail.ordStatus == 2
+                    orderDetail.orderStatus == 2
                       ? 'error'
-                      : orderDetail.ordStatus == 1
+                      : orderDetail.orderStatus == 1
                       ? 'finish'
                       : 'wait'
                   }

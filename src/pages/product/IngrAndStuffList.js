@@ -57,8 +57,8 @@ const IngrAndStuffList = () => {
     return () => {};
   }, [keyword, option]);
 
-  const openRecord = prId => {
-    history.push('/dashboard/product/getProduct/' + prId);
+  const openRecord = productId => {
+    history.push('/dashboard/product/getProduct/' + productId);
   };
   const fetchData = useCallback(() => {
     trackPromise(
@@ -139,8 +139,8 @@ const IngrAndStuffList = () => {
           <div>
             <span
               onClick={() => {
-                const prId = record.prId;
-                openRecord(prId);
+                const productId = record.productId;
+                openRecord(productId);
               }}>
               <FiEdit size={18} />
             </span>
@@ -274,7 +274,7 @@ const IngrAndStuffList = () => {
           <Table
             dataSource={keyword != '' || option != '' ? filterData : record}
             columns={location.state?.isManager ? headerManager : header}
-            rowKey="prId"
+            rowKey="productId"
             loading={promiseInProgress}
             pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{

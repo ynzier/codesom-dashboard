@@ -24,7 +24,7 @@ const getReqItemsById = async id => {
 };
 const listAllReqByBranch = async id => {
   return await http.get(prefix + '/listAllReqByBranch', {
-    params: { brId: id },
+    params: { branchId: id },
   });
 };
 const createRequisit = async (data, branchId) => {

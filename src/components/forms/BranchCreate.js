@@ -42,13 +42,13 @@ const BranchCreate = () => {
 
   const handleSubmit = async value => {
     var data = {
-      brName: value.brName,
-      brAddr: value.address,
-      brTel: value.tel, //on start
-      brImg: imgId,
-      brManager: value.brManager,
-      brOpenTime: moment(value.openClose[0]).format('HH:mm'),
-      brCloseTime: moment(value.openClose[1]).format('HH:mm'),
+      branchName: value.branchName,
+      branchAddr: value.address,
+      branchTel: value.tel, //on start
+      branchImg: imgId,
+      branchManager: value.branchManager,
+      branchOpen: moment(value.openClose[0]).format('HH:mm'),
+      branchClose: moment(value.openClose[1]).format('HH:mm'),
     };
     await BranchService.createNewBranch(data)
       .then(response => {
@@ -169,7 +169,7 @@ const BranchCreate = () => {
               </Col>
               <Col>
                 <Form.Item
-                  name="brName"
+                  name="branchName"
                   label="ชื่อสาขา"
                   rules={[
                     { required: true, message: '*ใส่ชื่อสาขา' },
@@ -215,7 +215,7 @@ const BranchCreate = () => {
                 </Row>
                 <Row>
                   <Col className="mb-3">
-                    <Form.Item name="brManager" label="ผู้จัดการสาขา">
+                    <Form.Item name="branchManager" label="ผู้จัดการสาขา">
                       <Select
                         placeholder="เลือกผู้จัดการ"
                         showSearch

@@ -11,29 +11,29 @@ const getAllBranchName = () => {
 const createNewBranch = data => {
   return http.post(prefix + '/createNewBranch', data);
 };
-const updateBranch = (brId, data) => {
+const updateBranch = (branchId, data) => {
   return http.put(prefix + '/updateBranch', data, {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
-const getBranchById = brId => {
+const getBranchById = branchId => {
   return http.get(prefix + '/getBranchById', {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
-const createBranchAcc = (brId, data) => {
+const createBranchAcc = (branchId, data) => {
   return http.post(prefix + '/createBranchAcc', data, {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
-const updateBrAcc = (brId, data) => {
+const updateBrAcc = (branchId, data) => {
   return http.put(prefix + '/updateBrAcc', data, {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
-const checkExistAcc = brId => {
+const checkExistAcc = branchId => {
   return http.get(prefix + '/checkExistAcc', {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
 const getBranchByManager = () => {

@@ -43,9 +43,9 @@ const getEmployeeByIdForUserCreate = empId => {
     params: { empId: empId },
   });
 };
-const getEmployeeBranch = brId => {
+const getEmployeeBranch = branchId => {
   return http.get(prefix + '/getEmployeeBranch', {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
 export default {

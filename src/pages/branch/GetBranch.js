@@ -8,7 +8,7 @@ import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { BranchEdit } from 'components';
 const GetBranch = ({ ...props }) => {
-  const { brId } = useParams();
+  const { branchId } = useParams();
   useEffect(() => {
     document.title = 'ข้อมูลสาขา';
   }, []);
@@ -32,7 +32,7 @@ const GetBranch = ({ ...props }) => {
       </div>
       <Row className="mb-4">
         <Col xs={12} xl={8}>
-          <BranchEdit brId={brId} />
+          <BranchEdit branchId={branchId} />
         </Col>
       </Row>
     </>

@@ -7,11 +7,11 @@ import { Row, Col, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { ProductEdit } from 'components';
 const GetProduct = () => {
-  let { prId } = useParams();
+  let { productId } = useParams();
 
   useEffect(() => {
     document.title = 'ข้อมูลสินค้า';
-  }, [prId]);
+  }, [productId]);
 
   return (
     <>
@@ -31,7 +31,7 @@ const GetProduct = () => {
         </div>
       </div>
       <Row className="mb-4">
-        <ProductEdit prId={prId} />
+        <ProductEdit productId={productId} />
       </Row>
     </>
   );

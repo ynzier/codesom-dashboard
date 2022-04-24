@@ -139,7 +139,7 @@ const EmployeeList = props => {
     },
     {
       title: 'สาขา',
-      dataIndex: 'brName',
+      dataIndex: 'branchName',
       align: 'center',
       width: 300,
     },
@@ -207,7 +207,7 @@ const EmployeeList = props => {
             ชื่อ: {deleteData.firstName} {deleteData.lastName}
           </p>
           <p>ตำแหน่ง: {deleteData.roleName}</p>
-          <p>สาขา: {deleteData.brName}</p>
+          <p>สาขา: {deleteData.branchName}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button

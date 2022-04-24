@@ -213,8 +213,8 @@ const ReportIngr = props => {
                             .indexOf(input.toLowerCase()) >= 0
                         }>
                         {branchData.map(option => (
-                          <Option key={option.brId} value={option.brId}>
-                            {option.brName}
+                          <Option key={option.branchId} value={option.branchId}>
+                            {option.branchName}
                           </Option>
                         ))}
                       </Select>

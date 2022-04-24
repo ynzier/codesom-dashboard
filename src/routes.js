@@ -24,7 +24,7 @@ export const Routes = {
   // Branch
   BranchLists: { path: '/dashboard/branch' },
   AddBranch: { path: '/dashboard/branch/create' },
-  GetBranch: { path: '/dashboard/branch/getBranch/:brId' },
+  GetBranch: { path: '/dashboard/branch/getBranch/:branchId' },
 
   // Ingredient
   CreateRequisition: { path: '/dashboard/warehouse/createRequisition' },
@@ -34,7 +34,7 @@ export const Routes = {
   ProductList: { path: '/dashboard/product' },
   IngrAndStuffList: { path: '/dashboard/product/ingredient' },
   AddProduct: { path: '/dashboard/product/create' },
-  GetProduct: { path: '/dashboard/product/getProduct/:prId' },
+  GetProduct: { path: '/dashboard/product/getProduct/:productId' },
   // Promotion
   PromotionList: { path: '/dashboard/promotion' },
   AddPromotion: { path: '/dashboard/promotion/create' },

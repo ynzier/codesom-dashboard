@@ -223,9 +223,9 @@ const PromotionEdit = props => {
                   value.productInPromotion.forEach(e => {
                     if (e != undefined && e.productId && e.count) {
                       const price = productData.filter(
-                        data => data.prId == e.productId,
+                        data => data.productId == e.productId,
                       );
-                      sumCost = sumCost + price[0].prPrice * e.count;
+                      sumCost = sumCost + price[0].productPrice * e.count;
                     }
                   });
                   setPromoCost(sumCost);
@@ -384,8 +384,8 @@ const PromotionEdit = props => {
                                   value={[index, 'productId']}
                                   dropdownStyle={{ fontFamily: 'Prompt' }}>
                                   {productData.map((item, index) => (
-                                    <Option key={index} value={item.prId}>
-                                      {item.prName} ({item.prId})
+                                    <Option key={index} value={item.productId}>
+                                      {item.productName} ({item.productId})
                                     </Option>
                                   ))}
                                 </Select>

@@ -47,28 +47,28 @@ const ProductList = props => {
           if (
             k != 'image' &&
             k != 'recipeId' &&
-            k != 'prImg' &&
-            k != 'prType' &&
+            k != 'productImg' &&
+            k != 'productType' &&
             k != 'product_type' &&
-            k != 'prUnit'
+            k != 'productUnit'
           ) {
             return String(obj[k]).toLowerCase().includes(keyword.toLowerCase());
           }
         });
       // option
-      if (keyword == '' && option != '') return obj.prType == option;
+      if (keyword == '' && option != '') return obj.productType == option;
       // keyword option
       if (keyword != '' && option != '')
         return (
-          obj.prType == option &&
+          obj.productType == option &&
           Object.keys(obj).some(k => {
             if (
               k != 'image' &&
               k != 'recipeId' &&
-              k != 'prImg' &&
-              k != 'prType' &&
+              k != 'productImg' &&
+              k != 'productType' &&
               k != 'product_type' &&
-              k != 'prUnit'
+              k != 'productUnit'
             ) {
               return String(obj[k])
                 .toLowerCase()
@@ -81,8 +81,8 @@ const ProductList = props => {
     return () => {};
   }, [keyword, option]);
 
-  const openRecord = prId => {
-    history.push('/dashboard/product/getProduct/' + prId);
+  const openRecord = productId => {
+    history.push('/dashboard/product/getProduct/' + productId);
   };
 
   useEffect(async () => {
@@ -160,7 +160,7 @@ const ProductList = props => {
       render: (text, record) => {
         return (
           <Image
-            alt={record.prDetail}
+            alt={record.productDetail}
             width="100%"
             height={140}
             style={{ objectFit: 'cover' }}
@@ -172,7 +172,7 @@ const ProductList = props => {
     },
     {
       title: 'ชื่อสินค้า',
-      dataIndex: 'prName',
+      dataIndex: 'productName',
       align: 'center',
       width: 300,
       render: (text, record) => {
@@ -184,10 +184,10 @@ const ProductList = props => {
                 fontSize: '14px',
                 fontWeight: 'bold',
               }}>
-              {record.prName}
+              {record.productName}
             </div>
             <div style={{ textAlign: 'left', fontSize: '12px' }}>
-              {record.prDetail}
+              {record.productDetail}
             </div>
             {record.needProcess == 1 && (
               <div
@@ -199,7 +199,7 @@ const ProductList = props => {
                 <a
                   onClick={() => {
                     setShowRecipe(true);
-                    setRecipeId(record.prId);
+                    setRecipeId(record.productId);
                   }}>
                   ดูส่วนผสม
                 </a>
@@ -211,7 +211,7 @@ const ProductList = props => {
     },
     {
       title: 'รหัสสินค้า',
-      dataIndex: 'prId',
+      dataIndex: 'productId',
       align: 'center',
       width: 200,
     },
@@ -226,13 +226,13 @@ const ProductList = props => {
     },
     {
       title: 'ราคา',
-      dataIndex: 'prPrice',
+      dataIndex: 'productPrice',
       align: 'center',
       width: 200,
       render: (text, record) => {
         return (
           <NumberFormat
-            value={record.prPrice}
+            value={record.productPrice}
             decimalScale={2}
             fixedDecimalScale={true}
             decimalSeparator="."
@@ -244,11 +244,11 @@ const ProductList = props => {
     },
     {
       title: 'สถานะ',
-      dataIndex: 'prStatus',
+      dataIndex: 'productStatus',
       align: 'center',
       width: 200,
       render: (text, record) => {
-        return <div>{record.prStatus}</div>;
+        return <div>{record.productStatus}</div>;
       },
     },
     {
@@ -260,8 +260,8 @@ const ProductList = props => {
         return (
           <a
             onClick={() => {
-              const prId = record.prId;
-              openRecord(prId);
+              const productId = record.productId;
+              openRecord(productId);
             }}>
             <FiEdit size={18} />
           </a>
@@ -279,7 +279,7 @@ const ProductList = props => {
       render: (text, record) => {
         return (
           <Image
-            alt={record.prDetail}
+            alt={record.productDetail}
             width="100%"
             height={140}
             style={{ objectFit: 'cover' }}
@@ -291,7 +291,7 @@ const ProductList = props => {
     },
     {
       title: 'ชื่อสินค้า',
-      dataIndex: 'prName',
+      dataIndex: 'productName',
       align: 'center',
       width: 300,
       render: (text, record) => {
@@ -303,10 +303,10 @@ const ProductList = props => {
                 fontSize: '14px',
                 fontWeight: 'bold',
               }}>
-              {record.prName}
+              {record.productName}
             </div>
             <div style={{ textAlign: 'left', fontSize: '12px' }}>
-              {record.prDetail}
+              {record.productDetail}
             </div>
             {record.needProcess == 1 && (
               <div
@@ -318,7 +318,7 @@ const ProductList = props => {
                 <a
                   onClick={() => {
                     setShowRecipe(true);
-                    setRecipeId(record.prId);
+                    setRecipeId(record.productId);
                   }}>
                   ดูส่วนผสม
                 </a>
@@ -330,7 +330,7 @@ const ProductList = props => {
     },
     {
       title: 'รหัสสินค้า',
-      dataIndex: 'prId',
+      dataIndex: 'productId',
       align: 'center',
       width: 200,
     },
@@ -345,13 +345,13 @@ const ProductList = props => {
     },
     {
       title: 'ราคา',
-      dataIndex: 'prPrice',
+      dataIndex: 'productPrice',
       align: 'center',
       width: 200,
       render: (text, record) => {
         return (
           <NumberFormat
-            value={record.prPrice}
+            value={record.productPrice}
             decimalScale={2}
             fixedDecimalScale={true}
             decimalSeparator="."
@@ -363,11 +363,11 @@ const ProductList = props => {
     },
     {
       title: 'สถานะ',
-      dataIndex: 'prStatus',
+      dataIndex: 'productStatus',
       align: 'center',
       width: 200,
       render: (text, record) => {
-        return <div>{record.prStatus}</div>;
+        return <div>{record.productStatus}</div>;
       },
     },
   ];
@@ -455,7 +455,7 @@ const ProductList = props => {
             dataSource={keyword != '' || option != '' ? filterData : record}
             columns={location.state?.isManager ? headerManager : header}
             loading={promiseInProgress}
-            rowKey="prId"
+            rowKey="productId"
             pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{
               fontFamily: 'Prompt',

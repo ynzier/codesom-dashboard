@@ -80,8 +80,8 @@ const BranchEdit = ({ ...props }) => {
       };
     }
   };
-  const fetchBranchData = async brId => {
-    await BranchService.getBranchById(brId)
+  const fetchBranchData = async branchId => {
+    await BranchService.getBranchById(branchId)
       .then(res => {
         if (res.data) {
           const getData = res.data;
@@ -120,14 +120,14 @@ const BranchEdit = ({ ...props }) => {
 
   useEffect(async () => {
     document.title = 'ข้อมูลสาขา';
-    fetchBranchData(props.brId);
+    fetchBranchData(props.branchId);
     navigator.geolocation.getCurrentPosition(position => {
       setCurrentPosition({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       });
     });
-  }, [props.brId]);
+  }, [props.branchId]);
   const fetchAdminManager = () => {
     employeeService
       .getAdminManagerList()
@@ -161,34 +161,34 @@ const BranchEdit = ({ ...props }) => {
 
   const sendData = async value => {
     var data = {
-      brName: value.brName,
-      brAddr: value.brAddr,
-      brTel: value.brTel, //on start
-      brImg: imgId,
-      brManager: value.brManager,
-      brOpenTime: moment(value.openClose[0]).format('HH:mm'),
-      brCloseTime: moment(value.openClose[1]).format('HH:mm'),
+      branchName: value.branchName,
+      branchAddr: value.branchAddr,
+      branchTel: value.branchTel, //on start
+      branchImg: imgId,
+      branchManager: value.branchManager,
+      branchOpen: moment(value.openClose[0]).format('HH:mm'),
+      branchClose: moment(value.openClose[1]).format('HH:mm'),
       isDelivery: isDelivery,
       coordinateLat: null,
       coordinateLng: null,
-      brDeliveryInfo: null,
+      branchDeliveryInfo: null,
     };
     if (isDelivery) {
       data = {
-        brName: value.brName,
-        brAddr: value.brAddr,
-        brTel: value.brTel, //on start
-        brImg: imgId,
-        brManager: value.brManager,
-        brOpenTime: moment(value.openClose[0]).format('HH:mm'),
-        brCloseTime: moment(value.openClose[1]).format('HH:mm'),
+        branchName: value.branchName,
+        branchAddr: value.branchAddr,
+        branchTel: value.branchTel, //on start
+        branchImg: imgId,
+        branchManager: value.branchManager,
+        branchOpen: moment(value.openClose[0]).format('HH:mm'),
+        branchClose: moment(value.openClose[1]).format('HH:mm'),
         coordinateLat: markerPosition.lat,
         coordinateLng: markerPosition.lng,
-        brDeliveryInfo: value.brDeliveryInfo,
+        branchDeliveryInfo: value.branchDeliveryInfo,
         isDelivery: isDelivery,
       };
     }
-    await BranchService.updateBranch(props.brId, data)
+    await BranchService.updateBranch(props.branchId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
         setEditable(!editable);
@@ -253,7 +253,7 @@ const BranchEdit = ({ ...props }) => {
               </Col>
               <Col>
                 <Form.Item
-                  name="brName"
+                  name="branchName"
                   label="ชื่อสาขา"
                   rules={[
                     { required: true, message: '*ใส่ชื่อสาขา' },
@@ -262,7 +262,7 @@ const BranchEdit = ({ ...props }) => {
                   <Input placeholder="ชื่อสาขา" disabled={!editable} />
                 </Form.Item>
                 <Form.Item
-                  name="brTel"
+                  name="branchTel"
                   label="เบอร์โทรศัพท์"
                   rules={[
                     { required: true, message: '*ใส่เบอร์โทรศัพท์' },
@@ -286,8 +286,8 @@ const BranchEdit = ({ ...props }) => {
                       name="openClose"
                       label="เวลาทำการ"
                       initialValue={[
-                        moment(branchData.brOpenTime, 'HH:mm'),
-                        moment(branchData.brCloseTime, 'HH:mm'),
+                        moment(branchData.branchOpen, 'HH:mm'),
+                        moment(branchData.branchClose, 'HH:mm'),
                       ]}
                       rules={[
                         {
@@ -305,7 +305,7 @@ const BranchEdit = ({ ...props }) => {
                 </Row>
                 <Row>
                   <Col className="mb-3">
-                    <Form.Item name="brManager" label="ผู้จัดการสาขา">
+                    <Form.Item name="branchManager" label="ผู้จัดการสาขา">
                       <Select
                         placeholder="เลือกผู้จัดการ"
                         showSearch
@@ -331,7 +331,7 @@ const BranchEdit = ({ ...props }) => {
                 <Row>
                   <Col>
                     <Form.Item
-                      name="brAddr"
+                      name="branchAddr"
                       label="ที่อยู่"
                       rules={[
                         { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
@@ -378,7 +378,7 @@ const BranchEdit = ({ ...props }) => {
                   editable={editable}
                 />
                 <Form.Item
-                  name="brDeliveryInfo"
+                  name="branchDeliveryInfo"
                   label="ข้อมูลการเดินทาง"
                   rules={[
                     { max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' },
@@ -441,7 +441,7 @@ const BranchEdit = ({ ...props }) => {
                   <Button
                     variant="outline-danger"
                     onClick={() => {
-                      fetchBranchData(props.brId);
+                      fetchBranchData(props.branchId);
                       setEditable(false);
                     }}
                     style={{
@@ -495,7 +495,7 @@ const BranchEdit = ({ ...props }) => {
         onHide={() => {
           setModalShow(false);
         }}
-        brId={props.brId}
+        branchId={props.branchId}
         editable={editable}
         setModalShow={setModalShow}
       />

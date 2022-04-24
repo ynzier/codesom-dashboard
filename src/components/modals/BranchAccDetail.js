@@ -6,18 +6,18 @@ import BranchesService from 'services/branches.service';
 const BranchAccDetail = ({ ...props }) => {
   const alert = useAlert();
 
-  const [brName, setBrName] = useState('');
-  const [brUsername, setBrUsername] = useState('');
-  const [brPassword, setBrPassword] = useState('');
-  const [brConfirmPassword, setBrConfirmPassword] = useState('');
+  const [branchName, setBrName] = useState('');
+  const [branchUsername, setbranchUsername] = useState('');
+  const [branchPassword, setBranchPassword] = useState('');
+  const [branchConfirmPassword, setBrConfirmPassword] = useState('');
   const [accStatus, setAccStatus] = useState('');
 
   const refresh = async () => {
-    await BranchesService.getBranchById(props.brId)
+    await BranchesService.getBranchById(props.branchId)
       .then(res => {
         if (res.data) {
           const getData = res.data;
-          setBrName(getData.brName);
+          setBrName(getData.branchName);
         }
       })
       .catch(error => {
@@ -29,11 +29,11 @@ const BranchAccDetail = ({ ...props }) => {
           error.toString();
         alert.show(resMessage, { type: 'error' });
       });
-    await BranchesService.checkExistAcc(props.brId)
+    await BranchesService.checkExistAcc(props.branchId)
       .then(res => {
         if (res) {
           setAccStatus(res.data.status);
-          setBrUsername('cs' + props.brId);
+          setbranchUsername('cs' + props.branchId);
         }
       })
       .catch(error => {
@@ -47,12 +47,12 @@ const BranchAccDetail = ({ ...props }) => {
       });
   };
   useEffect(async () => {
-    if (props.brId) {
-      await BranchesService.getBranchById(props.brId)
+    if (props.branchId) {
+      await BranchesService.getBranchById(props.branchId)
         .then(res => {
           if (res.data) {
             const getData = res.data;
-            setBrName(getData.brName);
+            setBrName(getData.branchName);
           }
         })
         .catch(error => {
@@ -64,11 +64,11 @@ const BranchAccDetail = ({ ...props }) => {
             error.toString();
           alert.show(resMessage, { type: 'error' });
         });
-      await BranchesService.checkExistAcc(props.brId)
+      await BranchesService.checkExistAcc(props.branchId)
         .then(res => {
           if (res) {
             setAccStatus(res.data.status);
-            setBrUsername('cs' + props.brId);
+            setbranchUsername('cs' + props.branchId);
           }
         })
         .catch(error => {
@@ -82,7 +82,7 @@ const BranchAccDetail = ({ ...props }) => {
         });
     }
     return () => {};
-  }, [props.brId, accStatus]);
+  }, [props.branchId, accStatus]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -95,11 +95,11 @@ const BranchAccDetail = ({ ...props }) => {
   };
   const sendData = async () => {
     var data = {
-      brUsername: brUsername,
-      brPassword: brPassword,
-      brConfirmPassword: brConfirmPassword,
+      branchUsername: branchUsername,
+      branchPassword: branchPassword,
+      branchConfirmPassword: branchConfirmPassword,
     };
-    await BranchesService.createBranchAcc(props.brId, data)
+    await BranchesService.createBranchAcc(props.branchId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
         refresh();
@@ -117,11 +117,11 @@ const BranchAccDetail = ({ ...props }) => {
   };
   const sendUpdatePassword = async () => {
     var data = {
-      brUsername: brUsername,
-      brPassword: brPassword,
-      brConfirmPassword: brConfirmPassword,
+      branchUsername: branchUsername,
+      branchPassword: branchPassword,
+      branchConfirmPassword: branchConfirmPassword,
     };
-    await BranchesService.updateBrAcc(props.brId, data)
+    await BranchesService.updateBrAcc(props.branchId, data)
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
         refresh();
@@ -153,7 +153,7 @@ const BranchAccDetail = ({ ...props }) => {
                 <Form.Control
                   plaintext
                   readOnly
-                  value={brName}
+                  value={branchName}
                   style={{ fontFamily: 'Prompt' }}
                 />
               </Col>
@@ -174,7 +174,7 @@ const BranchAccDetail = ({ ...props }) => {
                   disabled
                   type="text"
                   placeholder="ชื่อสาขา"
-                  value={brUsername}
+                  value={branchUsername}
                 />
               </Col>
             </Form.Group>
@@ -187,8 +187,8 @@ const BranchAccDetail = ({ ...props }) => {
                   <Form.Control
                     type="password"
                     placeholder="รหัสผ่าน"
-                    value={brPassword}
-                    onChange={e => setBrPassword(e.target.value)}
+                    value={branchPassword}
+                    onChange={e => setBranchPassword(e.target.value)}
                   />
                 </Col>
               </Form.Group>
@@ -205,7 +205,7 @@ const BranchAccDetail = ({ ...props }) => {
                   <Form.Control
                     type="password"
                     placeholder="ยืนยันรหัสผ่าน"
-                    value={brConfirmPassword}
+                    value={branchConfirmPassword}
                     onChange={e => setBrConfirmPassword(e.target.value)}
                   />
                 </Col>

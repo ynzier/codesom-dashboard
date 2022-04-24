@@ -43,8 +43,8 @@ const BranchList = () => {
     fetchData();
     return () => (mounted = false);
   }, [setRecord]);
-  const openRecord = brId => {
-    history.push('/dashboard/branch/getBranch/' + brId);
+  const openRecord = branchId => {
+    history.push('/dashboard/branch/getBranch/' + branchId);
   };
   return (
     <>
@@ -112,7 +112,7 @@ const BranchList = () => {
                       borderRadius: '8px',
                       paddingLeft: 10,
                     }}>
-                    {item.brName || 'none'}
+                    {item.branchName || 'none'}
                   </div>
                   <div
                     style={{
@@ -126,7 +126,7 @@ const BranchList = () => {
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                     }}>
-                    {item.brAddr || 'none'}
+                    {item.branchAddr || 'none'}
                   </div>
                   <div
                     style={{
@@ -136,7 +136,7 @@ const BranchList = () => {
                       borderRadius: '8px',
                       paddingLeft: 10,
                     }}>
-                    {item.brTel || 'none'}
+                    {item.branchTel || 'none'}
                   </div>
                 </div>
                 <div style={{ flex: 2 }} />
@@ -157,7 +157,7 @@ const BranchList = () => {
                       boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                     }}
                     onClick={() => {
-                      openRecord(item.brId);
+                      openRecord(item.branchId);
                     }}>
                     เพิ่มเติม
                   </Button>

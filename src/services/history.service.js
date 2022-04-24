@@ -6,15 +6,15 @@ const listOrderDashboard = async () => {
     headers: authHeader(),
   });
 };
-const listOrderDashboardByBranch = async brId => {
+const listOrderDashboardByBranch = async branchId => {
   return await http.get('/order/listOrderDashboardByBranch', {
-    params: { brId: brId },
+    params: { branchId: branchId },
   });
 };
-const getOrderItemsByIdDashboard = async ordId => {
+const getOrderItemsByIdDashboard = async orderId => {
   return http.get('/order/getOrderItemsByIdDashboard', {
     headers: authHeader(),
-    params: { ordId: ordId },
+    params: { orderId: orderId },
   });
 };
 export default {

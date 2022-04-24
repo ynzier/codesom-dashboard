@@ -353,8 +353,8 @@ const IngrReqList = ({ ...props }) => {
                       onChange={e => setBranchId(e.target.value)}>
                       <option value="">เลือกสาขา</option>
                       {branchData.map(option => (
-                        <option key={option.brId} value={option.brId}>
-                          {option.brName} ({option.brId})
+                        <option key={option.branchId} value={option.branchId}>
+                          {option.branchName} ({option.branchId})
                         </option>
                       ))}
                     </FormBS.Select>

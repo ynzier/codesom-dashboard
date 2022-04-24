@@ -6,7 +6,7 @@ import Select from 'react-select';
 import productService from 'services/product.service';
 import branchesService from 'services/branches.service';
 
-const ProductBranchModal = ({ editable, prId, needProcess }) => {
+const ProductBranchModal = ({ editable, productId, needProcess }) => {
   const [show, setShow] = useState(false);
   const alert = useAlert();
   const [branchList, setBranchList] = useState([]);
@@ -14,14 +14,14 @@ const ProductBranchModal = ({ editable, prId, needProcess }) => {
   const [edited, setEdited] = useState(false);
   const fetchPair = () => {
     productService
-      .getAllPairByProductId(prId)
+      .getAllPairByProductId(productId)
       .then(async res => {
         if (res.data.length > 0) {
           var tempData = [];
           await res.data.forEach(entry => {
             tempData.push({
               value: entry.branchId,
-              label: entry.branch.brName,
+              label: entry.branch.branchName,
             });
           });
           setBranchList(tempData);
@@ -43,8 +43,8 @@ const ProductBranchModal = ({ editable, prId, needProcess }) => {
         var tempData = [];
         await res.data.forEach(entry => {
           tempData.push({
-            value: entry.brId,
-            label: entry.brName,
+            value: entry.branchId,
+            label: entry.branchName,
           });
         });
         setOptionList(tempData);
@@ -114,7 +114,7 @@ const ProductBranchModal = ({ editable, prId, needProcess }) => {
         setBranchList(preArray);
       }
       await productService
-        .updatePairProductBranch(prId, preArray)
+        .updatePairProductBranch(productId, preArray)
         .then(response => {
           setEdited(false);
           fetchPair();
@@ -173,7 +173,7 @@ const ProductBranchModal = ({ editable, prId, needProcess }) => {
                 }}>
                 ยอดคงเหลือแต่ละสาขา
               </div>
-              <ListProductBranch prId={prId} editable={editable} />
+              <ListProductBranch productId={productId} editable={editable} />
               <div
                 className="mb-2"
                 style={{

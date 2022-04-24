@@ -210,7 +210,7 @@ const TimeChart = ({ data, type }) => {
     },
     yAxis: {
       label:
-        type === 'ordTotal'
+        type === 'orderTotal'
           ? {
               formatter: v =>
                 `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, s => `${s},`),
@@ -253,7 +253,7 @@ const TimeChart = ({ data, type }) => {
                       }}>
                       <span style={{ marginRight: 16 }}>{name}:</span>
                       <span className="g2-tooltip-list-item-value">
-                        {type == 'ordTotal' ? (
+                        {type == 'orderTotal' ? (
                           <NumberFormat
                             value={value}
                             decimalScale={2}
@@ -645,8 +645,8 @@ const ReportSale = props => {
                             .indexOf(input.toLowerCase()) >= 0
                         }>
                         {branchData.map(option => (
-                          <Option key={option.brId} value={option.brId}>
-                            {option.brName}
+                          <Option key={option.branchId} value={option.branchId}>
+                            {option.branchName}
                           </Option>
                         ))}
                       </Select>
@@ -1044,7 +1044,7 @@ const ReportSale = props => {
                       <h4>ยอดขายตามช่วงเวลา</h4>
                       <Tabs defaultActiveKey="1" centered>
                         <TabPane tab="ยอดขาย" key="1">
-                          <TimeChart data={scatterData} type="ordTotal" />
+                          <TimeChart data={scatterData} type="orderTotal" />
                         </TabPane>
                         <TabPane tab="จำนวนออเดอร์" key="2">
                           <TimeChart data={scatterData} type="ordDuplicate" />

@@ -237,8 +237,8 @@ const EmployeeEdit = ({ ...props }) => {
                     disabled={!editable}
                     dropdownStyle={{ fontFamily: 'Prompt' }}>
                     {branchData.map((item, index) => (
-                      <Option key={index} value={item.brId}>
-                        {item.brName}
+                      <Option key={index} value={item.branchId}>
+                        {item.branchName}
                       </Option>
                     ))}
                   </Select>

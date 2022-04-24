@@ -20,14 +20,14 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType, ProductBranchModal } from 'components';
 import { useAlert } from 'react-alert';
 
-const ProductEdit = ({ prId }) => {
+const ProductEdit = ({ productId }) => {
   const alert = useAlert();
   const [form] = Form.useForm();
   const { Option } = Select;
   const [editable, setEditable] = useState(false);
   const [dataIngrStuff, setDataIngrStuff] = useState([]);
   const [productData, setProductData] = useState({});
-  const [prCost, setPrCost] = useState(0);
+  const [productCost, setPrCost] = useState(0);
   const [typeData, setTypeData] = useState([]);
   const [needProcess, setNeedProcess] = useState(false);
   const [imgId, setImgId] = useState();
@@ -38,12 +38,12 @@ const ProductEdit = ({ prId }) => {
 
   useEffect(async () => {
     document.title = 'ข้อมูลสินค้า';
-    if (prId) {
-      await fetchProductData(prId);
+    if (productId) {
+      await fetchProductData(productId);
       await fetchProductType();
     }
     return () => {};
-  }, [prId]);
+  }, [productId]);
 
   const handleSubmit = values => {
     if (needProcess) {
@@ -81,40 +81,40 @@ const ProductEdit = ({ prId }) => {
         alert.show(resMessage, { type: 'error' });
       });
   });
-  const fetchProductData = async prId => {
-    await ProductService.getProductById(prId)
+  const fetchProductData = async productId => {
+    await ProductService.getProductById(productId)
       .then(res => {
         if (res.data) {
           var getData = res.data;
           setIsDelivery(getData.isDelivery);
           if (!getData.needProcess) {
             setProductData({
-              prName: getData.prName,
-              prCost: getData.prCost,
-              prPrice: getData.prPrice,
-              prImg: getData.prImg,
-              prUnit: getData.prUnit,
-              prType: getData.prType,
-              prDetail: getData.prDetail,
-              productStatus: getData.prStatus,
+              productName: getData.productName,
+              productCost: getData.productCost,
+              productPrice: getData.productPrice,
+              productImg: getData.productImg,
+              productUnit: getData.productUnit,
+              productType: getData.productType,
+              productDetail: getData.productDetail,
+              productStatus: getData.productStatus,
               weight: getData.weight,
             });
-            if (getData.prImg) {
-              setImgId(getData.prImg);
+            if (getData.productImg) {
+              setImgId(getData.productImg);
               setBase64TextString(getData.image?.imgObj);
             }
             form.resetFields();
             setNeedProcess(getData.needProcess);
           } else if (getData.needProcess) {
             setProductData({
-              prName: getData.prName,
-              prCost: getData.prCost,
-              prPrice: getData.prPrice,
-              prImg: getData.prImg,
-              prType: getData.prType,
-              prUnit: getData.prUnit,
-              prDetail: getData.prDetail,
-              prStatus: getData.prStatus,
+              productName: getData.productName,
+              productCost: getData.productCost,
+              productPrice: getData.productPrice,
+              productImg: getData.productImg,
+              productType: getData.productType,
+              productUnit: getData.productUnit,
+              productDetail: getData.productDetail,
+              productStatus: getData.productStatus,
               needProcess: getData.needProcess,
               weight: getData.weight,
               recipeDescription: getData.recipe.description,
@@ -123,11 +123,11 @@ const ProductEdit = ({ prId }) => {
             form.setFieldsValue({
               RecipeItem: getData.recipe.recipe_ingredients,
             });
-            if (getData.prImg) {
-              setImgId(getData.prImg);
+            if (getData.productImg) {
+              setImgId(getData.productImg);
               setBase64TextString(getData.image?.imgObj);
             }
-            setPrCost(getData.prCost);
+            setPrCost(getData.productCost);
             setNeedProcess(getData.needProcess);
             fetchforRecipe();
           }
@@ -164,18 +164,18 @@ const ProductEdit = ({ prId }) => {
   };
   const sendData = e => {
     var data = {
-      prName: e.prName,
-      prCost: e.prCost,
-      prPrice: e.prPrice,
-      prImg: imgId,
-      prType: e.prType,
-      prUnit: e.prUnit,
-      prDetail: e.prDetail,
-      prStatus: e.prStatus,
+      productName: e.productName,
+      productCost: e.productCost,
+      productPrice: e.productPrice,
+      productImg: imgId,
+      productType: e.productType,
+      productUnit: e.productUnit,
+      productDetail: e.productDetail,
+      productStatus: e.productStatus,
       weight: e.weight,
       isDelivery: isDelivery,
     };
-    ProductService.updateProduct(prId, data)
+    ProductService.updateProduct(productId, data)
       .then(res => {
         alert.show(res.data.message, { type: 'success' });
         history.back();
@@ -195,13 +195,13 @@ const ProductEdit = ({ prId }) => {
   const sendRecipeProduct = async e => {
     var data = {
       productData: {
-        prName: e.prName,
-        prCost: prCost,
-        prPrice: e.prPrice,
-        prImg: imgId,
-        prType: e.prType,
-        prUnit: e.prUnit,
-        prDetail: e.prDetail,
+        productName: e.productName,
+        productCost: productCost,
+        productPrice: e.productPrice,
+        productImg: imgId,
+        productType: e.productType,
+        productUnit: e.productUnit,
+        productDetail: e.productDetail,
         weight: e.weight,
         needProcess: needProcess,
       },
@@ -211,7 +211,7 @@ const ProductEdit = ({ prId }) => {
       },
     };
 
-    ProductService.updateProductWithRecipe(prId, data)
+    ProductService.updateProductWithRecipe(productId, data)
       .then(res => {
         alert.show(res.data.message, { type: 'success' });
         history.back();
@@ -344,7 +344,7 @@ const ProductEdit = ({ prId }) => {
                     </Upload>
 
                     <Form.Item
-                      name="prDetail"
+                      name="productDetail"
                       label="คำอธิบายของสินค้า"
                       rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
                       <Input.TextArea
@@ -390,7 +390,7 @@ const ProductEdit = ({ prId }) => {
                     <Row>
                       <Col>
                         <Form.Item
-                          name="prName"
+                          name="productName"
                           label="ชื่อสินค้า"
                           rules={[
                             { required: true, message: '*ใส่ชื่อสินค้า' },
@@ -416,12 +416,12 @@ const ProductEdit = ({ prId }) => {
                               stringMode
                               placeholder="0.00"
                               disabled={needProcess}
-                              value={prCost}
+                              value={productCost}
                             />
                           </div>
                         ) : (
                           <Form.Item
-                            name="prCost"
+                            name="productCost"
                             label="ราคาทุน"
                             rules={[{ required: true, message: '*ใส่ราคา' }]}>
                             <InputNumber
@@ -436,7 +436,7 @@ const ProductEdit = ({ prId }) => {
                       </Col>
                       <Col md={6}>
                         <Form.Item
-                          name="prPrice"
+                          name="productPrice"
                           label="ราคาขาย"
                           rules={[{ required: true, message: '*ใส่ราคา' }]}>
                           <InputNumber
@@ -452,7 +452,7 @@ const ProductEdit = ({ prId }) => {
                     <Row>
                       <Col md={12}>
                         <Form.Item
-                          name={'prType'}
+                          name={'productType'}
                           label={[
                             <div key="type1">ชนิดสินค้า </div>,
                             <ManageProductType
@@ -465,7 +465,7 @@ const ProductEdit = ({ prId }) => {
                           <Select
                             disabled={!editable}
                             placeholder="กดเพื่อเลือกรายการ"
-                            value={'prType'}
+                            value={'productType'}
                             dropdownStyle={{ fontFamily: 'Prompt' }}>
                             {typeData.map((item, index) => (
                               <Option key={index} value={item.typeId}>
@@ -479,7 +479,7 @@ const ProductEdit = ({ prId }) => {
                     <Row>
                       <Col className="mb-3">
                         <Form.Item
-                          name="prUnit"
+                          name="productUnit"
                           label="หน่วยของสินค้า"
                           rules={[
                             { required: true, message: '*ใส่หน่วยของสินค้า' },
@@ -497,7 +497,7 @@ const ProductEdit = ({ prId }) => {
                       <Col md={{ offset: 6, span: 6 }}>
                         <ProductBranchModal
                           editable={editable}
-                          prId={prId}
+                          productId={productId}
                           needProcess={needProcess}
                         />
                       </Col>

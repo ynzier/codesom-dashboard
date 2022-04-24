@@ -98,13 +98,13 @@ const ProductCreate = () => {
   });
   const sendData = e => {
     var data = {
-      prName: e.productName,
-      prCost: e.productCost,
-      prPrice: e.productPrice,
-      prImg: imgId,
-      prType: e.productType,
-      prUnit: e.productUnit,
-      prDetail: e.productDetail,
+      productName: e.productName,
+      productCost: e.productCost,
+      productPrice: e.productPrice,
+      productImg: imgId,
+      productType: e.productType,
+      productUnit: e.productUnit,
+      productDetail: e.productDetail,
     };
     ProductService.createProduct(data)
       .then(res => {
@@ -126,13 +126,13 @@ const ProductCreate = () => {
   const sendRecipeProduct = async e => {
     var data = {
       productData: {
-        prName: e.productName,
-        prCost: productCost,
-        prPrice: e.productPrice,
-        prImg: imgId,
-        prType: e.productType,
-        prDetail: e.productDetail,
-        prUnit: e.productUnit,
+        productName: e.productName,
+        productCost: productCost,
+        productPrice: e.productPrice,
+        productImg: imgId,
+        productType: e.productType,
+        productDetail: e.productDetail,
+        productUnit: e.productUnit,
         needProcess: needProcess,
       },
       recipeData: {

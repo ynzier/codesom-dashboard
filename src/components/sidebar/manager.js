@@ -42,7 +42,7 @@ const Sidebar = props => {
       .getBranchByManager()
       .then(res => {
         setBranchList(res.data);
-        setSelectBranch(res.data[0].brId);
+        setSelectBranch(res.data[0].branchId);
       })
       .catch(err => {
         console.log(err);
@@ -90,8 +90,8 @@ const Sidebar = props => {
               onChange={value => setSelectBranch(value)}
               value={selectBranch}>
               {branchList.map(option => (
-                <Option key={option.brId} value={option.brId}>
-                  {option.brName}
+                <Option key={option.branchId} value={option.branchId}>
+                  {option.branchName}
                 </Option>
               ))}
             </Select>

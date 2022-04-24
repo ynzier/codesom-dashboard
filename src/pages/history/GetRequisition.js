@@ -383,7 +383,7 @@ const GetRequisition = ({ ...props }) => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
-                  {requisitData.branch && requisitData.branch.brName}
+                  {requisitData.branch && requisitData.branch.branchName}
                 </Col>
               </Row>
               <Row>
@@ -395,13 +395,13 @@ const GetRequisition = ({ ...props }) => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
-                  {requisitData.branch && requisitData.branch.brAddr}
+                  {requisitData.branch && requisitData.branch.branchAddr}
                 </Col>
               </Row>
               <Row>
                 <Col>เบอร์ติดต่อสาขา: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {requisitData.branch && requisitData.branch.brTel}
+                  {requisitData.branch && requisitData.branch.branchTel}
                 </Col>
               </Row>
               <Row>

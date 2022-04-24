@@ -53,10 +53,10 @@ const disableType = typeId => {
     params: { typeId: typeId },
   });
 };
-const getProductById = prId => {
+const getProductById = productId => {
   return http.get(prefix + '/getProductById', {
     headers: authHeader(),
-    params: { prId: prId },
+    params: { productId: productId },
   });
 };
 const getRecipeById = productId => {
@@ -71,10 +71,10 @@ const getManagerAllProductInBranch = branchId => {
     params: { branchId: branchId },
   });
 };
-const updateProduct = (prId, data) => {
+const updateProduct = (productId, data) => {
   return http.put(prefix + '/updateProduct', data, {
     headers: authHeader(),
-    params: { prId: prId },
+    params: { productId: productId },
   });
 };
 const updateRecipe = (recipeId, data) => {

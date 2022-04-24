@@ -131,8 +131,8 @@ const BranchWarehouse = props => {
                         .localeCompare(optionB.children.toLowerCase())
                     }>
                     {branchData.map(option => (
-                      <Option key={option.brId} value={option.brId}>
-                        {option.brName}
+                      <Option key={option.branchId} value={option.branchId}>
+                        {option.branchName}
                       </Option>
                     ))}
                   </Select>
@@ -168,7 +168,7 @@ const BranchWarehouse = props => {
                               title: 'รายการ',
                               align: 'center',
                               render: (text, record) => {
-                                return <span>{record.product.prName}</span>;
+                                return <span>{record.product.productName}</span>;
                               },
                             },
                             {
@@ -185,7 +185,7 @@ const BranchWarehouse = props => {
                                     style={{
                                       color: text < 10 ? 'red' : 'black',
                                     }}>
-                                    {text} {record.product.prUnit}
+                                    {text} {record.product.productUnit}
                                   </span>
                                 );
                               },

@@ -36,7 +36,7 @@ const OrderHistory = props => {
         );
       // option
       if (keyword == '' && option != '' && pickDate.length < 1)
-        return obj.brId == option;
+        return obj.branchId == option;
       // date
       if (keyword == '' && option == '' && pickDate.length > 0)
         return (
@@ -48,7 +48,7 @@ const OrderHistory = props => {
       // keyword option
       if (keyword != '' && option != '' && pickDate.length < 1)
         return (
-          obj.brId == option &&
+          obj.branchId == option &&
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
           )
@@ -67,7 +67,7 @@ const OrderHistory = props => {
       // option date
       if (keyword == '' && option != '' && pickDate.length > 0)
         return (
-          obj.brId == option &&
+          obj.branchId == option &&
           moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
           moment(obj.createTimestamp).unix() <=
@@ -76,7 +76,7 @@ const OrderHistory = props => {
       // keyword option date
       if (keyword != '' && option != '' && pickDate.length > 0)
         return (
-          obj.brId == option &&
+          obj.branchId == option &&
           moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
           moment(obj.createTimestamp).unix() <=
@@ -155,11 +155,11 @@ const OrderHistory = props => {
   const header = [
     {
       title: 'รหัสรายการ',
-      dataIndex: 'ordId',
-      key: 'ordId',
+      dataIndex: 'orderId',
+      key: 'orderId',
       align: 'center',
       sorter: {
-        compare: (a, b) => b.ordId - a.ordId,
+        compare: (a, b) => b.orderId - a.orderId,
       },
       render: text => {
         return (
@@ -175,12 +175,12 @@ const OrderHistory = props => {
     },
     {
       title: 'สาขา',
-      dataIndex: 'brName',
+      dataIndex: 'branchName',
       align: 'center',
     },
     {
       title: 'ประเภท',
-      dataIndex: 'ordType',
+      dataIndex: 'orderType',
       align: 'center',
       render: text => {
         if (text == 'takeaway') return 'รับกลับ';
@@ -189,7 +189,7 @@ const OrderHistory = props => {
     },
     {
       title: 'ยอดชำระ',
-      dataIndex: 'ordTotal',
+      dataIndex: 'orderTotal',
       align: 'center',
       render: text => {
         return (
@@ -220,7 +220,7 @@ const OrderHistory = props => {
     },
     {
       title: 'สถานะ',
-      dataIndex: 'ordStatus',
+      dataIndex: 'orderStatus',
       align: 'center',
       render: text => {
         var status = text;
@@ -235,11 +235,11 @@ const OrderHistory = props => {
   const headerManager = [
     {
       title: 'รหัสรายการ',
-      dataIndex: 'ordId',
-      key: 'ordId',
+      dataIndex: 'orderId',
+      key: 'orderId',
       align: 'center',
       sorter: {
-        compare: (a, b) => b.ordId - a.ordId,
+        compare: (a, b) => b.orderId - a.orderId,
       },
       render: text => {
         return (
@@ -255,7 +255,7 @@ const OrderHistory = props => {
     },
     {
       title: 'ประเภท',
-      dataIndex: 'ordType',
+      dataIndex: 'orderType',
       align: 'center',
       render: text => {
         if (text == 'takeaway') return 'รับกลับ';
@@ -264,7 +264,7 @@ const OrderHistory = props => {
     },
     {
       title: 'ยอดชำระ',
-      dataIndex: 'ordTotal',
+      dataIndex: 'orderTotal',
       align: 'center',
       render: text => {
         return (
@@ -295,7 +295,7 @@ const OrderHistory = props => {
     },
     {
       title: 'สถานะ',
-      dataIndex: 'ordStatus',
+      dataIndex: 'orderStatus',
       align: 'center',
       render: text => {
         var status = text;
@@ -359,8 +359,8 @@ const OrderHistory = props => {
                       onChange={e => setOption(e.target.value)}>
                       <option value="">ทั้งหมด</option>
                       {branchData.map((item, index) => (
-                        <option key={index} value={item.brId}>
-                          {item.brName}
+                        <option key={index} value={item.branchId}>
+                          {item.branchName}
                         </option>
                       ))}
                     </Form.Select>
@@ -429,7 +429,7 @@ const OrderHistory = props => {
                 : record
             }
             columns={location.state?.isManager ? headerManager : header}
-            rowKey="ordId"
+            rowKey="orderId"
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}
           />
