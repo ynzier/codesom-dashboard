@@ -707,7 +707,7 @@ const ReportSale = props => {
                       <Col>
                         <div className="box-report">
                           <NumberFormat
-                            value={report.subTotal}
+                            value={report.orderNet}
                             decimalScale={2}
                             fixedDecimalScale={true}
                             decimalSeparator="."
@@ -749,10 +749,10 @@ const ReportSale = props => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col>ยอดขาย</Col>
+                          <Col>ค่าจัดส่ง</Col>
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
-                              value={report.subTotal}
+                              value={report.lalaFare}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               decimalSeparator="."
@@ -763,10 +763,10 @@ const ReportSale = props => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col>ยอดค่าจัดส่ง</Col>
+                          <Col>ค่าบริการ Omise</Col>
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
-                              value={report.deliveryFare}
+                              value={report.omiseFee}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               decimalSeparator="."
@@ -791,7 +791,21 @@ const ReportSale = props => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col>ยอดขายสุทธิ</Col>
+                          <Col>ยอดขายทั้งหมด (Net)</Col>
+                          <Col style={{ textAlign: 'right' }}>
+                            <NumberFormat
+                              value={report.orderNet}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
+                              decimalSeparator="."
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" บาท"
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>ยอดสุทธิ</Col>
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.finalTotal}
@@ -821,6 +835,29 @@ const ReportSale = props => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalTakeAway}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" บาท"
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>Online Store</Col>
+                          <Col style={{ textAlign: 'center' }}>
+                            <NumberFormat
+                              value={report.deliveryOnline}
+                              decimalScale={0}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" รายการ"
+                            />
+                          </Col>
+                          <Col style={{ textAlign: 'right' }}>
+                            <NumberFormat
+                              value={report.totalOnline}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}
@@ -986,6 +1023,52 @@ const ReportSale = props => {
                           <Col style={{ textAlign: 'right' }}>
                             <NumberFormat
                               value={report.totalQR}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" บาท"
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>Shopee Wallet</Col>
+                          <Col style={{ textAlign: 'center' }}>
+                            <NumberFormat
+                              value={report.paidShopee}
+                              decimalScale={0}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" รายการ"
+                            />
+                          </Col>
+                          <Col style={{ textAlign: 'right' }}>
+                            <NumberFormat
+                              value={report.totalShopee}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" บาท"
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>Dolphin Wallet</Col>
+                          <Col style={{ textAlign: 'center' }}>
+                            <NumberFormat
+                              value={report.paidDolphin}
+                              decimalScale={0}
+                              fixedDecimalScale={true}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              suffix=" รายการ"
+                            />
+                          </Col>
+                          <Col style={{ textAlign: 'right' }}>
+                            <NumberFormat
+                              value={report.totalDolphin}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               displayType={'text'}

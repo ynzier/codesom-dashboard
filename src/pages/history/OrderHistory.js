@@ -189,7 +189,7 @@ const OrderHistory = props => {
     },
     {
       title: 'ยอดชำระ',
-      dataIndex: 'orderTotal',
+      dataIndex: 'receiptTotal',
       align: 'center',
       render: text => {
         return (

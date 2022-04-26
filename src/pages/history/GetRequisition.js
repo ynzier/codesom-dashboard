@@ -165,7 +165,7 @@ const GetRequisition = ({ ...props }) => {
                         },
                         {
                           title: 'รายการ',
-                          dataIndex: 'prodName',
+                          dataIndex: 'productName',
                           align: 'center',
                           width: 260,
                           render: (text, record) => {
@@ -179,7 +179,7 @@ const GetRequisition = ({ ...props }) => {
                           width: 200,
                           render: (text, record) => (
                             <span>
-                              {text} {record.prodUnit}
+                              {text} {record.productUnit}
                             </span>
                           ),
                         },

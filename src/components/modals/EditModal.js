@@ -6,7 +6,7 @@ var getData = [];
 var getDataAlt = [];
 const EditModal = props => {
   const [prodID, setProdID] = useState();
-  const [prodName, setProdName] = useState('');
+  const [productName, setProdName] = useState('');
   const [productPrice, setProductPrice] = useState();
   const [itemCount, setItemCount] = useState(1);
   const [productType, setProductType] = useState('');
@@ -82,7 +82,7 @@ const EditModal = props => {
       .then(res => {
         console.log(res.data);
         setProdID(res.data.prod_id);
-        setProdName(res.data.prod_name);
+        setProdName(res.data.productName);
         setProductPrice(res.data.price);
         setItemCount(res.data.stock);
         setProductType(res.data.prod_type);
@@ -105,7 +105,7 @@ const EditModal = props => {
 
   const updateData = () => {
     var data = {
-      prod_name: prodName,
+      productName: productName,
       price: productPrice,
       prod_type: productType,
       stock: itemCount,
@@ -143,8 +143,8 @@ const EditModal = props => {
                   required
                   type="text"
                   placeholder="ชื่อสินค้า"
-                  name="prod_name"
-                  defaultValue={prodName}
+                  name="productName"
+                  defaultValue={productName}
                   onChange={e => setProdName(e.target.value)}
                 />
               </Form.Group>

@@ -8,15 +8,17 @@ import moment from 'moment-timezone';
 import { useParams } from 'react-router-dom';
 
 import 'moment/locale/th';
-import { Image } from 'antd';
+import { Image, Popover } from 'antd';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Preloader } from 'components';
 import { Card, Col, Row, Breadcrumb, Button } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 import historyService from 'services/history.service';
 
-const GetOrder = props => {
-  const { promiseInProgress } = usePromiseTracker();
+const GetOrder = () => {
+  const { promiseInProgress: loadingRecord } = usePromiseTracker({
+    area: 'loadingRecord',
+  });
   const { id } = useParams();
   const customDot = dot => <span>{dot}</span>;
   const [orderItems, setOrderItems] = useState([]);
@@ -30,25 +32,111 @@ const GetOrder = props => {
     fetchRecDetail(id);
   }, []);
   const fetchRecDetail = id => {
-    historyService
-      .getOrderItemsByIdDashboard(id)
-      .then(res => {
-        const receiveData = res.data;
-        setOrderItems(receiveData.orderItems);
-        setReceiptData(receiveData.receipt);
-        setOrderDetail(receiveData.orderDetail);
-        setPromoDetail(receiveData.promoItems);
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
+    trackPromise(
+      historyService
+        .getOrderItemsByIdDashboard(id)
+        .then(res => {
+          const receiveData = res.data;
+          setOrderItems(receiveData.orderItems);
+          setReceiptData(receiveData.receipt);
+          setOrderDetail(receiveData.orderDetail);
+          setPromoDetail(receiveData.promoItems);
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert.show(resMessage, { type: 'error' });
+        }),
+    );
   };
+  const content = (
+    <div style={{ width: 300, fontFamily: 'Prompt' }}>
+      <Row>
+        <Col>ค่าบริการ: </Col>
+        <Col
+          style={{
+            textAlign: 'right',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}>
+          <NumberFormat
+            value={receiptData.omiseFee}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix=" บาท"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>ภาษี 7%: </Col>
+        <Col
+          style={{
+            textAlign: 'right',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}>
+          <NumberFormat
+            value={receiptData.orderTax}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix=" บาท"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>ยอดเงิน (ไม่รวมภาษี): </Col>
+        <Col
+          style={{
+            textAlign: 'right',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}>
+          <NumberFormat
+            value={receiptData.orderNet}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix=" บาท"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>ยอดเงินสุทธิ: </Col>
+        <Col
+          style={{
+            textAlign: 'right',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}>
+          <NumberFormat
+            value={receiptData.orderTotal}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix=" บาท"
+          />
+        </Col>
+      </Row>
+    </div>
+  );
 
   return (
     <>
@@ -78,7 +166,7 @@ const GetOrder = props => {
               fontFamily: 'Prompt',
               minHeight: 828,
             }}>
-            {!promiseInProgress ? (
+            {!loadingRecord ? (
               <>
                 <Card.Body>
                   <h5>สินค้า</h5>
@@ -210,7 +298,7 @@ const GetOrder = props => {
                 </Card.Footer>
               </>
             ) : (
-              <Preloader show={promiseInProgress} />
+              <Preloader show={loadingRecord} />
             )}
           </Card>
         </div>
@@ -230,8 +318,22 @@ const GetOrder = props => {
               <Row>
                 <Col># {id}</Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {orderDetail.receipt?.paidType === 'qr' && 'Omise QR'}
+                  {orderDetail.receipt?.paidType === 'qr' && (
+                    <Popover
+                      content={content}
+                      placement="leftTop"
+                      title="Omise"
+                      trigger="click">
+                      <a style={{ textDecorationLine: 'underline' }}>
+                        Omise QR
+                      </a>
+                    </Popover>
+                  )}
                   {orderDetail.receipt?.paidType === 'cash' && 'เงินสด'}
+                  {orderDetail.receipt?.paidType === 'dolphin' &&
+                    'Dolphin Wallet'}
+                  {orderDetail.receipt?.paidType === 'shopee' &&
+                    'Shopee Wallet'}
                 </Col>
               </Row>
             </Card.Header>
@@ -260,7 +362,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={orderDetail.orderSubTotal}
+                    value={receiptData.receiptSubtotal}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -280,7 +382,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={orderDetail.orderDiscount}
+                    value={receiptData.receiptDiscount}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -300,7 +402,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={receiptData.net}
+                    value={receiptData.receiptNet}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -320,7 +422,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={receiptData.tax}
+                    value={receiptData.receiptTax}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -330,6 +432,28 @@ const GetOrder = props => {
                   />
                 </Col>
               </Row>
+              {orderDetail.platformId == 5 && (
+                <Row>
+                  <Col>ค่าจัดส่ง: </Col>
+                  <Col
+                    style={{
+                      textAlign: 'right',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}>
+                    <NumberFormat
+                      value={receiptData.lalaFare}
+                      decimalScale={2}
+                      fixedDecimalScale={true}
+                      decimalSeparator="."
+                      displayType={'text'}
+                      thousandSeparator={true}
+                      suffix=" บาท"
+                    />
+                  </Col>
+                </Row>
+              )}
               <Row>
                 <Col>ราคาสุทธิ (รวมภาษี): </Col>
                 <Col
@@ -340,7 +464,7 @@ const GetOrder = props => {
                     whiteSpace: 'nowrap',
                   }}>
                   <NumberFormat
-                    value={receiptData.total}
+                    value={receiptData.receiptTotal}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     decimalSeparator="."
@@ -386,7 +510,16 @@ const GetOrder = props => {
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                       }}>
-                      {orderDetail.orderRefNo}
+                      {orderDetail.platformId == 5 ? (
+                        <a
+                          target="_blank"
+                          href={orderDetail.lalamove.shareLink}
+                          rel="noreferrer">
+                          {orderDetail.orderRefNo}
+                        </a>
+                      ) : (
+                        orderDetail.orderRefNo
+                      )}
                     </Col>
                   </Row>
                 </>
