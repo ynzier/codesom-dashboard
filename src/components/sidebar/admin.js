@@ -58,10 +58,18 @@ const Sidebar = () => {
         </SidebarHeader>
         <SidebarContent>
           <Menu iconShape="circle">
-            <MenuItem icon={<MdSpaceDashboard color="#9D7463" />}>
-              แดชบอร์ด
-              <Link to={Routes.Home.path} />
-            </MenuItem>
+            <SubMenu
+              title="รายงาน"
+              icon={<CgFileDocument color="#9D7463" size="16px" />}>
+              <MenuItem>
+                รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
+              </MenuItem>
+              <MenuItem>
+                รายงานยอดจำหน่าย
+                <Link to={Routes.ReportSale.path} />
+              </MenuItem>
+              <MenuItem>รายงานข้อมูลพนักงาน</MenuItem>
+            </SubMenu>
             <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
               <MenuItem>
                 ๐ จัดการผู้ใช้งาน
@@ -121,20 +129,9 @@ const Sidebar = () => {
             <SubMenu
               title="เดลิเวอรี่"
               icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
-              <MenuItem>รายการที่ต้องส่ง</MenuItem>
-              <MenuItem>ประวัติการส่งสินค้า</MenuItem>
-            </SubMenu>
-            <SubMenu
-              title="รายงาน"
-              icon={<CgFileDocument color="#9D7463" size="16px" />}>
               <MenuItem>
-                รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
+                รายการเดลิเวอรี <Link to={Routes.DeliveryHistory.path} />
               </MenuItem>
-              <MenuItem>
-                รายงานยอดจำหน่าย
-                <Link to={Routes.ReportSale.path} />
-              </MenuItem>
-              <MenuItem>รายงานข้อมูลพนักงาน</MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>

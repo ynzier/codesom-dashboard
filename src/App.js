@@ -50,7 +50,7 @@ const App = () => {
         {...rest}
         render={props => (
           <>
-            {currentUser && history.push('/dashboard')}
+            {currentUser && history.push(Routes.ReportSale.path)}
             <Preloader show={loaded ? false : true} />
 
             <Component {...props} />
@@ -110,7 +110,6 @@ const App = () => {
           />
           {/* deploy */}
           <RouteWithLoader exact path="/" page={Page.Login} />
-          <RouteWithSidebar exact path={Routes.Home.path} page={Page.Home} />
           {/* Employee */}
           <RouteWithSidebar
             exact
@@ -228,6 +227,11 @@ const App = () => {
             exact
             path={Routes.ReportIngr.path}
             page={Page.ReportIngr}
+          />
+          <RouteWithSidebar
+            exact
+            path={Routes.DeliveryHistory.path}
+            page={Page.DeliveryHistory}
           />
           <Redirect to={Routes.NotFound.path} />
         </Switch>

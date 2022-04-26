@@ -45,3 +45,6 @@ export { default as GetRequisition } from './history/GetRequisition';
 //Report
 export { default as ReportSale } from './report/ReportSale';
 export { default as ReportIngr } from './report/ReportIngr';
+
+//Delivery
+export { default as DeliveryHistory } from './delivery/DeliveryHistory';
