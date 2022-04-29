@@ -312,6 +312,7 @@ const BranchEdit = ({ ...props }) => {
                         disabled={!editable}
                         dropdownStyle={{ fontFamily: 'Prompt' }}
                         optionFilterProp="children"
+                        allowClear
                         filterOption={(input, option) =>
                           option.children
                             .toLowerCase()

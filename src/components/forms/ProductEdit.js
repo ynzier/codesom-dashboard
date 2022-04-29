@@ -378,6 +378,7 @@ const ProductEdit = ({ productId }) => {
                             rules={[{ required: true, message: '*ใส่ราคา' }]}>
                             <InputNumber
                               min="1"
+                              max="10000"
                               disabled={!editable}
                               placeholder="1"
                             />
@@ -413,6 +414,7 @@ const ProductEdit = ({ productId }) => {
                             <InputNumber
                               min="0"
                               precision="2"
+                              max="10000"
                               stringMode
                               placeholder="0.00"
                               disabled={needProcess}
@@ -427,6 +429,7 @@ const ProductEdit = ({ productId }) => {
                             <InputNumber
                               min="0"
                               precision="2"
+                              max="10000"
                               stringMode
                               disabled={!editable}
                               placeholder="0.00"
@@ -441,6 +444,7 @@ const ProductEdit = ({ productId }) => {
                           rules={[{ required: true, message: '*ใส่ราคา' }]}>
                           <InputNumber
                             min="0"
+                            max="10000"
                             disabled={!editable}
                             precision="2"
                             stringMode

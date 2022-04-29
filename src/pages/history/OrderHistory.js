@@ -10,7 +10,7 @@ import locale from 'antd/es/date-picker/locale/th_TH';
 import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import NumberFormat from 'react-number-format';
-
+import { useAlert } from 'react-alert';
 import historyService from 'services/history.service';
 import BranchesService from 'services/branches.service';
 
@@ -20,7 +20,7 @@ const OrderHistory = props => {
   let history = useHistory();
   let location = useLocation();
   const { selectBranch } = props;
-
+  const alert = useAlert();
   const [record, setRecord] = useState([]);
   const [branchData, setbranchData] = useState([]);
   const [filterData, setfilterData] = useState([]);
@@ -182,10 +182,6 @@ const OrderHistory = props => {
       title: 'ประเภท',
       dataIndex: 'orderType',
       align: 'center',
-      render: text => {
-        if (text == 'takeaway') return 'รับกลับ';
-        if (text == 'delivery') return 'เดลิเวอรี';
-      },
     },
     {
       title: 'ยอดชำระ',
@@ -222,14 +218,6 @@ const OrderHistory = props => {
       title: 'สถานะ',
       dataIndex: 'orderStatus',
       align: 'center',
-      render: text => {
-        var status = text;
-        var message;
-        if (status === 0) message = 'กำลังดำเนินการ';
-        if (status === 1) message = 'เสร็จสิ้น';
-        if (status === 2) message = 'ยกเลิก';
-        return message;
-      },
     },
   ];
   const headerManager = [
@@ -257,14 +245,10 @@ const OrderHistory = props => {
       title: 'ประเภท',
       dataIndex: 'orderType',
       align: 'center',
-      render: text => {
-        if (text == 'takeaway') return 'รับกลับ';
-        if (text == 'delivery') return 'เดลิเวอรี';
-      },
     },
     {
       title: 'ยอดชำระ',
-      dataIndex: 'orderTotal',
+      dataIndex: 'receiptTotal',
       align: 'center',
       render: text => {
         return (
@@ -297,14 +281,6 @@ const OrderHistory = props => {
       title: 'สถานะ',
       dataIndex: 'orderStatus',
       align: 'center',
-      render: text => {
-        var status = text;
-        var message;
-        if (status === 0) message = 'กำลังดำเนินการ';
-        if (status === 1) message = 'เสร็จสิ้น';
-        if (status === 2) message = 'ยกเลิก';
-        return message;
-      },
     },
   ];
   return (
@@ -341,11 +317,7 @@ const OrderHistory = props => {
                     <Form.Control
                       type="text"
                       value={keyword}
-                      placeholder={
-                        !location.state?.isManager
-                          ? 'ค้นหารหัส/ชื่อสาขา'
-                          : 'ค้นหารหัส'
-                      }
+                      placeholder={'ค้นหา'}
                       onChange={e => setKeyword(e.target.value)}
                     />
                   </InputGroup>
@@ -405,6 +377,7 @@ const OrderHistory = props => {
                       setOption('');
                       setPickDate([]);
                     } else {
+                      setKeyword('');
                       setPickDate([]);
                     }
                   }}

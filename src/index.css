@@ -521,3 +521,30 @@ textarea.ant-input {
 a[title='Report errors in the road map or imagery to Google'] {
   display: none !important;
 }
+
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  color: rgba(0, 0, 0, 0.45);
+  width: 40px;
+  height: 40px;
+}
+
+ant-input-search-button:hover {
+  border-color: #9d7463 !important;
+  border-width: 1px;
+}
+
+ant-input-search-button:focus {
+  border-color: #9d7463 !important;
+  border-width: 1px !important;
+
+  outline: 0 !important;
+  box-shadow: 0 0 0 2px rgba(139, 4, 22, 0.219) !important;
+}
+
+.ant-input-search .ant-input:focus,
+.ant-input-search .ant-input:hover {
+  border-color: #9d7463;
+}

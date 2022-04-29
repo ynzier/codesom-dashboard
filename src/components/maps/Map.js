@@ -31,7 +31,11 @@ const MapComponent = ({
   const handleCenterChanged = useCallback(() => {
     if (mapRef.current !== undefined && mapRef.current !== null) {
       const newCenter = mapRef.current.getCenter();
-      if (newCenter !== undefined && onCenterChanged !== undefined) {
+      if (
+        newCenter !== undefined &&
+        onCenterChanged !== undefined &&
+        editable
+      ) {
         onCenterChanged({
           lat: newCenter.lat(),
           lng: newCenter.lng(),
@@ -66,13 +70,14 @@ const MapComponent = ({
         style={{
           bottom: 0,
           position: 'absolute',
-          display: 'flex',
+          display: editable ? 'flex' : 'none',
           flexDirection: 'row',
           width: 160,
           justifyContent: 'center',
           alignItems: 'center',
           height: '2rem',
         }}
+        disabled={!editable}
         className="get-current-location"
         onClick={() => {
           mapRef.current.panTo(center);

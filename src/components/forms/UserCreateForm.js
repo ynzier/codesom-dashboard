@@ -13,6 +13,7 @@ import { Form, Input, Button as ButtonA } from 'antd';
 import EmployeeService from 'services/employee.service';
 import UserService from 'services/users.service';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+const { Search } = Input;
 
 const UserCreateForm = () => {
   const alert = useAlert();
@@ -80,48 +81,38 @@ const UserCreateForm = () => {
             <h2 className="mb-4">เพิ่มผู้ใช้งานใหม่</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
-                <InputGroup>
-                  <FormControl
-                    type="tel"
-                    maxLength="10"
-                    value={empId}
-                    disabled={found}
-                    autoComplete="new-password"
-                    placeholder="รหัสพนักงาน"
-                    onChange={e => checkInput(e)}
-                  />
-                  <Button
-                    variant="outline-codesom"
-                    style={{ zIndex: 5 }}
-                    disabled={found}
-                    onClick={() => {
-                      EmployeeService.getEmployeeByIdForUserCreate(empId)
-                        .then(response => {
-                          const RecievedData = response && response.data;
-                          alert.show(response.data.message, {
-                            type: 'success',
-                          });
-                          setFirstName(RecievedData.resData[0].first_name);
-                          setLastName(RecievedData.resData[0].last_name);
-                          setValidEmpId(empId);
-                          form.resetFields();
-                          setFound(true);
-                        })
-                        .catch(error => {
-                          const resMessage =
-                            (error.response &&
-                              error.response.data &&
-                              error.response.data.message) ||
-                            error.message ||
-                            error.toString();
-                          setFirstName('');
-                          setLastName('');
-                          alert.show(resMessage, { type: 'error' });
+                <Search
+                  placeholder="รหัสพนักงาน"
+                  disabled={found}
+                  value={empId}
+                  onChange={e => checkInput(e)}
+                  onSearch={() => {
+                    EmployeeService.getEmployeeByIdForUserCreate(empId)
+                      .then(response => {
+                        const RecievedData = response && response.data;
+                        alert.show(response.data.message, {
+                          type: 'success',
                         });
-                    }}>
-                    ค้นหา
-                  </Button>
-                </InputGroup>
+                        setFirstName(RecievedData.resData[0].first_name);
+                        setLastName(RecievedData.resData[0].last_name);
+                        setValidEmpId(empId);
+                        form.resetFields();
+                        setFound(true);
+                      })
+                      .catch(error => {
+                        const resMessage =
+                          (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                          error.message ||
+                          error.toString();
+                        setFirstName('');
+                        setLastName('');
+                        alert.show(resMessage, { type: 'error' });
+                      });
+                  }}
+                  style={{ width: '100%' }}
+                />
               </Col>
             </Row>
             <Row>

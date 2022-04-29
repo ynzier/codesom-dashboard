@@ -20,8 +20,6 @@ import {
 
 import AuthService from 'services/auth.service';
 import tokenService from 'services/token.service';
-import { Link } from 'react-router-dom';
-import { Routes } from 'routes';
 import usersService from 'services/users.service';
 
 const SettingModal = ({ setModalShow, ...props }) => {
@@ -40,7 +38,15 @@ const SettingModal = ({ setModalShow, ...props }) => {
         alert.show(res.data.message, { type: 'success' });
         setModalShow(false);
       })
-      .catch(err => console.log(err));
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert.show(resMessage, { type: 'error' });
+      });
   };
   useEffect(async () => {
     const user = await tokenService.getUser();

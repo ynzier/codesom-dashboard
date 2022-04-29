@@ -86,18 +86,19 @@ const AddReqList = ({ ...props }) => {
                         </Select>
                       </Form.Item>
                     </ColA>
-                    <ColA span={8} />
-                    <ColA span={3} style={{ textAlign: 'center' }}>
+                    <ColA span={7} />
+                    <ColA span={4} style={{ textAlign: 'center' }}>
                       <Form.Item
                         name={[index, 'reqCount']}
                         rules={[{ required: true, message: 'ใส่จำนวน' }]}>
                         <InputNumber
                           min="1"
+                          max="1000"
                           style={{
                             textAlign: 'center',
                             width: '100%',
                             textOverflow: 'ellipsis',
-                            paddingRight: '14px',
+
                           }}
                         />
                       </Form.Item>
@@ -107,7 +108,7 @@ const AddReqList = ({ ...props }) => {
                         onClick={() => remove(field.name)}
                         size={20}
                         className="dynamic-delete-button"
-                        style={{ marginTop: '5px' }}
+                        style={{ marginTop: 10 }}
                       />
                     </ColA>
                   </RowA>
@@ -171,7 +172,7 @@ const IngrReqList = ({ ...props }) => {
   const { selectBranch } = props;
   const { promiseInProgress } = usePromiseTracker();
   const [branchData, setbranchData] = useState([]);
-  const [selectedBranchId, setBranchId] = useState('');
+  const [selectedBranchId, setBranchId] = useState(undefined);
   const [availableItem, setAvailableItem] = useState([]);
   const sendData = () => {
     var prepareData = {
@@ -335,34 +336,32 @@ const IngrReqList = ({ ...props }) => {
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
         }}>
         <Card.Body>
-          <FormBS>
-            <h2 className="mb-4">
-              {props.reqData.length > 0
-                ? 'ตรวจสอบรายการ'
-                : 'รายการสินค้าที่เบิก'}
-            </h2>
-            {!selectBranch && (
-              <Row>
-                <Col md={6} xl={6} className="mb-3">
-                  <FormBS.Group id="branch">
-                    <FormBS.Label>สาขา</FormBS.Label>
-                    <FormBS.Select
-                      required
-                      disabled={props.reqData.length > 0}
-                      value={selectedBranchId}
-                      onChange={e => setBranchId(e.target.value)}>
-                      <option value="">เลือกสาขา</option>
-                      {branchData.map(option => (
-                        <option key={option.branchId} value={option.branchId}>
-                          {option.branchName} ({option.branchId})
-                        </option>
-                      ))}
-                    </FormBS.Select>
-                  </FormBS.Group>
-                </Col>
-              </Row>
-            )}
-          </FormBS>
+          <h2 className="mb-4">
+            {props.reqData.length > 0 ? 'ตรวจสอบรายการ' : 'รายการสินค้าที่เบิก'}
+          </h2>
+          {!selectBranch && (
+            <Row>
+              <Col md={6} xl={6} className="mb-3">
+                <Select
+                  showSearch
+                  label="สาขา"
+                  value={selectedBranchId}
+                  disabled={props.reqData.length > 0}
+                  style={{ width: 300, fontFamily: 'Prompt' }}
+                  placeholder="เลือกสาขา"
+                  optionFilterProp="children"
+                  dropdownStyle={{ fontFamily: 'Prompt' }}
+                  onChange={value => setBranchId(value)}>
+                  {branchData.map(option => (
+                    <Option key={option.branchId} value={option.branchId}>
+                      {option.branchName} ({option.branchId})
+                    </Option>
+                  ))}
+                </Select>
+              </Col>
+            </Row>
+          )}
+
           <Card
             border="light"
             className="bg-white px-1 py-2 mb-4"
@@ -379,7 +378,7 @@ const IngrReqList = ({ ...props }) => {
                     dataSource={props.reqData}
                     columns={header}
                     rowKey="id"
-                    pagination={{ pageSize: 20 }}
+                    pagination={false}
                     style={{ fontFamily: 'Prompt' }}
                   />
                   <div
@@ -388,7 +387,7 @@ const IngrReqList = ({ ...props }) => {
                       flexDirection: 'row',
                       width: '100%',
                     }}
-                    className="mb-4">
+                    className="mt-4 mb-4">
                     <ButtonA
                       style={{
                         flex: 2,

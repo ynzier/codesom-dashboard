@@ -11,7 +11,6 @@ const IngrRequestPage = props => {
   const [selectedBranchId, setBranchId] = useState('');
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
-    console.log(reqData);
     document.title = 'คำร้องขอวัตถุดิบ';
   }, []);
 

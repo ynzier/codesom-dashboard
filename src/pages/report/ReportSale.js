@@ -631,6 +631,7 @@ const ReportSale = props => {
                         style={{
                           width: 300,
                           fontFamily: 'Prompt',
+                          fontSize: 16
                         }}
                         placeholder="เลือกสาขา"
                         value={branchId}
