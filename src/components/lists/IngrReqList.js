@@ -40,7 +40,10 @@ const AddReqList = ({ ...props }) => {
         type: 'error',
       });
 
-    if (props.selectedBranchId || props.selectBranch) {
+    if (
+      props.selectedBranchId != undefined ||
+      props.selectBranch != undefined
+    ) {
       inputData.forEach(obj => {
         props.availableItem.forEach(data => {
           if (obj.reqItemKey == data.key) {
@@ -98,7 +101,6 @@ const AddReqList = ({ ...props }) => {
                             textAlign: 'center',
                             width: '100%',
                             textOverflow: 'ellipsis',
-
                           }}
                         />
                       </Form.Item>
@@ -140,20 +142,11 @@ const AddReqList = ({ ...props }) => {
                       width: '100%',
                     }}
                     className="mb-4">
-                    <div style={{ flex: 10 }} />
+                    <div style={{ flex: 1 }} />
                     <ButtonA
-                      style={{
-                        flex: 2,
-                        width: '100%',
-                        height: 50,
-                        borderRadius: '10px',
-                        borderWidth: '0',
-                        color: 'white',
-                        fontSize: '16px',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        backgroundColor: '#2DC678',
-                      }}
-                      htmlType="submit">
+                      type="primary"
+                      htmlType="submit"
+                      style={{ width: 140 }}>
                       ยืนยัน
                     </ButtonA>
                   </div>
@@ -389,41 +382,21 @@ const IngrReqList = ({ ...props }) => {
                     }}
                     className="mt-4 mb-4">
                     <ButtonA
-                      style={{
-                        flex: 2,
-                        width: '100%',
-                        height: 50,
-                        borderRadius: '10px',
-                        borderWidth: '0',
-                        color: 'white',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        backgroundColor: '#97515F',
-                      }}
-                      htmlType="button"
+                      ghost
+                      danger
                       onClick={() => {
                         props.setReqData([]);
-                      }}>
+                      }}
+                      style={{ flex: 2 }}>
                       ย้อนกลับ
                     </ButtonA>
                     <div style={{ flex: 8 }} />
                     <ButtonA
-                      style={{
-                        flex: 2,
-                        width: '100%',
-                        height: 50,
-                        borderRadius: '10px',
-                        borderWidth: '0',
-                        color: 'white',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        backgroundColor: '#2DC678',
-                      }}
+                      type="primary"
                       onClick={() => {
                         sendData();
-                      }}>
+                      }}
+                      style={{ flex: 2 }}>
                       ยืนยัน
                     </ButtonA>
                   </div>

@@ -283,61 +283,38 @@ const EmployeeEdit = ({ ...props }) => {
               <Row>
                 <Col md={{ span: 3 }}>
                   <div>
-                    <Button
-                      variant="outline-codesom"
-                      onClick={() => history.back()}
-                      style={{ width: '100%' }}>
+                    <ButtonA ghost danger onClick={() => history.back()}>
                       ย้อนกลับ
-                    </Button>
+                    </ButtonA>
                   </div>
                 </Col>
                 <Col sm={{ span: 3, offset: 3 }}>
                   {editable && (
-                    <Button
-                      variant="outline-danger"
+                    <ButtonA
+                      ghost
+                      danger
                       onClick={() => {
                         fetchEmployeeData(empId);
                         setEditable(!editable);
-                      }}
-                      style={{
-                        borderRadius: '10px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                       }}>
                       ยกเลิก
-                    </Button>
+                    </ButtonA>
                   )}
                 </Col>
                 <Col sm={3}>
-                  {!editable ? (
-                    <Button
-                      variant="secondary"
+                  {editable && (
+                    <ButtonA type="primary" htmlType="submit">
+                      ยืนยัน
+                    </ButtonA>
+                  )}
+                  {!editable && (
+                    <ButtonA
+                      type="primary"
+                      htmlType="button"
                       onClick={() => {
-                        setEditable(!editable);
-                      }}
-                      style={{
-                        borderRadius: '10px',
-                        width: '100%',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        color: 'white',
+                        setEditable(true);
                       }}>
                       แก้ไข
-                    </Button>
-                  ) : (
-                    <ButtonA
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '10px',
-                        borderWidth: '0',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        fontSize: '16px',
-                        boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        backgroundColor: '#2DC678',
-                      }}
-                      htmlType="submit">
-                      ยืนยัน
                     </ButtonA>
                   )}
                 </Col>

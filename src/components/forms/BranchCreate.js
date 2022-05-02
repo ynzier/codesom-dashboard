@@ -4,7 +4,6 @@ import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Form,
-  InputNumber,
   Input,
   Upload,
   Button as ButtonA,
@@ -257,19 +256,7 @@ const BranchCreate = () => {
             </Row>
             <Row className="mt-3">
               <Col sm={3} md={{ span: 3, offset: 9 }}>
-                <ButtonA
-                  style={{
-                    width: '100%',
-                    height: '50px',
-                    borderRadius: '10px',
-                    borderWidth: '0',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '16px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    backgroundColor: '#2DC678',
-                  }}
-                  htmlType="submit">
+                <ButtonA type="primary" htmlType="submit">
                   บันทึกข้อมูล
                 </ButtonA>
               </Col>

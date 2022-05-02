@@ -2,25 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
-import { List, Card as CardA, Image } from 'antd';
+import { List, Card as CardA, Image, Button } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import {
-  Col,
-  Row,
-  Form,
-  Button,
-  Card,
-  Breadcrumb,
-  InputGroup,
-} from 'react-bootstrap';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FiEdit } from 'react-icons/fi';
+
 import { Routes } from 'routes';
-import ProductService from 'services/product.service';
-import { RecipeLookUp } from 'components';
 import promotionsService from 'services/promotions.service';
 
 const { Meta } = CardA;
@@ -95,16 +85,10 @@ const PromotionList = props => {
               {!selectBranch && (
                 <Col xs={5} xl={{ span: 2, offset: 6 }}>
                   <Button
-                    className="w-100"
-                    as={Link}
-                    to={Routes.AddPromotion.path}
-                    variant="codesom"
-                    style={{
-                      color: '#fff',
-                      height: '50px',
-                      paddingTop: '0.75rem',
-                      borderRadius: '10px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    className="w-100 ant-btn-custom"
+                    type="button"
+                    onClick={() => {
+                      history.push(Routes.AddPromotion.path);
                     }}>
                     เพิ่มโปรโมชัน
                   </Button>

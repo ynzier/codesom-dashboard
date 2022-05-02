@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { WarningFilled } from '@ant-design/icons';
 
-import {
-  Col,
-  Row,
-  Form,
-  Card,
-  Breadcrumb,
-  InputGroup,
-} from 'react-bootstrap';
+import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 
 import { useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Input } from 'antd';
 
 import UserService from 'services/users.service';
 import usersService from 'services/users.service';
@@ -170,20 +163,15 @@ const UserList = ({ ...props }) => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
           <Row>
             <Col xs={8} md={6} lg={6} xl={6}>
-              <InputGroup style={{ height: '50px' }}>
-                <InputGroup.Text>
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  placeholder="ค้นหาผู้ใช้งาน"
-                  onChange={e => search(e.target.value)}
-                />
-              </InputGroup>
+              <Input
+                onChange={e => search(e.target.value)}
+                placeholder="ค้นหาผู้ใช้งาน"
+              />
             </Col>
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
@@ -200,7 +188,7 @@ const UserList = ({ ...props }) => {
         </Card.Header>
         <Card.Body
           className="pt-0"
-          style={{ marginTop: 30, height: '100%', width: '100%' }}>
+          style={{ marginTop: 16, height: '100%', width: '100%' }}>
           <Table
             dataSource={filterData == null ? records : filterData}
             columns={header}

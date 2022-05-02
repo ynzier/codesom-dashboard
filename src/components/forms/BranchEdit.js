@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import FileService from 'services/file.service';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Col, Row, Card, Button } from 'react-bootstrap';
+import { Col, Row, Card, Modal } from 'react-bootstrap';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import moment from 'moment-timezone';
 import { Map } from 'components/maps/Map';
 import 'moment/locale/th';
-import {
-  Form,
-  Switch,
-  Input,
-  Upload,
-  Button as ButtonA,
-  TimePicker,
-  Select,
-} from 'antd';
+import { Form, Switch, Input, Upload, Button, TimePicker, Select } from 'antd';
 import { useAlert } from 'react-alert';
 
 // services
@@ -26,6 +19,10 @@ const { RangePicker } = TimePicker;
 
 const BranchEdit = ({ ...props }) => {
   const mapRef = useRef(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const { promiseInProgress: deleting } = usePromiseTracker({
+    area: 'deleting',
+  });
   const [editable, setEditable] = useState(false);
   const [isDelivery, setIsDelivery] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(undefined);
@@ -204,7 +201,49 @@ const BranchEdit = ({ ...props }) => {
         alert.show(resMessage, { type: 'error' });
       });
   };
-
+  const MyVerticallyCenteredModal = props => {
+    return (
+      <Modal {...props}>
+        <Modal.Header closeButton>
+          <Modal.Title>ต้องการลบข้อมูลสาขานี้หรือไม่?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ color: 'red', fontFamily: 'Prompt' }}>
+          <ul>*ข้อมูลประเภท ประวัติ รายงาน ยังคงอยู่</ul>
+          <ul>*ข้อมูลประเภท ประวัติ รายงาน ยังคงอยู่</ul>
+          <ul>*หากลบแล้ว จะไม่สามารถกู้คืนข้อมูลได้</ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="primary"
+            style={{ width: 200 }}
+            danger
+            loading={deleting}
+            onClick={async () => {
+              await trackPromise(
+                BranchService.deleteBranch(props.branchId)
+                  .then(res => {
+                    alert.show('ลบข้อมูลสำเร็จ', {
+                      type: 'success',
+                    });
+                    history.back();
+                  })
+                  .catch(error => {
+                    const resMessage =
+                      (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                      error.message ||
+                      alert.show(resMessage, { type: 'error' });
+                  }),
+                'deleting',
+              );
+            }}>
+            ลบข้อมูลสาขา
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
   return (
     <>
       <Card
@@ -403,9 +442,9 @@ const BranchEdit = ({ ...props }) => {
                     textDecoration: 'underline',
                     float: 'right',
                   }}>
-                  <div onClick={() => setModalShow(true)}>
+                  <a onClick={() => setModalShow(true)}>
                     ข้อมูลสำหรับเข้าสู่ระบบ
-                  </div>
+                  </a>
                 </div>
               </Col>
             </Row>
@@ -413,12 +452,8 @@ const BranchEdit = ({ ...props }) => {
               <Col sm={3} md={3}>
                 <div>
                   <Button
-                    variant="outline-codesom"
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    }}
+                    ghost
+                    danger
                     onClick={() => {
                       history.back();
                     }}>
@@ -429,62 +464,40 @@ const BranchEdit = ({ ...props }) => {
               <Col sm={{ span: 3, offset: 3 }} md={{ span: 3, offset: 3 }}>
                 {!editable ? (
                   <Button
-                    variant="outline-danger"
-                    onClick={() => {}}
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    }}>
+                    onClick={() => {
+                      setDeleteModal(true);
+                    }}
+                    ghost
+                    danger>
                     ลบ
                   </Button>
                 ) : (
                   <Button
-                    variant="outline-danger"
                     onClick={() => {
                       fetchBranchData(props.branchId);
                       setEditable(false);
                     }}
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    }}>
+                    ghost
+                    danger>
                     ยกเลิก
                   </Button>
                 )}
               </Col>
               <Col sm={3} md={3}>
-                {!editable ? (
+                {editable && (
+                  <Button type="primary" htmlType="submit">
+                    ยืนยัน
+                  </Button>
+                )}
+                {!editable && (
                   <Button
-                    variant="tertiary"
+                    type="primary"
+                    htmlType="button"
                     onClick={() => {
-                      setEditable(!editable);
-                    }}
-                    style={{
-                      borderRadius: '10px',
-                      width: '100%',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      color: 'white',
+                      setEditable(true);
                     }}>
                     แก้ไข
                   </Button>
-                ) : (
-                  <ButtonA
-                    style={{
-                      width: '100%',
-                      height: '43.59px',
-                      borderRadius: '10px',
-                      borderWidth: '0',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      backgroundColor: '#2DC678',
-                    }}
-                    htmlType="submit">
-                    บันทึกข้อมูล
-                  </ButtonA>
                 )}
               </Col>
             </Row>
@@ -499,6 +512,12 @@ const BranchEdit = ({ ...props }) => {
         branchId={props.branchId}
         editable={editable}
         setModalShow={setModalShow}
+      />
+      <MyVerticallyCenteredModal
+        show={deleteModal}
+        onHide={() => {
+          setDeleteModal(false);
+        }}
       />
     </>
   );

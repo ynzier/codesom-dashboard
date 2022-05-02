@@ -4,19 +4,15 @@ import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { Table, DatePicker } from 'antd';
+import { Table, DatePicker, Input, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-
-import {
-  faHome,
-  faSearch,
-  faFileInvoice,
-} from '@fortawesome/free-solid-svg-icons';
-import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
+import { faHome, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
 import requisitionService from 'services/requisition.service';
+const { Option } = Select;
 
 const RequisitionList = props => {
   let history = useHistory();
@@ -30,21 +26,21 @@ const RequisitionList = props => {
   const [record, setRecord] = useState([]);
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
-  const [option, setOption] = useState('');
+  const [option, setOption] = useState(undefined);
   const [pickDate, setPickDate] = useState([]);
 
   useEffect(async () => {
     const filterTable = record.filter(obj => {
       // keyword
-      if (keyword != '' && option == '' && pickDate.length < 1)
+      if (keyword != '' && option == undefined && pickDate.length < 1)
         return Object.keys(obj).some(k =>
           String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
         );
       // option
-      if (keyword == '' && option != '' && pickDate.length < 1)
+      if (keyword == '' && option != undefined && pickDate.length < 1)
         return obj.requisitionStatus == option;
       // date
-      if (keyword == '' && option == '' && pickDate.length > 0)
+      if (keyword == '' && option == undefined && pickDate.length > 0)
         return (
           moment(obj.updatedAt).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
@@ -52,7 +48,7 @@ const RequisitionList = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option
-      if (keyword != '' && option != '' && pickDate.length < 1)
+      if (keyword != '' && option != undefined && pickDate.length < 1)
         return (
           obj.requisitionStatus == option &&
           Object.keys(obj).some(k =>
@@ -60,7 +56,7 @@ const RequisitionList = props => {
           )
         );
       // keyword date
-      if (keyword != '' && option == '' && pickDate.length > 0)
+      if (keyword != '' && option == undefined && pickDate.length > 0)
         return (
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
@@ -71,7 +67,7 @@ const RequisitionList = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // option date
-      if (keyword == '' && option != '' && pickDate.length > 0)
+      if (keyword == '' && option != undefined && pickDate.length > 0)
         return (
           obj.requisitionStatus == option &&
           moment(obj.updatedAt).unix() >=
@@ -80,7 +76,7 @@ const RequisitionList = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option date
-      if (keyword != '' && option != '' && pickDate.length > 0)
+      if (keyword != '' && option != undefined && pickDate.length > 0)
         return (
           obj.requisitionStatus == option &&
           moment(obj.updatedAt).unix() >=
@@ -145,6 +141,11 @@ const RequisitionList = props => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    if (selectBranch) fetchData(selectBranch);
+
+    return () => {};
+  }, [selectBranch]);
   const header = [
     {
       title: 'No.',
@@ -269,7 +270,7 @@ const RequisitionList = props => {
       dataIndex: 'requisitionStatus',
       align: 'center',
       width: 150,
-      render: (text) => {
+      render: text => {
         return (
           <div>
             {text == 0
@@ -311,45 +312,51 @@ const RequisitionList = props => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
             <Row>
               <Col xs={8} md={5}>
-                <Form.Group>
-                  <InputGroup>
-                    <InputGroup.Text>
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputGroup.Text>
-                    <Form.Control
-                      type="text"
-                      value={keyword}
-                      placeholder={
-                        selectBranch ? 'ค้นหารหัส' : 'ค้นหารหัส/ชื่อสาขา'
-                      }
-                      onChange={e => setKeyword(e.target.value)}
-                    />
-                  </InputGroup>
-                </Form.Group>
+                <Input
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  placeholder={
+                    selectBranch ? 'ค้นหารหัส' : 'ค้นหารหัส/ชื่อสาขา'
+                  }
+                />
               </Col>
               <Col xs={4} md={3}>
-                <Form.Group>
-                  <Form.Select
-                    value={option}
-                    onChange={e => setOption(e.target.value)}>
-                    <option value="">ทั้งหมด</option>
-                    <option value="0">รออนุมัติ</option>
-                    <option value="1">อนุมัติแล้ว</option>
-                    <option value="2">กำลังดำเนินการ</option>
-                    <option value="3">เสร็จสิ้น</option>
-                    <option value="4">ยกเลิก</option>
-                  </Form.Select>
-                </Form.Group>
+                <Select
+                  className="mb-3"
+                  showSearch
+                  allowClear
+                  style={{
+                    width: '100%',
+                    fontFamily: 'Prompt',
+                  }}
+                  placeholder="สถานะ"
+                  value={option}
+                  optionFilterProp="children"
+                  dropdownStyle={{ fontFamily: 'Prompt' }}
+                  onChange={value => {
+                    setOption(value);
+                  }}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }>
+                  <Option value="0">รออนุมัติ</Option>
+                  <Option value="1">อนุมัติแล้ว</Option>
+                  <Option value="2">กำลังดำเนินการ</Option>
+                  <Option value="3">เสร็จสิ้น</Option>
+                  <Option value="4">ยกเลิก</Option>
+                </Select>
               </Col>
               <Col md="4">
                 <RangePicker
                   locale={locale}
-                  size="large"
                   value={pickDate}
                   disabledDate={current => {
                     return moment() < current;
@@ -364,7 +371,6 @@ const RequisitionList = props => {
                   style={{
                     borderRadius: '10px',
                     fontFamily: 'Prompt',
-                    height: '100%',
                   }}
                   popupStyle={{ fontFamily: 'Prompt' }}
                   onChange={date => {
@@ -379,7 +385,7 @@ const RequisitionList = props => {
                 <a
                   onClick={() => {
                     setKeyword('');
-                    setOption('');
+                    setOption(undefined);
                     setPickDate([]);
                   }}
                   style={{
@@ -398,7 +404,7 @@ const RequisitionList = props => {
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             dataSource={
-              keyword != '' || pickDate.length > 0 || option != ''
+              keyword != '' || pickDate.length > 0 || option != undefined
                 ? filterData
                 : record
             }

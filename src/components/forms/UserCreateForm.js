@@ -174,7 +174,7 @@ const UserCreateForm = () => {
               <Col md={6} xl={6} className="mb-3">
                 <Form.Item
                   name="confirmPassword"
-                  label="รหัสผ่าน"
+                  label="ยืนยันรหัสผ่าน"
                   rules={[
                     { required: true, message: '*ใส่รหัสผ่าน' },
                     { max: 40, message: '*ไม่เกิน 40 ตัวอักษร' },
@@ -191,8 +191,9 @@ const UserCreateForm = () => {
             <Row>
               <Col sm={6} md={6} />
               <Col sm={3} md={3}>
-                <Button
-                  variant="outline-danger"
+                <ButtonA
+                  danger
+                  ghost
                   onClick={() => {
                     setFound(false);
                     setEmpId('');
@@ -200,30 +201,12 @@ const UserCreateForm = () => {
                     setLastName('');
                     form.resetFields();
                     form.setFieldsValue({ firstName: '', lastName: '' });
-                  }}
-                  style={{
-                    borderRadius: '10px',
-                    width: '100%',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    borderWidth: 0,
                   }}>
                   ล้างข้อมูล
-                </Button>
+                </ButtonA>
               </Col>
               <Col sm={3} md={3}>
-                <ButtonA
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '10px',
-                    borderWidth: '0',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '16px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    backgroundColor: '#2DC678',
-                  }}
-                  htmlType="submit">
+                <ButtonA type="primary" htmlType="submit">
                   บันทึกข้อมูล
                 </ButtonA>
               </Col>

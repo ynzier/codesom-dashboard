@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import {
-  Col,
-  Row,
-  Form,
-  Card,
-  Breadcrumb,
-  InputGroup,
-  Button,
-  Modal,
-} from 'react-bootstrap';
+import { Col, Row, Card, Breadcrumb, Modal } from 'react-bootstrap';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Table, Input } from 'antd';
+import { Table, Input, Button } from 'antd';
 import { useAlert } from 'react-alert';
 
 import 'antd/dist/antd.min.css';
@@ -150,22 +141,22 @@ const EmployeeList = props => {
       render: (text, record) => {
         return (
           <div>
-            <span
+            <a
               onClick={() => {
                 const empId = record.empId;
                 openRecord(empId);
               }}>
               <i className="far fa-edit action mr-2"></i>
-            </span>
+            </a>
 
             <span>&nbsp;&nbsp;</span>
-            <span
+            <a
               onClick={() => {
                 setDeleteData(record);
                 setModalShow(true);
               }}>
               <i className="fas fa-trash action" />
-            </span>
+            </a>
           </div>
         );
       },
@@ -256,16 +247,10 @@ const EmployeeList = props => {
             <Col xs={4} md={5} lg={4} xl={2}>
               {!location.state?.isManager && (
                 <Button
-                  className="w-100"
-                  as={Link}
-                  to={Routes.CreateNewEmployee.path}
-                  variant="codesom"
-                  style={{
-                    color: '#fff',
-                    height: '50px',
-                    paddingTop: '0.75rem',
-                    borderRadius: '10px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                  className="w-100 ant-btn-custom"
+                  type="button"
+                  onClick={() => {
+                    history.push(Routes.CreateNewEmployee.path);
                   }}>
                   เพิ่มข้อมูลพนักงาน
                 </Button>

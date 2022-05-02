@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Col, Row, Card, Button, Stack } from 'react-bootstrap';
 import FileService from 'services/file.service';
-import storageService from 'services/storage.service';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { IoIosTrash } from 'react-icons/io';
 import {
-  Col as ColA,
   Row as RowA,
   Form,
   InputNumber,
@@ -263,7 +261,7 @@ const PromotionEdit = props => {
                     <Form.Item
                       name="promoDetail"
                       label="คำอธิบายโปรโมชัน"
-                      rules={[{ max: 255, message: '*ห้ามเกิน 255 ตัวอักษร' }]}>
+                      rules={[{ max: 50, message: '*ห้ามเกิน 50 ตัวอักษร' }]}>
                       <Input.TextArea
                         autoSize={{ minRows: 2, maxRows: 6 }}
                         placeholder="คำอธิบายโปรโมชัน"
@@ -371,57 +369,57 @@ const PromotionEdit = props => {
                     <>
                       {fields.map((field, index) => {
                         return (
-                          <RowA key={field.key} style={{ height: '100%' }}>
-                            <ColA span={16}>
-                              <Form.Item
-                                name={[index, 'productId']}
-                                rules={[
-                                  { required: true, message: '*เลือกรายการ' },
-                                ]}>
-                                <Select
-                                  placeholder="กดเพื่อเลือกรายการ"
-                                  disabled={!editable}
-                                  value={[index, 'productId']}
-                                  dropdownStyle={{ fontFamily: 'Prompt' }}>
-                                  {productData.map((item, index) => (
-                                    <Option key={index} value={item.productId}>
-                                      {item.productName} ({item.productId})
-                                    </Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </ColA>
-                            <ColA span={1} />
-                            <ColA span={6} style={{ textAlign: 'center' }}>
-                              <Form.Item
-                                name={[index, 'count']}
-                                rules={[
-                                  { required: true, message: 'ใส่จำนวน' },
-                                ]}>
-                                <InputNumber
-                                  min="1"
-                                  max="1000"
-                                  disabled={!editable}
-                                  style={{
-                                    textAlign: 'center',
-                                    width: '100%',
-                                    textOverflow: 'ellipsis',
-                                  }}
-                                />
-                              </Form.Item>
-                            </ColA>
-                            <ColA span={1}>
-                              <IoIosTrash
-                                onClick={() => remove(field.name)}
-                                size={20}
-                                className="dynamic-delete-button"
+                          <RowA
+                            key={field.key}
+                            style={{
+                              height: '100%',
+                              display: 'flex',
+                              flexDirection: 'row',
+                            }}>
+                            <Form.Item
+                              name={[index, 'productId']}
+                              rules={[
+                                { required: true, message: '*เลือกรายการ' },
+                              ]}
+                              style={{ flex: 2, marginRight: 12 }}>
+                              <Select
+                                placeholder="กดเพื่อเลือกรายการ"
+                                disabled={!editable}
+                                value={[index, 'productId']}
+                                dropdownStyle={{ fontFamily: 'Prompt' }}>
+                                {productData.map((item, index) => (
+                                  <Option key={index} value={item.productId}>
+                                    {item.productName} ({item.productId})
+                                  </Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+                            <Form.Item
+                              style={{ flex: 1 }}
+                              name={[index, 'count']}
+                              rules={[{ required: true, message: 'ใส่จำนวน' }]}>
+                              <InputNumber
+                                min="1"
+                                max="1000"
+                                disabled={!editable}
                                 style={{
-                                  marginTop: '5px',
-                                  float: 'right',
-                                  display: editable ? 'block' : 'none',
+                                  textAlign: 'center',
+                                  width: '100%',
+                                  textOverflow: 'ellipsis',
                                 }}
                               />
-                            </ColA>
+                            </Form.Item>
+
+                            <IoIosTrash
+                              onClick={() => remove(field.name)}
+                              size={20}
+                              className="dynamic-delete-button"
+                              style={{
+                                marginTop: '10px',
+                                float: 'right',
+                                display: editable ? 'block' : 'none',
+                              }}
+                            />
                           </RowA>
                         );
                       })}
@@ -460,53 +458,26 @@ const PromotionEdit = props => {
               {!isManager && (
                 <Row>
                   <Col md={{ span: 3, offset: 6 }}>
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => history.back()}
-                        style={{ width: '100%', borderWidth: 0 }}>
-                        ย้อนกลับ
-                      </Button>
-                    </div>
+                    <ButtonA ghost danger onClick={() => history.back()}>
+                      ย้อนกลับ
+                    </ButtonA>
                   </Col>
                   <Col md={3}>
-                    <div>
-                      {editable ? (
-                        <ButtonA
-                          style={{
-                            flex: 2,
-                            width: '100%',
-                            height: 50,
-                            borderRadius: '10px',
-                            borderWidth: '0',
-                            color: 'white',
-                            fontSize: '16px',
-                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                            backgroundColor: '#2DC678',
-                          }}
-                          htmlType="submit">
-                          ยืนยัน
-                        </ButtonA>
-                      ) : (
-                        <Button
-                          style={{
-                            flex: 2,
-                            width: '100%',
-                            height: 50,
-                            borderRadius: '10px',
-                            borderWidth: '0',
-                            color: 'white',
-                            fontSize: '16px',
-                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                            backgroundColor: '#2DC678',
-                          }}
-                          onClick={() => {
-                            setEditable(true);
-                          }}>
-                          แก้ไข
-                        </Button>
-                      )}
-                    </div>
+                    {editable && (
+                      <ButtonA type="primary" htmlType="submit">
+                        ยืนยัน
+                      </ButtonA>
+                    )}
+                    {!editable && (
+                      <ButtonA
+                        type="primary"
+                        htmlType="button"
+                        onClick={() => {
+                          setEditable(true);
+                        }}>
+                        แก้ไข
+                      </ButtonA>
+                    )}
                   </Col>
                 </Row>
               )}

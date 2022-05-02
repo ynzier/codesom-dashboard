@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
 import { Routes } from 'routes';
-import { FaPlus } from 'react-icons/fa';
-import { Row, Card, Breadcrumb, Button } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
+
+import { Row, Card, Breadcrumb, Col } from 'react-bootstrap';
 import { BranchList } from 'components';
+import { Input, Button } from 'antd';
 const BranchLists = () => {
+  let history = useHistory();
+
   useEffect(() => {
     document.title = 'จัดการข้อมูลสาขา';
   }, []);
-
+  const [keyword, setKeyword] = useState(undefined);
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
@@ -32,38 +35,33 @@ const BranchLists = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Body>
           <Row className="justify-content-between align-items-center">
             <h2>รายชื่อสาขา</h2>
           </Row>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: '100%',
-            }}
-            className="mb-4">
-            <div style={{ flex: 10 }} />
-            <Button
-              variant="codesom"
-              style={{
-                flex: 2,
-                paddingTop: '0.75rem',
-                width: '100%',
-                height: 50,
-                borderRadius: '10px',
-                color: 'white',
-                boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-              }}
-              as={Link}
-              to={Routes.AddBranch.path}>
-              <div>
-                <FaPlus /> เพิ่มสาขา
-              </div>
-            </Button>
-          </div>
-          <BranchList />
+          <Row className="mb-4">
+            <Col xs={8} md={6} lg={6} xl={6}>
+              <Input
+                onChange={e => setKeyword(e.target.value)}
+                value={keyword}
+                allowClear
+                placeholder="ค้นหาสาขา"
+              />
+            </Col>
+            <Col md={1} lg={2} xl={4} />
+            <Col xs={4} md={5} lg={4} xl={2}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  history.push(Routes.AddBranch.path);
+                }}>
+                เพิ่มสาขา
+              </Button>
+            </Col>
+          </Row>
+          <BranchList keyword={keyword} />
         </Card.Body>
       </Card>
     </>

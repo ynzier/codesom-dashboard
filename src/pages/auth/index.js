@@ -37,7 +37,7 @@ const Login = ({ ...props }) => {
     await trackPromise(
       AuthService.signinDashboard(Username, Password)
         .then(() => {
-          props.history.push('/dashboard');
+          props.history.push('/dashboard/report/salereport');
           window.location.reload();
         })
         .catch(error => {

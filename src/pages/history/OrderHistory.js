@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Table, DatePicker, Pagination } from 'antd';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { Table, DatePicker, Input, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Routes } from 'routes';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
-import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
+import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import NumberFormat from 'react-number-format';
 import { useAlert } from 'react-alert';
 import historyService from 'services/history.service';
 import BranchesService from 'services/branches.service';
+const { Option } = Select;
 
 var getBranchData = [];
 const OrderHistory = props => {
@@ -25,20 +26,20 @@ const OrderHistory = props => {
   const [branchData, setbranchData] = useState([]);
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
-  const [option, setOption] = useState('');
+  const [option, setOption] = useState(undefined);
   const [pickDate, setPickDate] = useState([]);
   useEffect(async () => {
     var filterTable = record.filter(obj => {
       // keyword
-      if (keyword != '' && option == '' && pickDate.length < 1)
+      if (keyword != '' && option == undefined && pickDate.length < 1)
         return Object.keys(obj).some(k =>
           String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
         );
       // option
-      if (keyword == '' && option != '' && pickDate.length < 1)
+      if (keyword == '' && option != undefined && pickDate.length < 1)
         return obj.branchId == option;
       // date
-      if (keyword == '' && option == '' && pickDate.length > 0)
+      if (keyword == '' && option == undefined && pickDate.length > 0)
         return (
           moment(obj.createTimestamp).unix() >=
             moment(pickDate[0]).startOf('day').unix() &&
@@ -46,7 +47,7 @@ const OrderHistory = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option
-      if (keyword != '' && option != '' && pickDate.length < 1)
+      if (keyword != '' && option != undefined && pickDate.length < 1)
         return (
           obj.branchId == option &&
           Object.keys(obj).some(k =>
@@ -54,7 +55,7 @@ const OrderHistory = props => {
           )
         );
       // keyword date
-      if (keyword != '' && option == '' && pickDate.length > 0)
+      if (keyword != '' && option == undefined && pickDate.length > 0)
         return (
           Object.keys(obj).some(k =>
             String(obj[k]).toLowerCase().includes(keyword.toLowerCase()),
@@ -65,7 +66,7 @@ const OrderHistory = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // option date
-      if (keyword == '' && option != '' && pickDate.length > 0)
+      if (keyword == '' && option != undefined && pickDate.length > 0)
         return (
           obj.branchId == option &&
           moment(obj.createTimestamp).unix() >=
@@ -74,7 +75,7 @@ const OrderHistory = props => {
             moment(pickDate[1]).endOf('day').unix()
         );
       // keyword option date
-      if (keyword != '' && option != '' && pickDate.length > 0)
+      if (keyword != '' && option != undefined && pickDate.length > 0)
         return (
           obj.branchId == option &&
           moment(obj.createTimestamp).unix() >=
@@ -285,7 +286,7 @@ const OrderHistory = props => {
   ];
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb
             className="d-none d-md-inline-block"
@@ -309,40 +310,44 @@ const OrderHistory = props => {
           <div className="table-settings mb-3">
             <Row>
               <Col xs={8} md={5}>
-                <Form.Group>
-                  <InputGroup>
-                    <InputGroup.Text>
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputGroup.Text>
-                    <Form.Control
-                      type="text"
-                      value={keyword}
-                      placeholder={'ค้นหา'}
-                      onChange={e => setKeyword(e.target.value)}
-                    />
-                  </InputGroup>
-                </Form.Group>
+                <Input
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  placeholder="ค้นหา"
+                />
               </Col>
               <Col xs={4} md={3}>
                 {!location.state?.isManager && (
-                  <Form.Group>
-                    <Form.Select
-                      value={option}
-                      onChange={e => setOption(e.target.value)}>
-                      <option value="">ทั้งหมด</option>
-                      {branchData.map((item, index) => (
-                        <option key={index} value={item.branchId}>
-                          {item.branchName}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
+                  <Select
+                    className="mb-3"
+                    showSearch
+                    style={{
+                      width: '100%',
+                      fontFamily: 'Prompt',
+                    }}
+                    placeholder="เลือกสาขา"
+                    value={option}
+                    optionFilterProp="children"
+                    dropdownStyle={{ fontFamily: 'Prompt' }}
+                    onChange={value => {
+                      setOption(value);
+                    }}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }>
+                    {branchData.map(option => (
+                      <Option key={option.branchId} value={option.branchId}>
+                        {option.branchName}
+                      </Option>
+                    ))}
+                  </Select>
                 )}
               </Col>
               <Col md="4">
                 <RangePicker
                   locale={locale}
-                  size="large"
                   value={pickDate}
                   disabledDate={current => {
                     return moment() < current;
@@ -357,7 +362,6 @@ const OrderHistory = props => {
                   style={{
                     borderRadius: '10px',
                     fontFamily: 'Prompt',
-                    height: '100%',
                   }}
                   popupStyle={{ fontFamily: 'Prompt' }}
                   onChange={date => {
@@ -374,7 +378,7 @@ const OrderHistory = props => {
                   onClick={() => {
                     if (!location.state?.isManager) {
                       setKeyword('');
-                      setOption('');
+                      setOption(undefined);
                       setPickDate([]);
                     } else {
                       setKeyword('');
@@ -397,7 +401,7 @@ const OrderHistory = props => {
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             dataSource={
-              keyword != '' || pickDate.length > 0 || option != ''
+              keyword != '' || pickDate.length > 0 || option != undefined
                 ? filterData
                 : record
             }

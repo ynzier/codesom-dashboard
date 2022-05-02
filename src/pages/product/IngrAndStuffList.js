@@ -1,25 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { Table } from 'antd';
+import { Table, Input, Button, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import {
-  Col,
-  Row,
-  Form,
-  Button,
-  Card,
-  Breadcrumb,
-  InputGroup,
-} from 'react-bootstrap';
+import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
 import storageService from 'services/storage.service';
+const { Option } = Select;
 
 const IngrAndStuffList = () => {
   let history = useHistory();
@@ -130,24 +123,24 @@ const IngrAndStuffList = () => {
         return <div>{record.unit}</div>;
       },
     },
-    {
-      key: 'key',
-      title: 'Action',
-      dataIndex: 'key',
-      render: (text, record) => {
-        return (
-          <div>
-            <span
-              onClick={() => {
-                const productId = record.productId;
-                openRecord(productId);
-              }}>
-              <FiEdit size={18} />
-            </span>
-          </div>
-        );
-      },
-    },
+    // {
+    //   key: 'key',
+    //   title: 'Action',
+    //   dataIndex: 'key',
+    //   render: (text, record) => {
+    //     return (
+    //       <div>
+    //         <a
+    //           onClick={() => {
+    //             const productId = record.productId;
+    //             openRecord(productId);
+    //           }}>
+    //           <FiEdit size={18} />
+    //         </a>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
   const headerManager = [
     {
@@ -222,46 +215,41 @@ const IngrAndStuffList = () => {
         style={{
           borderRadius: '36px',
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+          fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
             <Row>
               <Col xs={8} md={6} lg={3} xl={4}>
-                <Form.Group>
-                  <InputGroup>
-                    <InputGroup.Text>
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputGroup.Text>
-                    <Form.Control
-                      type="text"
-                      value={keyword}
-                      placeholder="ค้นหาชื่อวัตถุดิบ / รหัสวัตถุดิบ"
-                      onChange={e => setKeyword(e.target.value)}
-                    />
-                  </InputGroup>
-                </Form.Group>
+                <Input
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  placeholder="ค้นหาชื่อวัตถุดิบ / รหัสวัตถุดิบ"
+                />
               </Col>
               <Col xs={4} md={4} xl={3}>
-                <Form.Group>
-                  <Form.Select onChange={e => setOption(e.target.value)}>
-                    <option value="">ประเภท</option>
-                    <option value="วัตถุดิบ">วัตถุดิบ</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
-                  </Form.Select>
-                </Form.Group>
+                <Select
+                  className="mb-3"
+                  style={{
+                    width: 300,
+                    fontFamily: 'Prompt',
+                  }}
+                  placeholder="ประเภท"
+                  dropdownStyle={{ fontFamily: 'Prompt' }}
+                  onChange={value => {
+                    setOption(value);
+                  }}>
+                  <Option value="วัตถุดิบ">วัตถุดิบ</Option>
+                  <Option value="อื่นๆ">อื่นๆ</Option>
+                </Select>
               </Col>
               {!location.state?.isManager && (
                 <Col xs={5} xl={{ span: 2, offset: 3 }}>
                   <Button
-                    className="w-100"
-                    variant="codesom"
-                    onClick={() => setShowCreate(true)}
-                    style={{
-                      color: '#fff',
-                      height: '50px',
-                      paddingTop: '0.75rem',
-                      borderRadius: '10px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
+                    className="w-100 ant-btn-custom"
+                    type="button"
+                    onClick={() => {
+                      setShowCreate(true);
                     }}>
                     เพิ่มรายการ
                   </Button>

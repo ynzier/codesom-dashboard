@@ -8,12 +8,14 @@ import branchesService from 'services/branches.service';
 import { useAlert } from 'react-alert';
 
 var getBranchData = [];
-const BranchList = () => {
+const BranchList = ({ keyword }) => {
   const { promiseInProgress } = usePromiseTracker({
     area: branchesService.area.getAllBranch,
   });
   const alert = useAlert();
-  const [record, setRecord] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [filterData, setfilterData] = useState();
+
   let history = useHistory();
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const BranchList = () => {
           .then(res => {
             if (mounted) {
               getBranchData = res.data;
-              setRecord(getBranchData);
+              setRecords(getBranchData);
             }
           })
           .catch(error => {
@@ -42,15 +44,30 @@ const BranchList = () => {
     };
     fetchData();
     return () => (mounted = false);
-  }, [setRecord]);
+  }, [setRecords]);
   const openRecord = branchId => {
     history.push('/dashboard/branch/getBranch/' + branchId);
   };
+  useEffect(() => {
+    const search = value => {
+      const filterTable = records.filter(o =>
+        Object.keys(o).some(k =>
+          String(o[k]).toLowerCase().includes(value.toLowerCase()),
+        ),
+      );
+
+      setfilterData(filterTable);
+    };
+
+    if (keyword) search(keyword);
+    return () => {};
+  }, [keyword]);
+
   return (
     <>
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={record}
+        dataSource={filterData == null ? records : filterData}
         pagination={{ pageSize: 4, showSizeChanger: false }}
         loading={promiseInProgress}
         renderItem={item => (

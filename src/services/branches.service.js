@@ -39,6 +39,9 @@ const checkExistAcc = branchId => {
 const getBranchByManager = () => {
   return http.get(prefix + '/getBranchByManager');
 };
+const deleteBranch = async branchId => {
+  return await http.delete(prefix + '/deleteBranch/' + branchId);
+};
 
 export default {
   getAllBranch,
@@ -51,4 +54,5 @@ export default {
   updateBrAcc,
   area,
   getBranchByManager,
+  deleteBranch,
 };

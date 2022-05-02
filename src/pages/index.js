@@ -3,7 +3,6 @@ export { default as NotFound } from './errors/NotFound';
 export { default as ServerError } from './errors/ServerError';
 export { default as CustomerList } from './customer/CustomerList';
 export { default as Receipts } from './history/OrderHistory';
-export { default as Setting } from './setting/Setting';
 
 // Home
 export { default as Home } from './dashboard/Home';

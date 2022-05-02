@@ -240,34 +240,17 @@ const CreateEmployeeForm = () => {
             <Row>
               <Col sm={6} />
               <Col sm={3}>
-                <Button
-                  variant="outline-danger"
+                <ButtonA
+                  danger
+                  ghost
                   onClick={() => {
                     form.resetFields();
-                  }}
-                  style={{
-                    borderRadius: '10px',
-                    width: '100%',
-                    borderWidth: 0,
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                   }}>
                   ล้างข้อมูล
-                </Button>
+                </ButtonA>
               </Col>
               <Col sm={3}>
-                <ButtonA
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '10px',
-                    borderWidth: '0',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '16px',
-                    boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                    backgroundColor: '#2DC678',
-                  }}
-                  htmlType="submit">
+                <ButtonA type="primary" htmlType="submit">
                   ยืนยัน
                 </ButtonA>
               </Col>

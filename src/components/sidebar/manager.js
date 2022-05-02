@@ -31,6 +31,7 @@ const { Option } = Select;
 const Sidebar = props => {
   const { selectBranch, setSelectBranch } = props;
   const [collapsed, setCollapsed] = useState(false);
+  const [active, setActive] = useState(2);
   const [branchList, setBranchList] = useState([]);
 
   useEffect(() => {
@@ -103,17 +104,35 @@ const Sidebar = props => {
               <SubMenu
                 title="รายงาน"
                 icon={<CgFileDocument color="#9D7463" size="16px" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 1}
+                  onClick={() => {
+                    setActive(1);
+                  }}>
                   รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  active={active == 2}
+                  onClick={() => {
+                    setActive(2);
+                  }}>
                   รายงานยอดจำหน่าย
                   <Link to={Routes.ReportSale.path} />
                 </MenuItem>
-                <MenuItem>รายงานข้อมูลพนักงาน</MenuItem>
+                <MenuItem
+                  active={active == 3}
+                  onClick={() => {
+                    setActive(3);
+                  }}>
+                  รายงานข้อมูลพนักงาน
+                </MenuItem>
               </SubMenu>
               <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 4}
+                  onClick={() => {
+                    setActive(4);
+                  }}>
                   ๐ พนักงานในสาขา
                   <Link
                     to={{
@@ -126,7 +145,11 @@ const Sidebar = props => {
               <SubMenu
                 title="สินค้าและวัตถุดิบ"
                 icon={<GiCubes size="20px" color="#9D7463" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 5}
+                  onClick={() => {
+                    setActive(5);
+                  }}>
                   สินค้า
                   <Link
                     to={{
@@ -135,7 +158,11 @@ const Sidebar = props => {
                     }}
                   />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  active={active == 6}
+                  onClick={() => {
+                    setActive(6);
+                  }}>
                   วัตถุดิบและอื่นๆ
                   <Link
                     to={{
@@ -144,7 +171,11 @@ const Sidebar = props => {
                     }}
                   />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  active={active == 7}
+                  onClick={() => {
+                    setActive(7);
+                  }}>
                   โปรโมชั่น
                   <Link
                     to={{
@@ -157,7 +188,11 @@ const Sidebar = props => {
               <SubMenu
                 title="ประวัติรายการ"
                 icon={<FaWarehouse color="#9D7463" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 8}
+                  onClick={() => {
+                    setActive(8);
+                  }}>
                   ประวัติการขาย
                   <Link
                     to={{
@@ -166,7 +201,11 @@ const Sidebar = props => {
                     }}
                   />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  active={active == 9}
+                  onClick={() => {
+                    setActive(9);
+                  }}>
                   ประวัติการเบิกจ่ายสินค้า
                   <Link to={Routes.RequisitionList.path} />
                 </MenuItem>
@@ -174,11 +213,19 @@ const Sidebar = props => {
               <SubMenu
                 title="คลังสินค้า"
                 icon={<FaWarehouse color="#9D7463" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 10}
+                  onClick={() => {
+                    setActive(10);
+                  }}>
                   สร้างใบเบิกสินค้า
                   <Link to={Routes.CreateRequisition.path} />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  active={active == 11}
+                  onClick={() => {
+                    setActive(11);
+                  }}>
                   คลังสาขา
                   <Link to={Routes.BranchWarehouse.path} />
                 </MenuItem>
@@ -186,7 +233,11 @@ const Sidebar = props => {
               <SubMenu
                 title="เดลิเวอรี่"
                 icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
-                <MenuItem>
+                <MenuItem
+                  active={active == 12}
+                  onClick={() => {
+                    setActive(12);
+                  }}>
                   รายการเดลิเวอรี
                   <Link to={Routes.DeliveryHistory.path} />
                 </MenuItem>

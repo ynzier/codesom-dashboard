@@ -209,7 +209,7 @@ const ProductBranchModal = ({ editable, productId, needProcess }) => {
               <Col md={{ span: 3, offset: 9 }}>
                 <Button
                   className="px-4 py-2"
-                  variant="tertiary"
+                  variant="codesom"
                   style={{ color: 'white' }}
                   onClick={sendData}>
                   ยืนยัน

@@ -74,7 +74,7 @@
 .ant-btn:focus {
   color: #97515f;
   background: #fff;
-  border-style: none;
+  border-color: #9d7463;
 }
 .ant-btn:hover > a:only-child,
 .ant-btn:focus > a:only-child {
@@ -95,11 +95,16 @@
   background: #692a37 !important;
   border-color: #97515f;
 }
+.ant-btn-custom:hover {
+  color: #fff;
+  background: #692a37 !important;
+  border-color: #97515f;
+}
 .ant-btn-custom {
   line-height: 1.5715;
   position: relative;
   display: inline-block;
-  font-weight: 600;
+
   white-space: nowrap;
   text-align: center;
   background-image: none;
@@ -111,9 +116,9 @@
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  height: 50px;
+  height: 40px !important;
   padding: 4px 20px;
-  font-size: 16px;
+
   border-radius: 10px;
   color: #fff;
   border: 1px solid #d9d9d9;
@@ -121,7 +126,13 @@
   box-shadow: rgb(0 0 0 / 25%) 0px 0rem 0.7rem;
 }
 .ant-btn {
-  height: 50px;
+  width: 100%;
+  height: 40px;
+  background: #692a37;
+  border-color: #692a37;
+  border-radius: 10px;
+  font-family: 'Prompt';
+
 }
 .ant-btn:active > a:only-child {
   color: currentColor;
@@ -275,12 +286,6 @@
   border-radius: 8px;
   transition: all 0.3s;
 }
-.ant-btn {
-  width: 100%;
-  height: 50px;
-  border-radius: 10px;
-  font-family: 'Prompt';
-}
 .ant-input-number {
   box-sizing: border-box;
   margin: 0;
@@ -303,12 +308,10 @@
   box-sizing: border-box;
   margin: 0;
   color: rgba(0, 0, 0, 0.85);
-  font-size: 14px;
-  font-variant: tabular-nums;
+
   width: 100%;
   height: 40px;
   list-style: none;
-  font-feature-settings: 'tnum';
   padding: 0px 11px;
   position: relative;
   display: inline-flex;
@@ -359,7 +362,7 @@ textarea.ant-input {
   height: 43.59px;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
-  padding: 6px 11px;
+  padding: 4px 11px;
   transition: border 0.3s, box-shadow 0.3s;
 }
 
@@ -468,6 +471,7 @@ textarea.ant-input {
 }
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   position: relative;
+  height: 40px;
   background-color: #fff;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
@@ -526,7 +530,8 @@ a[title='Report errors in the road map or imagery to Google'] {
   > .ant-input-group
   > .ant-input-group-addon:last-child
   .ant-input-search-button:not(.ant-btn-primary) {
-  color: rgba(0, 0, 0, 0.45);
+  color: white;
+
   width: 40px;
   height: 40px;
 }
@@ -547,4 +552,18 @@ ant-input-search-button:focus {
 .ant-input-search .ant-input:focus,
 .ant-input-search .ant-input:hover {
   border-color: #9d7463;
+  color: rgba(0, 0, 0, 0.45);
+}
+.ant-input-search .ant-input:active {
+  border-color: #9d7463;
+  color: rgba(0, 0, 0, 0.45);
+}
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:hover {
+  border-color: #9d7463;
+  color: rgba(0, 0, 0, 0.45);
+  outline: 0 !important;
+  box-shadow: 0 0 0 1px rgba(139, 4, 22, 1) !important;
 }

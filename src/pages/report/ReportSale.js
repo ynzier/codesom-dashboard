@@ -549,6 +549,13 @@ const ReportSale = props => {
       await trackPromise(
         new Promise((resolve, reject) => {
           setTimeout(() => {
+            resolve(fetchReport([selectBranch]));
+          }, 500);
+        }),
+      );
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
             resolve(fetchChart([selectBranch]));
           }, 500);
         }),
@@ -631,7 +638,6 @@ const ReportSale = props => {
                         style={{
                           width: 300,
                           fontFamily: 'Prompt',
-                          fontSize: 16
                         }}
                         placeholder="เลือกสาขา"
                         value={branchId}
@@ -654,10 +660,9 @@ const ReportSale = props => {
                     </Col>
                   )}
                   <Col md={4}>
-                    <div style={{ fontWeight: 600 }}>ช่วงวันที่</div>
+                    <div>ช่วงวันที่</div>
                     <RangePicker
                       locale={locale}
-                      size="large"
                       value={pickDate}
                       disabledDate={current => {
                         return moment() < current;
@@ -675,7 +680,6 @@ const ReportSale = props => {
                       style={{
                         borderRadius: '10px',
                         fontFamily: 'Prompt',
-                        height: 43.59,
                       }}
                       popupStyle={{ fontFamily: 'Prompt' }}
                       onChange={date => {

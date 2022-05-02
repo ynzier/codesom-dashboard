@@ -5,7 +5,6 @@ import ingredientService from 'services/ingredient.service';
 import FileService from 'services/file.service';
 import { IoIosTrash } from 'react-icons/io';
 import {
-  Col as ColA,
   Row as RowA,
   Form,
   InputNumber,
@@ -14,7 +13,6 @@ import {
   Upload,
   Button as ButtonA,
   Switch,
-  Space,
 } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ManageProductType, ProductBranchModal } from 'components';
@@ -511,57 +509,27 @@ const ProductEdit = ({ productId }) => {
                 <Row>
                   <Col md={{ span: 3, offset: 6 }}>
                     <div>
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => history.back()}
-                        style={{
-                          width: '100%',
-                          borderWidth: 0,
-                          height: 50,
-                          boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                        }}>
+                      <ButtonA onClick={() => history.back()} ghost danger>
                         ย้อนกลับ
-                      </Button>
+                      </ButtonA>
                     </div>
                   </Col>
                   <Col md={3}>
-                    <div>
-                      {editable ? (
-                        <ButtonA
-                          style={{
-                            flex: 2,
-                            width: '100%',
-                            height: 50,
-                            borderRadius: '10px',
-                            borderWidth: '0',
-                            color: 'white',
-                            fontSize: '16px',
-                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                            backgroundColor: '#2DC678',
-                          }}
-                          htmlType="submit">
-                          ยืนยัน
-                        </ButtonA>
-                      ) : (
-                        <Button
-                          style={{
-                            flex: 2,
-                            width: '100%',
-                            height: 50,
-                            borderRadius: '10px',
-                            borderWidth: '0',
-                            color: 'white',
-                            fontSize: '16px',
-                            boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                            backgroundColor: '#2DC678',
-                          }}
-                          onClick={() => {
-                            setEditable(true);
-                          }}>
-                          แก้ไข
-                        </Button>
-                      )}
-                    </div>
+                    {editable && (
+                      <ButtonA type="primary" htmlType="submit">
+                        ยืนยัน
+                      </ButtonA>
+                    )}
+                    {!editable && (
+                      <ButtonA
+                        type="primary"
+                        htmlType="button"
+                        onClick={() => {
+                          setEditable(true);
+                        }}>
+                        แก้ไข
+                      </ButtonA>
+                    )}
                   </Col>
                 </Row>
               </Card.Body>
@@ -608,76 +576,83 @@ const ProductEdit = ({ productId }) => {
                         <>
                           {fields.map((field, index) => {
                             return (
-                              <RowA key={field.key} style={{ height: '100%' }}>
-                                <ColA span={16}>
-                                  <Form.Item
-                                    name={[index, 'ingrId']}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: '*เลือกรายการ',
-                                      },
-                                    ]}>
-                                    <Select
-                                      disabled={!editable}
-                                      placeholder="กดเพื่อเลือกรายการ"
-                                      value={[index, 'ingrId']}
-                                      dropdownStyle={{ fontFamily: 'Prompt' }}>
-                                      {dataIngrStuff.map((item, index) => (
-                                        <Option key={index} value={item.id}>
-                                          {item.name} ({item.unit})
-                                        </Option>
-                                      ))}
-                                    </Select>
-                                  </Form.Item>
-                                </ColA>
-                                <ColA span={1} />
-                                <ColA span={6} style={{ textAlign: 'center' }}>
-                                  <Form.Item
-                                    name={[index, 'amountRequired']}
-                                    rules={[
-                                      { required: true, message: 'ใส่จำนวน' },
-                                    ]}>
-                                    <InputNumber
-                                      min="1"
-                                      disabled={!editable}
-                                      max="1000"
-                                      style={{
-                                        textAlign: 'center',
-                                        width: '100%',
-                                        textOverflow: 'ellipsis',
-                                      }}
-                                    />
-                                  </Form.Item>
-                                </ColA>
-                                <ColA span={1}>
-                                  <IoIosTrash
-                                    onClick={() => remove(field.name)}
-                                    size={20}
-                                    className="dynamic-delete-button"
+                              <RowA
+                                key={field.key}
+                                style={{
+                                  height: '100%',
+                                  display: 'flex',
+                                  flexDirection: 'row',
+                                }}>
+                                <Form.Item
+                                  name={[index, 'ingrId']}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: '*เลือกรายการ',
+                                    },
+                                  ]}
+                                  style={{ flex: 2, marginRight: 12 }}>
+                                  <Select
+                                    disabled={!editable}
+                                    placeholder="กดเพื่อเลือกรายการ"
+                                    value={[index, 'ingrId']}
+                                    dropdownStyle={{ fontFamily: 'Prompt' }}>
+                                    {dataIngrStuff.map((item, index) => (
+                                      <Option key={index} value={item.id}>
+                                        {item.name} ({item.unit})
+                                      </Option>
+                                    ))}
+                                  </Select>
+                                </Form.Item>
+
+                                <Form.Item
+                                  style={{ flex: 1 }}
+                                  name={[index, 'amountRequired']}
+                                  rules={[
+                                    { required: true, message: 'ใส่จำนวน' },
+                                  ]}>
+                                  <InputNumber
+                                    min="1"
+                                    disabled={!editable}
+                                    max="1000"
                                     style={{
-                                      marginTop: '5px',
-                                      float: 'right',
-                                      display: editable ? 'block' : 'none',
+                                      textAlign: 'center',
+                                      width: '100%',
+                                      textOverflow: 'ellipsis',
                                     }}
                                   />
-                                </ColA>
+                                </Form.Item>
+
+                                <IoIosTrash
+                                  onClick={() => remove(field.name)}
+                                  size={20}
+                                  className="dynamic-delete-button"
+                                  style={{
+                                    marginTop: '10px',
+                                    float: 'right',
+                                    display: editable ? 'block' : 'none',
+                                  }}
+                                />
                               </RowA>
                             );
                           })}
                           <RowA style={{ justifyContent: 'center' }}>
-                            <Button
-                              variant="codesom"
+                            <ButtonA
+                              type="primary"
                               onClick={() => {
                                 add();
                               }}
+                              disabled={!editable}
                               style={{
                                 color: '#97515F',
                                 backgroundColor: 'transparent',
-                                borderStyle: 'none',
+                                width: 40,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                display: 'flex',
                               }}>
                               <PlusOutlined />
-                            </Button>
+                            </ButtonA>
                           </RowA>
                         </>
                       );

@@ -296,67 +296,71 @@ const PromotionCreate = () => {
                     <>
                       {fields.map((field, index) => {
                         return (
-                          <RowA key={field.key} style={{ height: '100%' }}>
-                            <ColA span={16}>
-                              <Form.Item
-                                name={[index, 'productId']}
-                                rules={[
-                                  { required: true, message: '*เลือกรายการ' },
-                                ]}>
-                                <Select
-                                  placeholder="กดเพื่อเลือกรายการ"
-                                  value={[index, 'productId']}
-                                  dropdownStyle={{ fontFamily: 'Prompt' }}>
-                                  {productData.map((item, index) => (
-                                    <Option key={index} value={item.productId}>
-                                      {item.productName} ({item.productId})
-                                    </Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </ColA>
-                            <ColA span={1} />
-                            <ColA span={6} style={{ textAlign: 'center' }}>
-                              <Form.Item
-                                name={[index, 'count']}
-                                rules={[
-                                  { required: true, message: 'ใส่จำนวน' },
-                                ]}>
-                                <InputNumber
-                                  min="1"
-                                  max="1000"
-                                  style={{
-                                    textAlign: 'center',
-                                    width: '100%',
-                                    textOverflow: 'ellipsis',
-                                  }}
-                                />
-                              </Form.Item>
-                            </ColA>
-                            <ColA span={1}>
-                              <IoIosTrash
-                                onClick={() => remove(field.name)}
-                                size={20}
-                                className="dynamic-delete-button"
-                                style={{ marginTop: '5px', float: 'right' }}
+                          <RowA
+                            key={field.key}
+                            style={{
+                              height: '100%',
+                              display: 'flex',
+                              flexDirection: 'row',
+                            }}>
+                            <Form.Item
+                              name={[index, 'productId']}
+                              rules={[
+                                { required: true, message: '*เลือกรายการ' },
+                              ]}
+                              style={{ flex: 2, marginRight: 12 }}>
+                              <Select
+                                placeholder="กดเพื่อเลือกรายการ"
+                                value={[index, 'productId']}
+                                dropdownStyle={{ fontFamily: 'Prompt' }}>
+                                {productData.map((item, index) => (
+                                  <Option key={index} value={item.productId}>
+                                    {item.productName} ({item.productId})
+                                  </Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+
+                            <Form.Item
+                              name={[index, 'count']}
+                              style={{ flex: 1 }}
+                              rules={[{ required: true, message: 'ใส่จำนวน' }]}>
+                              <InputNumber
+                                min="1"
+                                max="1000"
+                                style={{
+                                  textAlign: 'center',
+                                  width: '100%',
+                                  textOverflow: 'ellipsis',
+                                }}
                               />
-                            </ColA>
+                            </Form.Item>
+
+                            <IoIosTrash
+                              onClick={() => remove(field.name)}
+                              size={20}
+                              className="dynamic-delete-button"
+                              style={{ marginTop: '10px', float: 'right' }}
+                            />
                           </RowA>
                         );
                       })}
                       <RowA style={{ justifyContent: 'center' }}>
-                        <Button
-                          variant="codesom"
+                        <ButtonA
+                          type="primary"
                           onClick={() => {
                             add();
                           }}
                           style={{
                             color: '#97515F',
                             backgroundColor: 'transparent',
-                            borderStyle: 'none',
+                            width: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            display: 'flex',
                           }}>
                           <PlusOutlined />
-                        </Button>
+                        </ButtonA>
                       </RowA>
                     </>
                   );
@@ -375,28 +379,12 @@ const PromotionCreate = () => {
               </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => history.back()}
-                      style={{ width: '100%', borderWidth: 0 }}>
-                      ย้อนกลับ
-                    </Button>
-                  </div>
+                  <ButtonA ghost danger onClick={() => history.back()}>
+                    ย้อนกลับ
+                  </ButtonA>
                 </Col>
                 <Col md={3}>
-                  <ButtonA
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '10px',
-                      borderWidth: '0',
-                      color: 'white',
-                      fontSize: '16px',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
-                      backgroundColor: '#2DC678',
-                    }}
-                    htmlType="submit">
+                  <ButtonA type="primary" htmlType="submit">
                     ยืนยัน
                   </ButtonA>
                 </Col>

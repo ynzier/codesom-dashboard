@@ -32,7 +32,7 @@ const ListProductBranch = ({ productId, editable }) => {
     await storageService
       .removeList(productId, branchId)
       .then(res => {
-        alert.show("ลบข้อมูลออกจากคลังสินค้าสำเร็จ!", { type: 'success' });
+        alert.show('ลบข้อมูลออกจากคลังสินค้าสำเร็จ!', { type: 'success' });
         if (record.length == 1) {
           setRecord([]);
         }
@@ -91,13 +91,15 @@ const ListProductBranch = ({ productId, editable }) => {
           <div>
             <span>{text}</span>
             {editable && (
-              <FontAwesomeIcon
+              <a
                 onClick={() => {
                   deleteRecord(record.branch.branchId);
-                }}
-                style={{ right: 20, position: 'absolute', color: '#C96480' }}
-                icon={faMinusCircle}
-              />
+                }}>
+                <FontAwesomeIcon
+                  style={{ right: 20, position: 'absolute', color: '#C96480' }}
+                  icon={faMinusCircle}
+                />
+              </a>
             )}
           </div>
         );

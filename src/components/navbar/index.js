@@ -13,25 +13,22 @@ import {
   Container,
   Col,
   Row,
-  Form,
-  Button,
   Modal,
 } from 'react-bootstrap';
-
+import { Form, Input, Button } from 'antd';
 import AuthService from 'services/auth.service';
 import tokenService from 'services/token.service';
 import usersService from 'services/users.service';
 
 const SettingModal = ({ setModalShow, ...props }) => {
+  const [form] = Form.useForm();
   const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
   const [empId, setEmpId] = useState();
   const alert = useAlert();
 
   const handleSubmit = async e => {
-    e.preventDefault();
-    const data = { password: password, confirmPassword: confirmPass };
+    console.log(e);
+    const data = { password: e.password, confirmPassword: e.confirmPassword };
     await usersService
       .updateUser(empId, data)
       .then(res => {
@@ -55,6 +52,7 @@ const SettingModal = ({ setModalShow, ...props }) => {
       .getUsername(user.authPayload.empId)
       .then(res => {
         setUserName(res.data.userName);
+        form.resetFields();
       })
       .catch(err => console.log(err));
 
@@ -66,54 +64,46 @@ const SettingModal = ({ setModalShow, ...props }) => {
       <Modal.Header closeButton>
         <Modal.Title>ตั้งค่ารหัสผ่าน</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="px-4 mt-3">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group as={Row} className="mb-3" controlId="branchUsername">
-            <Form.Label column sm="3">
-              ชื่อผู้ใช้
-            </Form.Label>
-            <Col sm="9">
-              <Form.Control disabled type="text" value={userName} />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3" controlId="branchPassword">
-            <Form.Label column sm="3">
-              รหัสผ่าน
-            </Form.Label>
-            <Col sm="9">
-              <Form.Control
-                type="password"
-                placeholder="รหัสผ่าน"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="branchConfirmPassword">
-            <Form.Label column sm="3">
-              ยืนยันรหัสผ่าน
-            </Form.Label>
-            <Col sm="9">
-              <Form.Control
-                type="password"
-                placeholder="ยืนยันรหัสผ่าน"
-                value={confirmPass}
-                onChange={e => setConfirmPass(e.target.value)}
-              />
-            </Col>
-          </Form.Group>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <div style={{ flex: 4 }} />
-            <Button
-              variant="tertiary"
-              type="submit"
-              style={{ color: 'white', flex: 2 }}>
-              บันทึกข้อมูล
+      <Modal.Body className="px-4 mt-3" style={{ fontFamily: 'Prompt' }}>
+        <Form
+          name="settingForm"
+          onFinish={handleSubmit}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 12 }}>
+          <Form.Item
+            label="ชื่อผู้ใช้งาน"
+            name="username"
+            initialValue={userName}>
+            <Input disabled={true} />
+          </Form.Item>
+
+          <Form.Item
+            label="รหัสผ่าน"
+            name="password"
+            rules={[
+              { required: true, message: 'กรอกรหัสผ่าน!' },
+              { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
+              { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
+            ]}>
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label="ยืนยันรหัสผ่าน"
+            name="confirmPassword"
+            rules={[
+              { required: true, message: 'กรอกรหัสผ่าน!' },
+              { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
+              { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
+            ]}>
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 18, span: 6 }}>
+            <Button type="primary" htmlType="submit">
+              ยืนยัน
             </Button>
-          </div>
+          </Form.Item>
         </Form>
       </Modal.Body>
     </Modal>

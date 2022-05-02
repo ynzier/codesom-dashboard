@@ -8,7 +8,7 @@ import {
 } from 'react-icons/cg';
 import { FiUsers } from 'react-icons/fi';
 import { GiCubes } from 'react-icons/gi';
-import { MdSpaceDashboard, MdDeliveryDining } from 'react-icons/md';
+import { MdDeliveryDining } from 'react-icons/md';
 import { FaWarehouse } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
@@ -27,6 +27,7 @@ import {
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [active, setActive] = useState(2);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -61,21 +62,43 @@ const Sidebar = () => {
             <SubMenu
               title="รายงาน"
               icon={<CgFileDocument color="#9D7463" size="16px" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 1}
+                onClick={() => {
+                  setActive(1);
+                }}>
                 รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 2}
+                onClick={() => {
+                  setActive(2);
+                }}>
                 รายงานยอดจำหน่าย
                 <Link to={Routes.ReportSale.path} />
               </MenuItem>
-              <MenuItem>รายงานข้อมูลพนักงาน</MenuItem>
+              <MenuItem
+                active={active == 3}
+                onClick={() => {
+                  setActive(3);
+                }}>
+                รายงานข้อมูลพนักงาน
+              </MenuItem>
             </SubMenu>
             <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 4}
+                onClick={() => {
+                  setActive(4);
+                }}>
                 ๐ จัดการผู้ใช้งาน
                 <Link to={Routes.UserList.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 5}
+                onClick={() => {
+                  setActive(5);
+                }}>
                 ๐ จัดการพนักงาน
                 <Link to={Routes.EmployeeList.path} />
               </MenuItem>
@@ -83,7 +106,11 @@ const Sidebar = () => {
             <SubMenu
               title="สาขา"
               icon={<CgGitBranch color="#9D7463" size="24px" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 6}
+                onClick={() => {
+                  setActive(6);
+                }}>
                 ๐ จัดการสาขา
                 <Link to={Routes.BranchLists.path} />
               </MenuItem>
@@ -91,15 +118,27 @@ const Sidebar = () => {
             <SubMenu
               title="สินค้าและวัตถุดิบ"
               icon={<GiCubes size="20px" color="#9D7463" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 7}
+                onClick={() => {
+                  setActive(7);
+                }}>
                 สินค้า
                 <Link to={Routes.ProductList.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 8}
+                onClick={() => {
+                  setActive(8);
+                }}>
                 วัตถุดิบและอื่นๆ
                 <Link to={Routes.IngrAndStuffList.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 9}
+                onClick={() => {
+                  setActive(9);
+                }}>
                 โปรโมชั่น
                 <Link to={Routes.PromotionList.path} />
               </MenuItem>
@@ -107,21 +146,37 @@ const Sidebar = () => {
             <SubMenu
               title="ประวัติรายการ"
               icon={<FaWarehouse color="#9D7463" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 10}
+                onClick={() => {
+                  setActive(10);
+                }}>
                 ประวัติการขาย
                 <Link to={Routes.OrderHistory.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 11}
+                onClick={() => {
+                  setActive(11);
+                }}>
                 ประวัติการเบิกจ่ายสินค้า
                 <Link to={Routes.RequisitionList.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu title="คลังสินค้า" icon={<FaWarehouse color="#9D7463" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 12}
+                onClick={() => {
+                  setActive(12);
+                }}>
                 สร้างใบเบิกสินค้า
                 <Link to={Routes.CreateRequisition.path} />
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                active={active == 13}
+                onClick={() => {
+                  setActive(13);
+                }}>
                 คลังสาขา
                 <Link to={Routes.BranchWarehouse.path} />
               </MenuItem>
@@ -129,7 +184,11 @@ const Sidebar = () => {
             <SubMenu
               title="เดลิเวอรี่"
               icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
-              <MenuItem>
+              <MenuItem
+                active={active == 14}
+                onClick={() => {
+                  setActive(14);
+                }}>
                 รายการเดลิเวอรี <Link to={Routes.DeliveryHistory.path} />
               </MenuItem>
             </SubMenu>

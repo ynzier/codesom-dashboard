@@ -7,8 +7,8 @@ import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import requisitionService from 'services/requisition.service';
 import { Routes } from 'routes';
 import { Preloader } from 'components';
-import { Table, Steps } from 'antd';
-import { Card, Col, Row, Breadcrumb, Button } from 'react-bootstrap';
+import { Table, Steps, Button } from 'antd';
+import { Card, Col, Row, Breadcrumb } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 
 const GetRequisition = ({ ...props }) => {
@@ -474,23 +474,18 @@ const GetRequisition = ({ ...props }) => {
                 {requisitData.requisitionStatus == 0 && (
                   <>
                     <Button
-                      style={{ flex: 1, marginInline: 10, borderWidth: 0 }}
-                      variant="outline-danger"
+                      danger
+                      ghost
+                      style={{ flex: 1, marginRight: 12 }}
                       onClick={() => {
                         updateStatus(4);
                       }}>
                       <FontAwesomeIcon icon={faBan} className="approveIcon" />
                       ไม่อนุมัติ
-                    </Button>{' '}
+                    </Button>
                     <Button
-                      variant="tertiary"
-                      type="submit"
-                      style={{
-                        flex: 1,
-                        marginInline: 10,
-                        boxShadow: 'rgb(0 0 0 / 10%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}
+                      style={{ flex: 1 }}
+                      type="primary"
                       onClick={() => {
                         updateStatus(1);
                       }}>
@@ -502,14 +497,8 @@ const GetRequisition = ({ ...props }) => {
                 {requisitData.requisitionStatus == 1 && (
                   <>
                     <Button
-                      variant="tertiary"
-                      type="submit"
-                      style={{
-                        flex: 1,
-                        marginInline: 10,
-                        boxShadow: 'rgb(0 0 0 / 10%) 0px 0.5rem 0.7rem',
-                        color: 'white',
-                      }}
+                      type="primary"
+                      style={{ flex: 1 }}
                       onClick={() => {
                         updateStatus(2);
                       }}>

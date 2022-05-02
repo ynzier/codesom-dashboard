@@ -152,9 +152,9 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
           <Col md={{ offset: 9, span: 3 }}>
             <div>
               <Button
-                variant="tertiary"
+                variant="codesom"
                 type="submit"
-                style={{ width: '100%', color: 'white' }}>
+                style={{ width: '100%', height: '50px', color: 'white' }}>
                 ยืนยัน
               </Button>
             </div>
