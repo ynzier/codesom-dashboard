@@ -164,10 +164,11 @@ const DeliveryHistory = props => {
       render: text => {
         return (
           <a
-            onClick={() => {
+            href=""
+            onClick={e => {
+              e.preventDefault();
               openRecord(text);
-            }}
-            style={{ textDecorationLine: 'underline' }}>
+            }}>
             {text}
           </a>
         );
@@ -207,15 +208,15 @@ const DeliveryHistory = props => {
               <p style={{ fontSize: 14 }}>
                 ที่อยู่: {record.lalamove?.recipientAddr}
               </p>
-              <p style={{ fontSize: 14 }}>
-                Tracking:{' '}
+              <div style={{ display: 'flex' }}>
+                <p style={{ fontSize: 14, marginRight: 4 }}>Tracking: </p>
                 <a
                   href={record.lalamove?.shareLink}
                   target="_blank"
                   rel="noreferrer">
                   {record.lalamove?.lalamoveOrderId}
                 </a>
-              </p>
+              </div>
             </div>
           }
           title={
@@ -318,7 +319,7 @@ const DeliveryHistory = props => {
           }
           trigger="click"
           style={{ fontFamily: 'Prompt' }}>
-          <a href="">{text}</a>
+          <a>{text}</a>
         </Popover>
       ),
     },

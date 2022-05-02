@@ -33,6 +33,7 @@ const Sidebar = props => {
   const [collapsed, setCollapsed] = useState(false);
   const [active, setActive] = useState(2);
   const [branchList, setBranchList] = useState([]);
+  const [open, setOpen] = useState(0);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -103,6 +104,11 @@ const Sidebar = props => {
             <Menu iconShape="circle">
               <SubMenu
                 title="รายงาน"
+                onClick={() => {
+                  if (open != 1) setOpen(1);
+                  if (open == 1) setOpen(0);
+                }}
+                open={open == 1}
                 icon={<CgFileDocument color="#9D7463" size="16px" />}>
                 <MenuItem
                   active={active == 1}
@@ -127,7 +133,14 @@ const Sidebar = props => {
                   รายงานข้อมูลพนักงาน
                 </MenuItem>
               </SubMenu>
-              <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
+              <SubMenu
+                onClick={() => {
+                  if (open != 2) setOpen(2);
+                  if (open == 2) setOpen(0);
+                }}
+                open={open == 2}
+                title="บุคลากร"
+                icon={<FiUsers color="#9D7463" />}>
                 <MenuItem
                   active={active == 4}
                   onClick={() => {
@@ -143,6 +156,11 @@ const Sidebar = props => {
                 </MenuItem>
               </SubMenu>
               <SubMenu
+                onClick={() => {
+                  if (open != 3) setOpen(3);
+                  if (open == 3) setOpen(0);
+                }}
+                open={open == 3}
                 title="สินค้าและวัตถุดิบ"
                 icon={<GiCubes size="20px" color="#9D7463" />}>
                 <MenuItem
@@ -186,6 +204,11 @@ const Sidebar = props => {
                 </MenuItem>
               </SubMenu>
               <SubMenu
+                onClick={() => {
+                  if (open != 4) setOpen(4);
+                  if (open == 4) setOpen(0);
+                }}
+                open={open == 4}
                 title="ประวัติรายการ"
                 icon={<FaWarehouse color="#9D7463" />}>
                 <MenuItem
@@ -211,6 +234,11 @@ const Sidebar = props => {
                 </MenuItem>
               </SubMenu>
               <SubMenu
+                onClick={() => {
+                  if (open != 5) setOpen(5);
+                  if (open == 5) setOpen(0);
+                }}
+                open={open == 5}
                 title="คลังสินค้า"
                 icon={<FaWarehouse color="#9D7463" />}>
                 <MenuItem
@@ -231,6 +259,11 @@ const Sidebar = props => {
                 </MenuItem>
               </SubMenu>
               <SubMenu
+                onClick={() => {
+                  if (open != 6) setOpen(6);
+                  if (open == 6) setOpen(0);
+                }}
+                open={open == 6}
                 title="เดลิเวอรี่"
                 icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
                 <MenuItem

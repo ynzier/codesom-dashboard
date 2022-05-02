@@ -53,6 +53,7 @@ const BranchCreate = () => {
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
         form.resetFields();
+        history.back();
       })
       .catch(error => {
         const resMessage =

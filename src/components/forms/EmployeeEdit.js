@@ -275,6 +275,7 @@ const EmployeeEdit = ({ ...props }) => {
                     precision="2"
                     stringMode
                     placeholder="0.00"
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
@@ -283,16 +284,12 @@ const EmployeeEdit = ({ ...props }) => {
               <Row>
                 <Col md={{ span: 3 }}>
                   <div>
-                    <ButtonA ghost danger onClick={() => history.back()}>
-                      ย้อนกลับ
-                    </ButtonA>
+                    <ButtonA onClick={() => history.back()}>ย้อนกลับ</ButtonA>
                   </div>
                 </Col>
                 <Col sm={{ span: 3, offset: 3 }}>
                   {editable && (
                     <ButtonA
-                      ghost
-                      danger
                       onClick={() => {
                         fetchEmployeeData(empId);
                         setEditable(!editable);

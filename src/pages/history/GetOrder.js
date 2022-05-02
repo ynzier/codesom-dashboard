@@ -324,9 +324,7 @@ const GetOrder = () => {
                       placement="leftTop"
                       title="Omise"
                       trigger="click">
-                      <a style={{ textDecorationLine: 'underline' }}>
-                        Omise QR
-                      </a>
+                      <a href="">Omise QR</a>
                     </Popover>
                   )}
                   {orderDetail.receipt?.paidType === 'cash' && 'เงินสด'}

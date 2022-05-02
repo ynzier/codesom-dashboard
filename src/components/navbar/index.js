@@ -6,15 +6,7 @@ import {
   faUserCircle,
   faCog,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  Nav,
-  Navbar,
-  Dropdown,
-  Container,
-  Col,
-  Row,
-  Modal,
-} from 'react-bootstrap';
+import { Nav, Navbar, Dropdown, Container, Modal } from 'react-bootstrap';
 import { Form, Input, Button } from 'antd';
 import AuthService from 'services/auth.service';
 import tokenService from 'services/token.service';
@@ -27,7 +19,6 @@ const SettingModal = ({ setModalShow, ...props }) => {
   const alert = useAlert();
 
   const handleSubmit = async e => {
-    console.log(e);
     const data = { password: e.password, confirmPassword: e.confirmPassword };
     await usersService
       .updateUser(empId, data)

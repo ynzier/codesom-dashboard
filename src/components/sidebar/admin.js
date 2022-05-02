@@ -28,7 +28,7 @@ import {
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [active, setActive] = useState(2);
-
+  const [open, setOpen] = useState(1);
   useEffect(() => {
     const root = document.documentElement;
     root?.style.setProperty('--contentMargin', collapsed ? '80px' : '270px');
@@ -60,6 +60,11 @@ const Sidebar = () => {
         <SidebarContent>
           <Menu iconShape="circle">
             <SubMenu
+              onClick={() => {
+                if (open != 1) setOpen(1);
+                if (open == 1) setOpen(0);
+              }}
+              open={open == 1}
               title="รายงาน"
               icon={<CgFileDocument color="#9D7463" size="16px" />}>
               <MenuItem
@@ -85,7 +90,14 @@ const Sidebar = () => {
                 รายงานข้อมูลพนักงาน
               </MenuItem>
             </SubMenu>
-            <SubMenu title="บุคลากร" icon={<FiUsers color="#9D7463" />}>
+            <SubMenu
+              onClick={() => {
+                if (open != 2) setOpen(2);
+                if (open == 2) setOpen(0);
+              }}
+              open={open == 2}
+              title="บุคลากร"
+              icon={<FiUsers color="#9D7463" />}>
               <MenuItem
                 active={active == 4}
                 onClick={() => {
@@ -105,6 +117,11 @@ const Sidebar = () => {
             </SubMenu>
             <SubMenu
               title="สาขา"
+              onClick={() => {
+                if (open != 3) setOpen(3);
+                if (open == 3) setOpen(0);
+              }}
+              open={open == 3}
               icon={<CgGitBranch color="#9D7463" size="24px" />}>
               <MenuItem
                 active={active == 6}
@@ -116,6 +133,11 @@ const Sidebar = () => {
               </MenuItem>
             </SubMenu>
             <SubMenu
+              onClick={() => {
+                if (open != 4) setOpen(4);
+                if (open == 4) setOpen(0);
+              }}
+              open={open == 4}
               title="สินค้าและวัตถุดิบ"
               icon={<GiCubes size="20px" color="#9D7463" />}>
               <MenuItem
@@ -144,6 +166,11 @@ const Sidebar = () => {
               </MenuItem>
             </SubMenu>
             <SubMenu
+              onClick={() => {
+                if (open != 5) setOpen(5);
+                if (open == 5) setOpen(0);
+              }}
+              open={open == 5}
               title="ประวัติรายการ"
               icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem
@@ -163,7 +190,14 @@ const Sidebar = () => {
                 <Link to={Routes.RequisitionList.path} />
               </MenuItem>
             </SubMenu>
-            <SubMenu title="คลังสินค้า" icon={<FaWarehouse color="#9D7463" />}>
+            <SubMenu
+              onClick={() => {
+                if (open != 6) setOpen(6);
+                if (open == 6) setOpen(0);
+              }}
+              open={open == 6}
+              title="คลังสินค้า"
+              icon={<FaWarehouse color="#9D7463" />}>
               <MenuItem
                 active={active == 12}
                 onClick={() => {
@@ -182,6 +216,11 @@ const Sidebar = () => {
               </MenuItem>
             </SubMenu>
             <SubMenu
+              onClick={() => {
+                if (open != 7) setOpen(7);
+                if (open == 7) setOpen(0);
+              }}
+              open={open == 7}
               title="เดลิเวอรี่"
               icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
               <MenuItem

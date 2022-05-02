@@ -331,6 +331,7 @@ const ProductCreate = () => {
                             </div>
                             <InputNumber
                               min="0"
+                              style={{ width: '100%' }}
                               precision="2"
                               stringMode
                               placeholder="0.00"
@@ -346,6 +347,7 @@ const ProductCreate = () => {
                             <InputNumber
                               min="0"
                               precision="2"
+                              style={{ width: '100%' }}
                               stringMode
                               placeholder="0.00"
                             />
@@ -360,6 +362,7 @@ const ProductCreate = () => {
                           <InputNumber
                             min="0"
                             precision="2"
+                            style={{ width: '100%' }}
                             stringMode
                             placeholder="0.00"
                           />
@@ -410,9 +413,7 @@ const ProductCreate = () => {
                 </Row>
                 <Row>
                   <Col md={{ span: 3, offset: 6 }}>
-                    <ButtonA onClick={() => history.back()} ghost danger>
-                      ย้อนกลับ
-                    </ButtonA>
+                    <ButtonA onClick={() => history.back()}>ย้อนกลับ</ButtonA>
                   </Col>
                   <Col md={3}>
                     <ButtonA type="primary" htmlType="submit">
@@ -507,36 +508,31 @@ const ProductCreate = () => {
                                     }}
                                   />
                                 </Form.Item>
-
-                                <IoIosTrash
-                                  onClick={() => remove(field.name)}
-                                  size={20}
-                                  className="dynamic-delete-button"
-                                  style={{
-                                    marginTop: '10px',
-                                    float: 'right',
-                                  }}
-                                />
+                                <a
+                                  href=""
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    remove(field.name);
+                                  }}>
+                                  <IoIosTrash
+                                    size={20}
+                                    style={{
+                                      marginTop: '10px',
+                                      float: 'right',
+                                    }}
+                                  />
+                                </a>
                               </RowA>
                             );
                           })}
-                          <RowA style={{ justifyContent: 'center' }}>
-                            <ButtonA
-                              type="primary"
-                              onClick={() => {
-                                add();
-                              }}
-                              style={{
-                                color: '#97515F',
-                                backgroundColor: 'transparent',
-                                width: 40,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                display: 'flex',
-                              }}>
-                              <PlusOutlined />
-                            </ButtonA>
-                          </RowA>
+
+                          <ButtonA
+                            type="dashed"
+                            onClick={() => {
+                              add();
+                            }}>
+                            <PlusOutlined />
+                          </ButtonA>
                         </>
                       );
                     }}

@@ -85,8 +85,7 @@ const PromotionList = props => {
               {!selectBranch && (
                 <Col xs={5} xl={{ span: 2, offset: 6 }}>
                   <Button
-                    className="w-100 ant-btn-custom"
-                    type="button"
+                    type="primary"
                     onClick={() => {
                       history.push(Routes.AddPromotion.path);
                     }}>

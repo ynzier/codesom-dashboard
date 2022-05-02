@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAlert } from 'react-alert';
-import { Col, Row, Form, Button, Modal } from 'react-bootstrap';
+import { Form, Input, Button } from 'antd';
+import { Col, Row, Modal } from 'react-bootstrap';
 import BranchesService from 'services/branches.service';
 
 const BranchAccDetail = ({ ...props }) => {
   const alert = useAlert();
-
+  const [form] = Form.useForm();
   const [branchName, setBrName] = useState('');
   const [branchUsername, setbranchUsername] = useState('');
-  const [branchPassword, setBranchPassword] = useState('');
-  const [branchConfirmPassword, setBrConfirmPassword] = useState('');
   const [accStatus, setAccStatus] = useState('');
 
   const refresh = async () => {
@@ -80,24 +79,24 @@ const BranchAccDetail = ({ ...props }) => {
             error.toString();
           alert.show(resMessage, { type: 'error' });
         });
+      form.resetFields();
     }
     return () => {};
   }, [props.branchId, accStatus]);
 
   const handleSubmit = e => {
-    e.preventDefault();
     if (accStatus == 'valid') {
-      sendData();
+      sendData(e);
     }
     if (accStatus == 'existed') {
-      sendUpdatePassword();
+      sendUpdatePassword(e);
     }
   };
-  const sendData = async () => {
+  const sendData = async e => {
     var data = {
       branchUsername: branchUsername,
-      branchPassword: branchPassword,
-      branchConfirmPassword: branchConfirmPassword,
+      branchPassword: e.branchPassword,
+      branchConfirmPassword: e.branchConfirmPassword,
     };
     await BranchesService.createBranchAcc(props.branchId, data)
       .then(response => {
@@ -115,11 +114,11 @@ const BranchAccDetail = ({ ...props }) => {
         alert.show(resMessage, { type: 'error' });
       });
   };
-  const sendUpdatePassword = async () => {
+  const sendUpdatePassword = async e => {
     var data = {
       branchUsername: branchUsername,
-      branchPassword: branchPassword,
-      branchConfirmPassword: branchConfirmPassword,
+      branchPassword: e.branchPassword,
+      branchConfirmPassword: e.branchConfirmPassword,
     };
     await BranchesService.updateBrAcc(props.branchId, data)
       .then(response => {
@@ -144,20 +143,17 @@ const BranchAccDetail = ({ ...props }) => {
           <Modal.Title>ข้อมูลสำหรับ App User</Modal.Title>
         </Modal.Header>
         <Modal.Body className="px-4 mt-3">
-          <Form onSubmit={handleSubmit}>
-            <Form.Group as={Row} className="mb-3" controlId="branchName">
-              <Form.Label column sm="3">
-                ชื่อสาขา
-              </Form.Label>
-              <Col sm="9">
-                <Form.Control
-                  plaintext
-                  readOnly
-                  value={branchName}
-                  style={{ fontFamily: 'Prompt' }}
-                />
-              </Col>
-            </Form.Group>
+          <Form
+            name="settingForm"
+            onFinish={handleSubmit}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 12 }}>
+            <Form.Item
+              label="ชื่อสาขา"
+              name="branchName"
+              initialValue={branchName}>
+              <Input disabled={true} />
+            </Form.Item>
             {accStatus == 'valid' && (
               <div>
                 <p style={{ color: 'red' }}>
@@ -165,76 +161,57 @@ const BranchAccDetail = ({ ...props }) => {
                 </p>
               </div>
             )}
-            <Form.Group as={Row} className="mb-3" controlId="branchUsername">
-              <Form.Label column sm="3">
-                ชื่อผู้ใช้
-              </Form.Label>
-              <Col sm="9">
-                <Form.Control
-                  disabled
-                  type="text"
-                  placeholder="ชื่อสาขา"
-                  value={branchUsername}
-                />
-              </Col>
-            </Form.Group>
-            {(props.editable || accStatus == 'valid') && (
-              <Form.Group as={Row} className="mb-3" controlId="branchPassword">
-                <Form.Label column sm="3">
-                  รหัสผ่าน
-                </Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="password"
-                    placeholder="รหัสผ่าน"
-                    value={branchPassword}
-                    onChange={e => setBranchPassword(e.target.value)}
-                  />
-                </Col>
-              </Form.Group>
+            <Form.Item
+              label="ชื่อผู้ใช้"
+              name="branchUsername"
+              initialValue={branchUsername}>
+              <Input disabled />
+            </Form.Item>
+
+            {props.editable && (
+              <Form.Item
+                label="รหัสผ่าน"
+                name="branchPassword"
+                rules={[
+                  { required: true, message: 'กรอกรหัสผ่าน!' },
+                  { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
+                  { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
+                ]}>
+                <Input.Password />
+              </Form.Item>
             )}
-            {(props.editable || accStatus == 'valid') && (
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="branchConfirmPassword">
-                <Form.Label column sm="3">
-                  ยืนยันรหัสผ่าน
-                </Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="password"
-                    placeholder="ยืนยันรหัสผ่าน"
-                    value={branchConfirmPassword}
-                    onChange={e => setBrConfirmPassword(e.target.value)}
-                  />
-                </Col>
-              </Form.Group>
+            {props.editable && (
+              <Form.Item
+                label="ยืนยันรหัสผ่าน"
+                name="branchConfirmPassword"
+                rules={[
+                  { required: true, message: 'กรอกรหัสผ่าน!' },
+                  { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
+                  { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
+                ]}>
+                <Input.Password />
+              </Form.Item>
             )}
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {accStatus == 'valid' && (
-                <>
-                  <div style={{ flex: 4 }} />
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{ color: 'white', flex: 2 }}>
+
+            {accStatus == 'valid' && props.editable && (
+              <>
+                <div style={{ flex: 4 }} />
+                <Form.Item wrapperCol={{ offset: 18, span: 6 }}>
+                  <Button type="primary" htmlType="submit">
                     เปิดใช้งาน
                   </Button>
-                </>
-              )}
-              {accStatus == 'existed' && props.editable && (
-                <>
-                  <div style={{ flex: 4 }} />
-                  <Button
-                    variant="tertiary"
-                    type="submit"
-                    style={{ color: 'white', flex: 2 }}>
+                </Form.Item>
+              </>
+            )}
+            {accStatus == 'existed' && props.editable && (
+              <>
+                <Form.Item wrapperCol={{ offset: 18, span: 6 }}>
+                  <Button type="primary" htmlType="submit">
                     บันทึกข้อมูล
                   </Button>
-                </>
-              )}
-            </div>
+                </Form.Item>
+              </>
+            )}
           </Form>
         </Modal.Body>
       </Modal>

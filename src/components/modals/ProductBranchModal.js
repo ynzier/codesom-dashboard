@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAlert } from 'react-alert';
-import { Col, Row, Card, Form, Button, Modal, Alert } from 'react-bootstrap';
+import { Col, Row, Card, Form, Modal, Alert } from 'react-bootstrap';
 import { ListProductBranch } from 'components';
+import { Button } from 'antd';
 import Select from 'react-select';
 import productService from 'services/product.service';
 import branchesService from 'services/branches.service';
@@ -55,17 +56,17 @@ const ProductBranchModal = ({ editable, productId, needProcess }) => {
   const branchSelectStyle = {
     control: styles => ({
       ...styles,
-      backgroundColor: editable ? 'white' : '#E8E8E8',
-      borderRadius: 20,
+      backgroundColor: editable ? 'white' : '#e8e8e8',
+      borderRadius: 12,
       paddingBlock: 4,
-      boxShadow: '0 0 0 1px #ffe9f1',
+      boxShadow: '0 0 0 1px #97515f',
       fontFamily: 'Prompt',
       borderColor: '#ffe9f1',
       ':hover': {
-        borderColor: '#C96480',
+        borderColor: '#97515f',
       },
       ':focus': {
-        borderColor: '#C96480',
+        borderColor: '#97515f',
       },
     }),
     option: (provided, state) => {
@@ -74,7 +75,7 @@ const ProductBranchModal = ({ editable, productId, needProcess }) => {
         fontFamily: 'Prompt',
         color: state.isFocused || state.isSelected ? 'white' : '#a4a4a4',
         backgroundColor:
-          state.isFocused || state.isSelected ? '#C96480' : 'white',
+          state.isFocused || state.isSelected ? '#97515f' : 'white',
         ':active': { backgroundColor: '#c55474' },
       };
     },
@@ -135,18 +136,16 @@ const ProductBranchModal = ({ editable, productId, needProcess }) => {
 
   return (
     <>
-      <a
-        style={{
-          fontFamily: 'Prompt',
-          color: '#c4c4c4',
-          fontSize: 14,
-          textDecoration: 'underline',
-          textAlign: 'right',
-          float: 'right',
-        }}
-        onClick={() => setShow(true)}>
-        แสดงรายชื่อสาขา
-      </a>
+      <div style={{ textAlign: 'right' }}>
+        <a
+          href=""
+          onClick={e => {
+            e.preventDefault();
+            setShow(true);
+          }}>
+          แสดงรายชื่อสาขา
+        </a>
+      </div>
       <Modal
         size="md"
         aria-labelledby="contained-modal-title-vcenter"
@@ -207,11 +206,7 @@ const ProductBranchModal = ({ editable, productId, needProcess }) => {
           {editable && (
             <Row className="mt-3">
               <Col md={{ span: 3, offset: 9 }}>
-                <Button
-                  className="px-4 py-2"
-                  variant="codesom"
-                  style={{ color: 'white' }}
-                  onClick={sendData}>
+                <Button type="primary" onClick={sendData}>
                   ยืนยัน
                 </Button>
               </Col>

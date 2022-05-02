@@ -176,8 +176,7 @@ const UserList = ({ ...props }) => {
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
               <Button
-                className="w-100 ant-btn-custom"
-                type="button"
+                type="primary"
                 onClick={() => {
                   history.push(Routes.AddPermission.path);
                 }}>

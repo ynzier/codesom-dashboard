@@ -209,7 +209,6 @@ const BranchEdit = ({ ...props }) => {
         </Modal.Header>
         <Modal.Body style={{ color: 'red', fontFamily: 'Prompt' }}>
           <ul>*ข้อมูลประเภท ประวัติ รายงาน ยังคงอยู่</ul>
-          <ul>*ข้อมูลประเภท ประวัติ รายงาน ยังคงอยู่</ul>
           <ul>*หากลบแล้ว จะไม่สามารถกู้คืนข้อมูลได้</ul>
         </Modal.Body>
         <Modal.Footer>
@@ -438,11 +437,14 @@ const BranchEdit = ({ ...props }) => {
                 <div
                   className="mb-3"
                   style={{
-                    color: '#C6C6C6',
-                    textDecoration: 'underline',
                     float: 'right',
                   }}>
-                  <a onClick={() => setModalShow(true)}>
+                  <a
+                    href=""
+                    onClick={e => {
+                      e.preventDefault();
+                      setModalShow(true);
+                    }}>
                     ข้อมูลสำหรับเข้าสู่ระบบ
                   </a>
                 </div>
@@ -452,8 +454,6 @@ const BranchEdit = ({ ...props }) => {
               <Col sm={3} md={3}>
                 <div>
                   <Button
-                    ghost
-                    danger
                     onClick={() => {
                       history.back();
                     }}>
@@ -515,6 +515,7 @@ const BranchEdit = ({ ...props }) => {
       />
       <MyVerticallyCenteredModal
         show={deleteModal}
+        branchId={props.branchId}
         onHide={() => {
           setDeleteModal(false);
         }}

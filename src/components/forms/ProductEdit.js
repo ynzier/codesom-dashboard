@@ -376,6 +376,7 @@ const ProductEdit = ({ productId }) => {
                             rules={[{ required: true, message: '*ใส่ราคา' }]}>
                             <InputNumber
                               min="1"
+                              style={{ width: '100%' }}
                               max="10000"
                               disabled={!editable}
                               placeholder="1"
@@ -414,6 +415,7 @@ const ProductEdit = ({ productId }) => {
                               precision="2"
                               max="10000"
                               stringMode
+                              style={{ width: '100%' }}
                               placeholder="0.00"
                               disabled={needProcess}
                               value={productCost}
@@ -427,6 +429,7 @@ const ProductEdit = ({ productId }) => {
                             <InputNumber
                               min="0"
                               precision="2"
+                              style={{ width: '100%' }}
                               max="10000"
                               stringMode
                               disabled={!editable}
@@ -442,6 +445,7 @@ const ProductEdit = ({ productId }) => {
                           rules={[{ required: true, message: '*ใส่ราคา' }]}>
                           <InputNumber
                             min="0"
+                            style={{ width: '100%' }}
                             max="10000"
                             disabled={!editable}
                             precision="2"
@@ -509,9 +513,7 @@ const ProductEdit = ({ productId }) => {
                 <Row>
                   <Col md={{ span: 3, offset: 6 }}>
                     <div>
-                      <ButtonA onClick={() => history.back()} ghost danger>
-                        ย้อนกลับ
-                      </ButtonA>
+                      <ButtonA onClick={() => history.back()}>ย้อนกลับ</ButtonA>
                     </div>
                   </Col>
                   <Col md={3}>
@@ -622,35 +624,31 @@ const ProductEdit = ({ productId }) => {
                                     }}
                                   />
                                 </Form.Item>
-
-                                <IoIosTrash
-                                  onClick={() => remove(field.name)}
-                                  size={20}
-                                  className="dynamic-delete-button"
-                                  style={{
-                                    marginTop: '10px',
-                                    float: 'right',
-                                    display: editable ? 'block' : 'none',
-                                  }}
-                                />
+                                <a
+                                  href=""
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    remove(field.name);
+                                  }}>
+                                  <IoIosTrash
+                                    size={20}
+                                    style={{
+                                      marginTop: '10px',
+                                      float: 'right',
+                                      display: editable ? 'block' : 'none',
+                                    }}
+                                  />
+                                </a>
                               </RowA>
                             );
                           })}
                           <RowA style={{ justifyContent: 'center' }}>
                             <ButtonA
-                              type="primary"
+                              type="dashed"
                               onClick={() => {
                                 add();
                               }}
-                              disabled={!editable}
-                              style={{
-                                color: '#97515F',
-                                backgroundColor: 'transparent',
-                                width: 40,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                display: 'flex',
-                              }}>
+                              disabled={!editable}>
                               <PlusOutlined />
                             </ButtonA>
                           </RowA>

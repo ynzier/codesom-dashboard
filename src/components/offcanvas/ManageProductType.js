@@ -9,7 +9,10 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
   const [newType, setNewType] = useState();
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = e => {
+    e.preventDefault();
+    setShow(true);
+  };
   const header = [
     {
       title: 'ชนิดสินค้า',
@@ -23,36 +26,36 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
       dataIndex: 'typeId',
       render: (text, record) => {
         return (
-          <div>
-            <span
-              onClick={() => {
-                ProductService.disableType(record.typeId)
-                  .then(response => {
-                    fetchProductType();
-                    alert.show(response.data.message, { type: 'success' });
-                    handleClose();
-                  })
-                  .catch(error => {
-                    const resMessage =
-                      (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                      error.message ||
-                      error.toString();
-                    alert.show(resMessage, { type: 'error' });
-                    handleClose();
-                  });
-              }}>
-              <i className="fas fa-trash action"></i>
-            </span>
-          </div>
+          <a
+            href=""
+            onClick={e => {
+              e.preventDefault();
+              ProductService.disableType(record.typeId)
+                .then(response => {
+                  fetchProductType();
+                  alert.show(response.data.message, { type: 'success' });
+                  handleClose();
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                  handleClose();
+                });
+            }}>
+            <i className="fas fa-trash action"></i>
+          </a>
         );
       },
     },
   ];
   return (
     <>
-      <a style={{ color: '#c4c4c4', fontSize: 12 }} onClick={handleShow}>
+      <a href="" onClick={handleShow}>
         (เพิ่มเติม)
       </a>
       <Offcanvas show={show} placement="end" onHide={handleClose} {...props}>
@@ -66,12 +69,13 @@ const ManageProductType = ({ fetchProductType, typeData, ...props }) => {
                 <Form.Control
                   type="text"
                   maxLength="20"
+                  style={{ height: 40 }}
                   placeholder="เพิ่มชนิดสินค้า"
                   onChange={e => setNewType(e.target.value)}
                 />
                 <Button
-                  variant="outline-tertiary"
-                  style={{ zIndex: 5 }}
+                  variant="codesom"
+                  style={{ zIndex: 5, height: 40 }}
                   onClick={e => {
                     ProductService.createType(newType)
                       .then(response => {

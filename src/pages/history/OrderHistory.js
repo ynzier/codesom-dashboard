@@ -165,10 +165,11 @@ const OrderHistory = props => {
       render: text => {
         return (
           <a
-            onClick={() => {
+            href=""
+            onClick={e => {
+              e.preventDefault();
               openRecord(text);
-            }}
-            style={{ textDecorationLine: 'underline' }}>
+            }}>
             {text}
           </a>
         );

@@ -246,8 +246,7 @@ const IngrAndStuffList = () => {
               {!location.state?.isManager && (
                 <Col xs={5} xl={{ span: 2, offset: 3 }}>
                   <Button
-                    className="w-100 ant-btn-custom"
-                    type="button"
+                    type="primary"
                     onClick={() => {
                       setShowCreate(true);
                     }}>

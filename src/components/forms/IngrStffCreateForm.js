@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, Form, Button, InputGroup } from 'react-bootstrap';
-import { InputNumber } from 'antd';
+import { Col, Row } from 'react-bootstrap';
+import { InputNumber, Button, Input, Select, Form } from 'antd';
 import { useAlert } from 'react-alert';
 import ingredientService from 'services/ingredient.service';
 import stuffService from 'services/stuff.service';
 
+const { Option } = Select;
 const IngrStffCreateForm = ({ handleClose, fetchData }) => {
   const alert = useAlert();
-  const [name, setName] = useState('');
-  const [cost, setCost] = useState('0');
-  const [type, setType] = useState('');
-  const [unit, setUnit] = useState('');
+  const [form] = Form.useForm();
   useEffect(() => {
     document.title = 'เพิ่มข้อมูลวัตถุดิบ';
   }, []);
 
   const handleSubmit = e => {
-    e.preventDefault();
-    if (type == '')
-      return alert.show('เลือกชนิดสินค้าก่อน!', { type: 'error' });
-    sendData();
-  };
-
-  const sendData = () => {
-    if (type == 'วัตถุดิบ') {
+    console.log(e);
+    if (e.type == 'วัตถุดิบ') {
       var ingrData = {
-        ingrName: name,
-        ingrUnit: unit,
-        ingrCost: cost,
+        ingrName: e.name,
+        ingrUnit: e.unit,
+        ingrCost: e.cost,
       };
       ingredientService
         .createIngredient(ingrData)
@@ -44,11 +36,11 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
 
           return alert.show(resMessage, { type: 'error' });
         });
-    } else if (type == 'อื่นๆ') {
+    } else if (e.type == 'อื่นๆ') {
       var stuffData = {
-        stuffName: name,
-        stuffUnit: unit,
-        stuffCost: cost,
+        stuffName: e.name,
+        stuffUnit: e.unit,
+        stuffCost: e.cost,
       };
       stuffService
         .createStuff(stuffData)
@@ -66,84 +58,72 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
           return alert.show(resMessage, { type: 'error' });
         });
     }
-    setName('');
-    setCost('0');
-    setUnit('');
-    setType('');
     fetchData();
     handleClose();
   };
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        form={form}
+        name="createIngrStff"
+        preserve={false}
+        layout="vertical"
+        onFinish={handleSubmit}>
         <Row>
-          <Col md={12} className="mb-3">
+          <Col md={12}>
             <Row>
-              <Col md={8} className="mb-3">
-                <Form.Group id="ItemNo">
-                  <Form.Label>ชื่อวัตถุดิบ</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="ชื่อวัตถุดิบ"
-                    name="itemName"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                  />
-                </Form.Group>
+              <Col md={8}>
+                <Form.Item
+                  name="name"
+                  label="ชื่อวัตถุดิบ"
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อวัตถุดิบ' },
+                    { max: 20, message: '*ไม่เกิน 20 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อวัตถุดิบ" />
+                </Form.Item>
               </Col>
-              <Col md={4} className="mb-3">
-                <Form.Group id="modelID">
-                  <Form.Label>ราคาทุน</Form.Label>
-                  <InputGroup>
-                    <InputNumber
-                      min="0"
-                      precision="2"
-                      stringMode
-                      required
-                      value={cost}
-                      placeholder="0.00"
-                      style={{
-                        borderRadius: 8,
-                        borderColor: '#e8e8e8',
-                        height: 43.59,
-                        padding: 5,
-                        width: 200,
-                      }}
-                      onChange={value => setCost(value)}
-                    />
-                  </InputGroup>
-                </Form.Group>
+              <Col md={4}>
+                <Form.Item
+                  name="cost"
+                  label="ราคาทุน"
+                  rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                  <InputNumber
+                    min="0"
+                    precision="2"
+                    style={{ width: '100%' }}
+                    stringMode
+                    placeholder="0.00"
+                  />
+                </Form.Item>
               </Col>
             </Row>
             <Row>
-              <Col md={4} className="mb-3">
-                <Form.Group id="modelID">
-                  <Form.Label>หน่วย</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="อัน,ลิตร,.-,..."
-                    name="itemUnit"
-                    value={unit}
-                    onChange={e => setUnit(e.target.value)}
-                  />
-                </Form.Group>
+              <Col md={4}>
+                <Form.Item
+                  name="unit"
+                  label="หน่วย"
+                  rules={[
+                    { required: true, message: '*ใส่หน่วย' },
+                    { max: 10, message: '*ไม่เกิน 10 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="อัน,ลิตร,.-,..." />
+                </Form.Item>
               </Col>
-              <Col md={4} className="mb-3">
-                <Form.Group id="modelID">
-                  <Form.Label>ชนิดสินค้า </Form.Label>
-                  <Form.Select
-                    required
-                    name="itemType"
-                    value={type}
-                    onChange={e => setType(e.target.value)}>
-                    <option value="">ชนิดสินค้า</option>
-                    <option value="วัตถุดิบ">วัตถุดิบ</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
-                  </Form.Select>
-                </Form.Group>
+              <Col md={4}>
+                <Form.Item
+                  name={'type'}
+                  label="ชนิดสินค้า"
+                  rules={[{ required: true, message: '*เลือกประเภท' }]}>
+                  <Select
+                    placeholder="เลือกประเภท"
+                    value={'type'}
+                    dropdownStyle={{ fontFamily: 'Prompt' }}>
+                    <Option value="วัตถุดิบ">วัตถุดิบ</Option>
+                    <Option value="อื่นๆ">อื่นๆ</Option>
+                  </Select>
+                </Form.Item>
               </Col>
             </Row>
           </Col>
@@ -151,10 +131,7 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
         <Row>
           <Col md={{ offset: 9, span: 3 }}>
             <div>
-              <Button
-                variant="codesom"
-                type="submit"
-                style={{ width: '100%', height: '50px', color: 'white' }}>
+              <Button type="primary" htmlType="submit">
                 ยืนยัน
               </Button>
             </div>

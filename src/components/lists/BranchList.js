@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { List, Card, Image } from 'antd';
-import { Button } from 'react-bootstrap';
+import { List, Card, Image, Button } from 'antd';
+
 import BranchesService from 'services/branches.service';
 import { useHistory } from 'react-router-dom';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
@@ -164,14 +164,8 @@ const BranchList = ({ keyword }) => {
                     alignSelf: 'center',
                   }}>
                   <Button
-                    variant="secondary"
                     style={{
                       width: '120px',
-                      height: 40,
-                      padding: 0,
-                      borderRadius: 5,
-                      color: 'white',
-                      boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
                     }}
                     onClick={() => {
                       openRecord(item.branchId);

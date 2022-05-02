@@ -154,19 +154,15 @@ const RequisitionList = props => {
       width: 120,
       render: (text, record) => {
         return (
-          <div style={{ display: 'flex' }}>
-            <span style={{ flex: 1 }}>{text}</span>
-            <a>
-              <FontAwesomeIcon
-                icon={faFileInvoice}
-                size="xl"
-                onClick={() => {
-                  const requisitionId = record.requisitionId;
-                  openRecord(requisitionId);
-                }}
-              />
-            </a>
-          </div>
+          <a
+            href=""
+            onClick={e => {
+              e.preventDefault();
+              const requisitionId = record.requisitionId;
+              openRecord(requisitionId);
+            }}>
+            {text}
+          </a>
         );
       },
     },
@@ -203,7 +199,7 @@ const RequisitionList = props => {
       dataIndex: 'requisitionStatus',
       align: 'center',
       width: 150,
-      render: (text, record) => {
+      render: text => {
         return (
           <div>
             {text == 0
@@ -228,19 +224,15 @@ const RequisitionList = props => {
       width: 120,
       render: (text, record) => {
         return (
-          <div style={{ display: 'flex' }}>
-            <span style={{ flex: 1 }}>{text}</span>
-            <a>
-              <FontAwesomeIcon
-                icon={faFileInvoice}
-                size="xl"
-                onClick={() => {
-                  const requisitionId = record.requisitionId;
-                  openRecord(requisitionId);
-                }}
-              />
-            </a>
-          </div>
+          <a
+            href=""
+            onClick={e => {
+              e.preventDefault();
+              const requisitionId = record.requisitionId;
+              openRecord(requisitionId);
+            }}>
+            {text}
+          </a>
         );
       },
     },

@@ -449,6 +449,7 @@ const PromotionEdit = props => {
                     min="0"
                     precision="2"
                     stringMode
+                    style={{ width: '100%' }}
                     disabled
                     placeholder="0.00"
                     value={promoCost}
@@ -458,7 +459,7 @@ const PromotionEdit = props => {
               {!isManager && (
                 <Row>
                   <Col md={{ span: 3, offset: 6 }}>
-                    <ButtonA ghost danger onClick={() => history.back()}>
+                    <ButtonA type="default" onClick={() => history.back()}>
                       ย้อนกลับ
                     </ButtonA>
                   </Col>

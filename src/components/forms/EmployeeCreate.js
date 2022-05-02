@@ -79,6 +79,7 @@ const CreateEmployeeForm = () => {
       .then(response => {
         alert.show(response.data.message, { type: 'success' });
         form.resetFields();
+        history.back();
       })
       .catch(error => {
         const resMessage =
@@ -232,6 +233,7 @@ const CreateEmployeeForm = () => {
                     min="0"
                     precision="2"
                     stringMode
+                    style={{ width: '100%' }}
                     placeholder="0.00"
                   />
                 </Form.Item>

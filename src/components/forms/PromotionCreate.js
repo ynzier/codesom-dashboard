@@ -379,7 +379,7 @@ const PromotionCreate = () => {
               </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>
-                  <ButtonA ghost danger onClick={() => history.back()}>
+                  <ButtonA type="default" onClick={() => history.back()}>
                     ย้อนกลับ
                   </ButtonA>
                 </Col>

@@ -140,9 +140,11 @@ const EmployeeList = props => {
       align: 'center',
       render: (text, record) => {
         return (
-          <div>
+          <>
             <a
-              onClick={() => {
+              href=""
+              onClick={e => {
+                e.preventDefault();
                 const empId = record.empId;
                 openRecord(empId);
               }}>
@@ -151,13 +153,15 @@ const EmployeeList = props => {
 
             <span>&nbsp;&nbsp;</span>
             <a
-              onClick={() => {
+              href=""
+              onClick={e => {
+                e.preventDefault();
                 setDeleteData(record);
                 setModalShow(true);
               }}>
               <i className="fas fa-trash action" />
             </a>
-          </div>
+          </>
         );
       },
     },
@@ -202,7 +206,9 @@ const EmployeeList = props => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="danger"
+            type="primary"
+            danger
+            ghost
             onClick={() => {
               setModalShow(false);
               deleteRecord();
@@ -247,8 +253,7 @@ const EmployeeList = props => {
             <Col xs={4} md={5} lg={4} xl={2}>
               {!location.state?.isManager && (
                 <Button
-                  className="w-100 ant-btn-custom"
-                  type="button"
+                  type="primary"
                   onClick={() => {
                     history.push(Routes.CreateNewEmployee.path);
                   }}>

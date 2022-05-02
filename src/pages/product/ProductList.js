@@ -183,14 +183,11 @@ const ProductList = props => {
               {record.productDetail}
             </div>
             {record.needProcess == 1 && (
-              <div
-                style={{
-                  textAlign: 'left',
-                  fontSize: '12px',
-                  textDecorationLine: 'underline',
-                }}>
+              <div style={{ textAlign: 'left' }}>
                 <a
-                  onClick={() => {
+                  href=""
+                  onClick={e => {
+                    e.preventDefault();
                     setShowRecipe(true);
                     setRecipeId(record.productId);
                   }}>
@@ -252,7 +249,9 @@ const ProductList = props => {
       render: (text, record) => {
         return (
           <a
-            onClick={() => {
+            href=""
+            onClick={e => {
+              e.preventDefault();
               const productId = record.productId;
               openRecord(productId);
             }}>
@@ -302,14 +301,11 @@ const ProductList = props => {
               {record.productDetail}
             </div>
             {record.needProcess == 1 && (
-              <div
-                style={{
-                  textAlign: 'left',
-                  fontSize: '12px',
-                  textDecorationLine: 'underline',
-                }}>
+              <div style={{ textAlign: 'left' }}>
                 <a
-                  onClick={() => {
+                  href=""
+                  onClick={e => {
+                    e.preventDefault();
                     setShowRecipe(true);
                     setRecipeId(record.productId);
                   }}>
@@ -431,8 +427,7 @@ const ProductList = props => {
               {!location.state?.isManager && (
                 <Col xs={5} xl={{ span: 2, offset: 3 }}>
                   <Button
-                    className="w-100 ant-btn-custom"
-                    type="button"
+                    type="primary"
                     onClick={() => {
                       history.push(Routes.AddProduct.path);
                     }}>

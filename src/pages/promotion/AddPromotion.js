@@ -29,8 +29,7 @@ const AddPromotion = () => {
         </div>
       </div>
       <Row className="mb-4">
-        <PromotionCreate
-        />
+        <PromotionCreate />
       </Row>
     </>
   );
