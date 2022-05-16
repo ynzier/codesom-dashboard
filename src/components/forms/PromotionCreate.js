@@ -35,7 +35,6 @@ const PromotionCreate = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'เพิ่มโปรโมชัน';
     fetchforRecipe();
   }, []);
 
@@ -199,7 +198,7 @@ const PromotionCreate = () => {
               onFinish={values => {
                 handleFinish(values);
               }}>
-              <h5 className="mb-4">ข้อมูลโปรโมชัน</h5>
+              <h5 className="mb-4">เพิ่มโปรโมชัน</h5>
               <Row>
                 <Col md={6}>
                   <Stack>
@@ -276,6 +275,7 @@ const PromotionCreate = () => {
                         min="0"
                         precision="2"
                         stringMode
+                        style={{ width: '100%' }}
                         placeholder="0.00"
                       />
                     </Form.Item>
@@ -294,24 +294,24 @@ const PromotionCreate = () => {
                 {(fields, { add, remove }, { error }) => {
                   return (
                     <>
-                      {fields.map((field, index) => {
+                      {fields.map(({ key, name, ...restField }) => {
                         return (
                           <RowA
-                            key={field.key}
+                            key={key}
                             style={{
                               height: '100%',
                               display: 'flex',
                               flexDirection: 'row',
                             }}>
                             <Form.Item
-                              name={[index, 'productId']}
+                              name={[name, 'productId']}
+                              {...restField}
                               rules={[
                                 { required: true, message: '*เลือกรายการ' },
                               ]}
                               style={{ flex: 2, marginRight: 12 }}>
                               <Select
                                 placeholder="กดเพื่อเลือกรายการ"
-                                value={[index, 'productId']}
                                 dropdownStyle={{ fontFamily: 'Prompt' }}>
                                 {productData.map((item, index) => (
                                   <Option key={index} value={item.productId}>
@@ -322,12 +322,16 @@ const PromotionCreate = () => {
                             </Form.Item>
 
                             <Form.Item
-                              name={[index, 'count']}
+                              name={[name, 'count']}
+                              {...restField}
                               style={{ flex: 1 }}
-                              rules={[{ required: true, message: 'ใส่จำนวน' }]}>
+                              rules={[
+                                { required: true, message: '*ใส่จำนวน' },
+                              ]}>
                               <InputNumber
                                 min="1"
                                 max="1000"
+                                placeholder="0"
                                 style={{
                                   textAlign: 'center',
                                   width: '100%',
@@ -337,7 +341,7 @@ const PromotionCreate = () => {
                             </Form.Item>
 
                             <IoIosTrash
-                              onClick={() => remove(field.name)}
+                              onClick={() => remove(name)}
                               size={20}
                               className="dynamic-delete-button"
                               style={{ marginTop: '10px', float: 'right' }}

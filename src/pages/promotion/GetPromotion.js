@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Row, Breadcrumb } from 'react-bootstrap';
 import 'antd/dist/antd.min.css';
 import { PromotionEdit } from 'components';
 const GetPromotion = () => {
   const { promoId } = useParams();
   useEffect(() => {
-    document.title = 'ข้อมูลสินค้า';
+    document.title = 'ข้อมูลโปรโมชัน';
   }, []);
 
   return (
@@ -23,9 +23,9 @@ const GetPromotion = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={Routes.ProductList.path}>รายการสินค้า</Link>
+              <Link to={Routes.ProductList.path}>โปรโมชัน</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ข้อมูลสินค้า</Breadcrumb.Item>
+            <Breadcrumb.Item active>ข้อมูลโปรโมชัน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

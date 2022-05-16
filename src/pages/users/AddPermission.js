@@ -8,7 +8,7 @@ import { Routes } from 'routes';
 
 const AddPermission = () => {
   useEffect(() => {
-    document.title = 'เพิ่มสิทธิ์ผู้ใช้งาน';
+    document.title = 'เพิ่มผู้ใช้งาน';
   }, []);
   return (
     <>
@@ -23,9 +23,9 @@ const AddPermission = () => {
               </Breadcrumb.Item>
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.UserList.path}>
-              ผู้ใช้งาน
+              รายชื่อผู้ใช้งาน
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสิทธิ์ผู้ใช้งาน</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

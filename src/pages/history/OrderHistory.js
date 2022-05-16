@@ -92,9 +92,9 @@ const OrderHistory = props => {
   }, [keyword, option, pickDate]);
 
   useEffect(() => {
-    document.title = 'ประวัติการขายสินค้า';
+    document.title = 'ประวัติออเดอร์';
     let mounted = true;
-    if (!selectBranch) {
+    if (selectBranch == null) {
       historyService
         .listOrderDashboard()
         .then(res => setRecord(res.data))
@@ -131,7 +131,7 @@ const OrderHistory = props => {
     };
   }, []);
   useEffect(() => {
-    if (selectBranch)
+    if (selectBranch != null)
       historyService
         .listOrderDashboardByBranch(selectBranch)
         .then(res => setRecord(res.data))
@@ -234,10 +234,11 @@ const OrderHistory = props => {
       render: text => {
         return (
           <a
-            onClick={() => {
+            href=""
+            onClick={e => {
+              e.preventDefault();
               openRecord(text);
-            }}
-            style={{ textDecorationLine: 'underline' }}>
+            }}>
             {text}
           </a>
         );
@@ -308,7 +309,7 @@ const OrderHistory = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <div className="table-settings mb-3">
+          <div className="table-settings">
             <Row>
               <Col xs={8} md={5}>
                 <Input
@@ -320,7 +321,6 @@ const OrderHistory = props => {
               <Col xs={4} md={3}>
                 {!location.state?.isManager && (
                   <Select
-                    className="mb-3"
                     showSearch
                     style={{
                       width: '100%',
@@ -406,7 +406,7 @@ const OrderHistory = props => {
                 ? filterData
                 : record
             }
-            columns={location.state?.isManager ? headerManager : header}
+            columns={selectBranch != null ? headerManager : header}
             rowKey="orderId"
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}

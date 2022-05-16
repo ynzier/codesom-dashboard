@@ -28,7 +28,7 @@ const GetOrder = () => {
   const { Step } = Steps;
   const alert = useAlert();
   useEffect(() => {
-    document.title = 'ประวัติออเดอร์';
+    document.title = 'ข้อมูลออเดอร์';
     fetchRecDetail(id);
   }, []);
   const fetchRecDetail = id => {
@@ -151,7 +151,7 @@ const GetOrder = () => {
             <Breadcrumb.Item href={Routes.OrderHistory.path}>
               ประวัติออเดอร์
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>หมายเลขออเดอร์: {id}</Breadcrumb.Item>
+            <Breadcrumb.Item active>ข้อมูลออเดอร์ {id}</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>{' '}
@@ -195,7 +195,7 @@ const GetOrder = () => {
                         },
                         {
                           title: 'จำนวน',
-                          dataIndex: 'prCount',
+                          dataIndex: 'quantity',
                           align: 'center',
                           render: (text, record) => (
                             <span>
@@ -313,7 +313,7 @@ const GetOrder = () => {
             }}>
             <Card.Header>
               <Row>
-                <h5>ประวัติออเดอร์</h5>
+                <h5>ข้อมูลออเดอร์</h5>
               </Row>
               <Row>
                 <Col># {id}</Col>

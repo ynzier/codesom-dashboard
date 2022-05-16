@@ -12,7 +12,7 @@ const BranchLists = () => {
   let history = useHistory();
 
   useEffect(() => {
-    document.title = 'จัดการข้อมูลสาขา';
+    document.title = 'รายชื่อสาขา';
   }, []);
   const [keyword, setKeyword] = useState(undefined);
   return (
@@ -25,7 +25,7 @@ const BranchLists = () => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>สาขา</Breadcrumb.Item>
+            <Breadcrumb.Item active>รายชื่อสาขา</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

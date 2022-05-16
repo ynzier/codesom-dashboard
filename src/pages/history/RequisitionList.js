@@ -7,7 +7,7 @@ import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Table, DatePicker, Input, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-import { faHome, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
@@ -96,7 +96,7 @@ const RequisitionList = props => {
     history.push('/dashboard/history/getRequisition/' + reqId);
   };
   const fetchData = useCallback(async id => {
-    if (id) {
+    if (id != null) {
       await trackPromise(
         requisitionService
           .listAllReqByBranch(id)
@@ -135,14 +135,14 @@ const RequisitionList = props => {
     }
   });
   useEffect(async () => {
-    document.title = 'รายการเบิกจ่ายสินค้าทั้งหมด';
-    if (!selectBranch) fetchData();
-    if (selectBranch) fetchData(selectBranch);
+    document.title = 'ประวัติการเบิกจ่ายสินค้า';
+    if (selectBranch == null) fetchData();
+    if (selectBranch != null) fetchData(selectBranch);
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (selectBranch) fetchData(selectBranch);
+    if (selectBranch != null) fetchData(selectBranch);
 
     return () => {};
   }, [selectBranch]);
@@ -307,20 +307,19 @@ const RequisitionList = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <div className="table-settings mb-3">
+          <div className="table-settings ">
             <Row>
               <Col xs={8} md={5}>
                 <Input
                   value={keyword}
                   onChange={e => setKeyword(e.target.value)}
                   placeholder={
-                    selectBranch ? 'ค้นหารหัส' : 'ค้นหารหัส/ชื่อสาขา'
+                    selectBranch != null ? 'ค้นหารหัส' : 'ค้นหารหัส/ชื่อสาขา'
                   }
                 />
               </Col>
               <Col xs={4} md={3}>
                 <Select
-                  className="mb-3"
                   showSearch
                   allowClear
                   style={{
@@ -400,7 +399,7 @@ const RequisitionList = props => {
                 ? filterData
                 : record
             }
-            columns={selectBranch ? headerManager : header}
+            columns={selectBranch != null ? headerManager : header}
             rowKey="requisitionId"
             loading={promiseInProgress}
             showSizeChanger={false}

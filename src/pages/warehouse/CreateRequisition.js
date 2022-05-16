@@ -11,7 +11,11 @@ const IngrRequestPage = props => {
   const [selectedBranchId, setBranchId] = useState('');
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
-    document.title = 'คำร้องขอวัตถุดิบ';
+    {
+      reqData.length
+        ? (document.title = 'ตรวจสอบรายการ')
+        : (document.title = 'สร้างใบเบิกสินค้า');
+    }
   }, []);
 
   return (
@@ -30,13 +34,13 @@ const IngrRequestPage = props => {
               <>
                 <Breadcrumb.Item>
                   <Link to={Routes.CreateRequisition.path}>
-                    สร้างใบเบิกวัตถุดิบ
+                    สร้างใบเบิกสินค้า
                   </Link>
                 </Breadcrumb.Item>
-                <Breadcrumb.Item active>ยืนยันรายการ</Breadcrumb.Item>
+                <Breadcrumb.Item active>ตรวจสอบรายการ</Breadcrumb.Item>
               </>
             ) : (
-              <Breadcrumb.Item active>สร้างใบเบิกวัตถุดิบ</Breadcrumb.Item>
+              <Breadcrumb.Item active>สร้างใบเบิกสินค้า</Breadcrumb.Item>
             )}
           </Breadcrumb>
         </div>

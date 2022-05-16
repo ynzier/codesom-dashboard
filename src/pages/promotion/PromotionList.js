@@ -27,7 +27,7 @@ const PromotionList = props => {
     history.push('/dashboard/promotion/getPromotion/' + promoId);
   };
   useEffect(async () => {
-    document.title = 'รายการสินค้าทั้งหมด';
+    document.title = 'โปรโมชัน';
     let mounted = true;
     await trackPromise(
       new Promise((resolve, reject) => {
@@ -65,7 +65,7 @@ const PromotionList = props => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>สินค้าโปรโมชัน</Breadcrumb.Item>
+            <Breadcrumb.Item active>โปรโมชัน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -79,10 +79,9 @@ const PromotionList = props => {
         <Card.Header style={{ borderWidth: 0 }}>
           <div className="table-settings mb-3">
             <Row>
-              <Col xs={8} md={6} lg={3} xl={4}>
-                <h2>สินค้าโปรโมชัน</h2>
-              </Col>
-              {!selectBranch && (
+              <Col xs={8} md={6} lg={3} xl={4} />
+
+              {selectBranch == null && (
                 <Col xs={5} xl={{ span: 2, offset: 6 }}>
                   <Button
                     type="primary"

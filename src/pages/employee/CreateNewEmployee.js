@@ -7,7 +7,7 @@ import { Routes } from 'routes';
 import { Link } from 'react-router-dom';
 const AddAdmin = () => {
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลพนักงาน';
+    document.title = 'เพิ่มพนักงาน';
   }, []);
   return (
     <>
@@ -20,9 +20,9 @@ const AddAdmin = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.EmployeeList.path}>
-              พนักงาน
+            รายชื่อพนักงาน
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มข้อมูลพนักงาน</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มพนักงาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

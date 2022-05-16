@@ -37,7 +37,6 @@ const ProductCreate = () => {
   const [productCost, setProductCost] = useState(0);
 
   useEffect(() => {
-    document.title = 'เพิ่มสินค้า';
     fetchProductType();
   }, []);
 
@@ -256,7 +255,7 @@ const ProductCreate = () => {
                 fontFamily: 'Prompt',
               }}>
               <Card.Body>
-                <h5 className="mb-4">ข้อมูลสินค้า / Goods Info</h5>
+                <h5 className="mb-4">เพิ่มสินค้า</h5>
                 <Row>
                   <Col md={6} className="mb-3">
                     <Upload
@@ -462,17 +461,18 @@ const ProductCreate = () => {
                     {(fields, { add, remove }, { error }) => {
                       return (
                         <>
-                          {fields.map((field, index) => {
+                          {fields.map(({ key, name, ...restField }) => {
                             return (
                               <RowA
-                                key={field.key}
+                                key={key}
                                 style={{
                                   height: '100%',
                                   display: 'flex',
                                   flexDirection: 'row',
                                 }}>
                                 <Form.Item
-                                  name={[index, 'ingrId']}
+                                  name={[name, 'ingrId']}
+                                  {...restField}
                                   rules={[
                                     {
                                       required: true,
@@ -482,7 +482,6 @@ const ProductCreate = () => {
                                   style={{ flex: 2, marginRight: 12 }}>
                                   <Select
                                     placeholder="กดเพื่อเลือกรายการ"
-                                    value={[index, 'ingrId']}
                                     dropdownStyle={{ fontFamily: 'Prompt' }}>
                                     {dataIngrStuff.map((item, index) => (
                                       <Option key={index} value={item.id}>
@@ -494,13 +493,15 @@ const ProductCreate = () => {
 
                                 <Form.Item
                                   style={{ flex: 1 }}
-                                  name={[index, 'amountRequired']}
+                                  name={[name, 'amountRequired']}
+                                  {...restField}
                                   rules={[
-                                    { required: true, message: 'ใส่จำนวน' },
+                                    { required: true, message: '*ใส่จำนวน' },
                                   ]}>
                                   <InputNumber
                                     min="1"
                                     max="1000"
+                                    placeholder="0"
                                     style={{
                                       textAlign: 'center',
                                       width: '100%',
@@ -512,7 +513,7 @@ const ProductCreate = () => {
                                   href=""
                                   onClick={e => {
                                     e.preventDefault();
-                                    remove(field.name);
+                                    remove(name);
                                   }}>
                                   <IoIosTrash
                                     size={20}

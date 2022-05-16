@@ -73,7 +73,7 @@ const IngrAndStuffList = () => {
     );
   });
   useEffect(async () => {
-    document.title = 'รายการวัตถุดิบทั้งหมด';
+    document.title = 'วัตถุดิบและอื่นๆ';
     fetchData();
     return () => {};
   }, []);
@@ -205,7 +205,7 @@ const IngrAndStuffList = () => {
                 <FontAwesomeIcon icon={faHome} />
               </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>รายการวัตถุดิบทั้งหมด</Breadcrumb.Item>
+            <Breadcrumb.Item active>วัตถุดิบและอื่นๆ</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -218,7 +218,7 @@ const IngrAndStuffList = () => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <div className="table-settings mb-3">
+          <div className="table-settings mb-1">
             <Row>
               <Col xs={8} md={6} lg={3} xl={4}>
                 <Input

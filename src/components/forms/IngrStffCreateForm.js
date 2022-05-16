@@ -9,9 +9,6 @@ const { Option } = Select;
 const IngrStffCreateForm = ({ handleClose, fetchData }) => {
   const alert = useAlert();
   const [form] = Form.useForm();
-  useEffect(() => {
-    document.title = 'เพิ่มข้อมูลวัตถุดิบ';
-  }, []);
 
   const handleSubmit = e => {
     console.log(e);
@@ -129,13 +126,14 @@ const IngrStffCreateForm = ({ handleClose, fetchData }) => {
           </Col>
         </Row>
         <Row>
-          <Col md={{ offset: 9, span: 3 }}>
-            <div>
-              <Button type="primary" htmlType="submit">
-                ยืนยัน
-              </Button>
-            </div>
-          </Col>
+          <div>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: 130, float: 'right' }}>
+              ยืนยัน
+            </Button>
+          </div>
         </Row>
       </Form>
     </>

@@ -21,7 +21,7 @@ const GetEmployee = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.EmployeeList.path}>
-              พนักงาน
+            รายชื่อพนักงาน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลพนักงาน</Breadcrumb.Item>
           </Breadcrumb>

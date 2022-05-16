@@ -317,6 +317,7 @@ const PromotionEdit = props => {
                         disabled={!editable}
                         precision="2"
                         stringMode
+                        style={{ width: '100%' }}
                         placeholder="0.00"
                       />
                     </Form.Item>
@@ -367,17 +368,18 @@ const PromotionEdit = props => {
                 {(fields, { add, remove }, { error }) => {
                   return (
                     <>
-                      {fields.map((field, index) => {
+                      {fields.map(({ key, name, ...restField }) => {
                         return (
                           <RowA
-                            key={field.key}
+                            key={key}
                             style={{
                               height: '100%',
                               display: 'flex',
                               flexDirection: 'row',
                             }}>
                             <Form.Item
-                              name={[index, 'productId']}
+                              name={[name, 'productId']}
+                              {...restField}
                               rules={[
                                 { required: true, message: '*เลือกรายการ' },
                               ]}
@@ -385,7 +387,6 @@ const PromotionEdit = props => {
                               <Select
                                 placeholder="กดเพื่อเลือกรายการ"
                                 disabled={!editable}
-                                value={[index, 'productId']}
                                 dropdownStyle={{ fontFamily: 'Prompt' }}>
                                 {productData.map((item, index) => (
                                   <Option key={index} value={item.productId}>
@@ -396,11 +397,13 @@ const PromotionEdit = props => {
                             </Form.Item>
                             <Form.Item
                               style={{ flex: 1 }}
-                              name={[index, 'count']}
-                              rules={[{ required: true, message: 'ใส่จำนวน' }]}>
+                              name={[name, 'count']}
+                              {...restField}
+                              rules={[{ required: true, message: '*ใส่จำนวน' }]}>
                               <InputNumber
                                 min="1"
                                 max="1000"
+                                placeholder="0"
                                 disabled={!editable}
                                 style={{
                                   textAlign: 'center',
@@ -411,7 +414,7 @@ const PromotionEdit = props => {
                             </Form.Item>
 
                             <IoIosTrash
-                              onClick={() => remove(field.name)}
+                              onClick={() => remove(name)}
                               size={20}
                               className="dynamic-delete-button"
                               style={{

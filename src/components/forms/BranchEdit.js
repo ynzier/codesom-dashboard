@@ -116,7 +116,6 @@ const BranchEdit = ({ ...props }) => {
   };
 
   useEffect(async () => {
-    document.title = 'ข้อมูลสาขา';
     fetchBranchData(props.branchId);
     navigator.geolocation.getCurrentPosition(position => {
       setCurrentPosition({

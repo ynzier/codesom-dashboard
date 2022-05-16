@@ -71,12 +71,13 @@ const AddReqList = ({ ...props }) => {
         {(fields, { add, remove }) => {
           return (
             <>
-              {fields.map((field, index) => {
+              {fields.map(({ key, name, ...restField }) => {
                 return (
-                  <RowA key={field.key} style={{ height: '100%' }}>
+                  <RowA key={key} style={{ height: '100%' }}>
                     <ColA span={12}>
                       <Form.Item
-                        name={[index, 'reqItemKey']}
+                        name={[name, 'reqItemKey']}
+                        {...restField}
                         rules={[{ required: true, message: '*เลือกรายการ' }]}>
                         <Select
                           placeholder="กดเพื่อเลือกรายการ"
@@ -92,11 +93,13 @@ const AddReqList = ({ ...props }) => {
                     <ColA span={7} />
                     <ColA span={4} style={{ textAlign: 'center' }}>
                       <Form.Item
-                        name={[index, 'reqCount']}
+                        name={[name, 'reqCount']}
+                        {...restField}
                         rules={[{ required: true, message: 'ใส่จำนวน' }]}>
                         <InputNumber
                           min="1"
                           max="1000"
+                          placeholder="0"
                           style={{
                             textAlign: 'center',
                             width: '100%',
@@ -107,7 +110,7 @@ const AddReqList = ({ ...props }) => {
                     </ColA>
                     <ColA span={1}>
                       <IoIosTrash
-                        onClick={() => remove(field.name)}
+                        onClick={() => remove(name)}
                         size={20}
                         className="dynamic-delete-button"
                         style={{ marginTop: 10 }}
@@ -175,7 +178,7 @@ const IngrReqList = ({ ...props }) => {
       },
       requisitionItems: props.reqData,
     };
-    if (selectBranch) {
+    if (selectBranch != null) {
       void trackPromise(
         new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -186,7 +189,7 @@ const IngrReqList = ({ ...props }) => {
                   if (res.data && res.data.message) {
                     alert.show(res.data.message, { type: 'success' });
                     props.setReqData([]);
-                    setBranchId('');
+                    setBranchId(undefined);
                     form.resetFields();
                   }
                 })
@@ -214,7 +217,7 @@ const IngrReqList = ({ ...props }) => {
                   if (res.data && res.data.message) {
                     alert.show(res.data.message, { type: 'success' });
                     props.setReqData([]);
-                    setBranchId('');
+                    setBranchId(undefined);
                     form.resetFields();
                   }
                 })
@@ -235,7 +238,7 @@ const IngrReqList = ({ ...props }) => {
   };
   useEffect(() => {
     let mounted = true;
-    if (!selectBranch)
+    if (selectBranch == null)
       BranchesService.getAllBranch()
         .then(res => {
           if (mounted) {
@@ -255,7 +258,7 @@ const IngrReqList = ({ ...props }) => {
     return () => (mounted = false);
   }, []);
   useEffect(() => {
-    if (selectBranch) {
+    if (selectBranch != null) {
       requisitionService
         .getItemMakeRequest(selectBranch)
         .then(res => setAvailableItem(res.data))
@@ -329,10 +332,10 @@ const IngrReqList = ({ ...props }) => {
           boxShadow: 'rgb(0 0 0 / 25%) 0px 0.5rem 0.7rem',
         }}>
         <Card.Body>
-          <h2 className="mb-4">
-            {props.reqData.length > 0 ? 'ตรวจสอบรายการ' : 'รายการสินค้าที่เบิก'}
+          <h2 className="mb-3">
+            {props.reqData.length > 0 ? 'ตรวจสอบรายการ' : 'สร้างใบเบิกสินค้า'}
           </h2>
-          {!selectBranch && (
+          {selectBranch == null && (
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Select

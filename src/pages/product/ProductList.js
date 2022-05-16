@@ -79,7 +79,7 @@ const ProductList = props => {
   };
 
   useEffect(async () => {
-    document.title = 'รายการสินค้าทั้งหมด';
+    document.title = 'สินค้า';
     let mounted = true;
     await trackPromise(
       new Promise((resolve, reject) => {
@@ -128,7 +128,7 @@ const ProductList = props => {
   }, []);
 
   useEffect(() => {
-    if (selectBranch)
+    if (selectBranch != null)
       ProductService.getManagerAllProductInBranch(selectBranch)
         .then(res => setRecord(res.data))
         .catch(error => {
@@ -377,7 +377,7 @@ const ProductList = props => {
                 <FontAwesomeIcon icon={faHome} />
               </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>รายการสินค้า</Breadcrumb.Item>
+            <Breadcrumb.Item active>สินค้า</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -390,7 +390,7 @@ const ProductList = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <div className="table-settings mb-3">
+          <div className="table-settings mb-1">
             <Row>
               <Col xs={8} md={6} lg={3} xl={4}>
                 <Input

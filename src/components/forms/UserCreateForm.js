@@ -78,7 +78,7 @@ const UserCreateForm = () => {
             onFinish={values => {
               sendData(values);
             }}>
-            <h2 className="mb-4">เพิ่มผู้ใช้งานใหม่</h2>
+            <h2 className="mb-4">เพิ่มผู้ใช้งาน</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Search

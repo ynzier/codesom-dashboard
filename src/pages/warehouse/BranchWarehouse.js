@@ -25,7 +25,7 @@ const BranchWarehouse = props => {
   useEffect(() => {
     document.title = 'คลังสาขา';
     let mounted = true;
-    if (!selectBranch)
+    if (selectBranch == null)
       BranchesService.getAllBranch()
         .then(res => {
           if (mounted) {
@@ -44,7 +44,7 @@ const BranchWarehouse = props => {
     return () => (mounted = false);
   }, []);
   useEffect(async () => {
-    if (selectBranch)
+    if (selectBranch != null)
       try {
         await storageService
           .getAllProductInStorage(selectBranch)
@@ -110,8 +110,8 @@ const BranchWarehouse = props => {
             }}>
             <Card.Body>
               <Col md={12} xl={12} className="mb-3">
-                <h2>รายการที่มีในคลังสินค้า</h2>
-                {!selectBranch && (
+                <h2>คลังสาขา</h2>
+                {selectBranch == null && (
                   <Select
                     showSearch
                     label="สาขา"
@@ -168,7 +168,9 @@ const BranchWarehouse = props => {
                               title: 'รายการ',
                               align: 'center',
                               render: (text, record) => {
-                                return <span>{record.product.productName}</span>;
+                                return (
+                                  <span>{record.product.productName}</span>
+                                );
                               },
                             },
                             {

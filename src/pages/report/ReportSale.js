@@ -545,7 +545,7 @@ const ReportSale = props => {
     };
   }, []);
   useEffect(async () => {
-    if (selectBranch) {
+    if (selectBranch != null) {
       await trackPromise(
         new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -627,7 +627,7 @@ const ReportSale = props => {
               <Col md={12} xl={12} className="mb-3">
                 <h2>รายงานยอดจำหน่าย</h2>
                 <Row style={{ height: '100%' }} className="mb-3">
-                  {!selectBranch && (
+                  {selectBranch == null && (
                     <Col md={4} style={{ height: '100%' }}>
                       <div style={{ fontWeight: 600 }}>ชื่อสาขา</div>
                       <Select

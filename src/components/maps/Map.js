@@ -42,7 +42,7 @@ const MapComponent = ({
         });
       }
     }
-  }, [mapRef, onCenterChanged]);
+  }, [mapRef, onCenterChanged, editable]);
 
   if (!isLoaded) {
     return <div>{'loading'}</div>;

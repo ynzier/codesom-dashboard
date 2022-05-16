@@ -111,7 +111,7 @@ const CreateEmployeeForm = () => {
             onFinish={values => {
               sendData(values);
             }}>
-            <h2 className="mb-4">เพิ่มพนักงานใหม่</h2>
+            <h2 className="mb-4">เพิ่มพนักงาน</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Form.Item

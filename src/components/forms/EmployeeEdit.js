@@ -146,7 +146,7 @@ const EmployeeEdit = ({ ...props }) => {
             onFinish={values => {
               sendData(values);
             }}>
-            <h2 className="mb-4">แก้ไขข้อมูลพนักงาน</h2>
+            <h2 className="mb-4">ข้อมูลพนักงาน</h2>
             <Row>
               <Col md={6} xl={6} className="mb-3">
                 <Form.Item

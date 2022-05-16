@@ -33,7 +33,6 @@ const Sidebar = () => {
     const root = document.documentElement;
     root?.style.setProperty('--contentMargin', collapsed ? '80px' : '270px');
   }, [collapsed]);
-
   return (
     <>
       <ProSidebar
@@ -62,7 +61,6 @@ const Sidebar = () => {
             <SubMenu
               onClick={() => {
                 if (open != 1) setOpen(1);
-                if (open == 1) setOpen(0);
               }}
               open={open == 1}
               title="รายงาน"
@@ -72,14 +70,14 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(1);
                 }}>
-                รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
+                ๐ รายงานการใช้วัตถุดิบ <Link to={Routes.ReportIngr.path} />
               </MenuItem>
               <MenuItem
                 active={active == 2}
                 onClick={() => {
                   setActive(2);
                 }}>
-                รายงานยอดจำหน่าย
+                ๐ รายงานยอดจำหน่าย
                 <Link to={Routes.ReportSale.path} />
               </MenuItem>
               <MenuItem
@@ -87,13 +85,12 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(3);
                 }}>
-                รายงานข้อมูลพนักงาน
+                ๐ รายงานข้อมูลพนักงาน
               </MenuItem>
             </SubMenu>
             <SubMenu
               onClick={() => {
                 if (open != 2) setOpen(2);
-                if (open == 2) setOpen(0);
               }}
               open={open == 2}
               title="บุคลากร"
@@ -103,7 +100,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(4);
                 }}>
-                ๐ จัดการผู้ใช้งาน
+                ๐ รายชื่อผู้ใช้งาน
                 <Link to={Routes.UserList.path} />
               </MenuItem>
               <MenuItem
@@ -111,7 +108,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(5);
                 }}>
-                ๐ จัดการพนักงาน
+                ๐ รายชื่อพนักงาน
                 <Link to={Routes.EmployeeList.path} />
               </MenuItem>
             </SubMenu>
@@ -119,7 +116,6 @@ const Sidebar = () => {
               title="สาขา"
               onClick={() => {
                 if (open != 3) setOpen(3);
-                if (open == 3) setOpen(0);
               }}
               open={open == 3}
               icon={<CgGitBranch color="#9D7463" size="24px" />}>
@@ -128,14 +124,13 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(6);
                 }}>
-                ๐ จัดการสาขา
+                ๐ รายชื่อสาขา
                 <Link to={Routes.BranchLists.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu
               onClick={() => {
                 if (open != 4) setOpen(4);
-                if (open == 4) setOpen(0);
               }}
               open={open == 4}
               title="สินค้าและวัตถุดิบ"
@@ -145,7 +140,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(7);
                 }}>
-                สินค้า
+                ๐ สินค้า
                 <Link to={Routes.ProductList.path} />
               </MenuItem>
               <MenuItem
@@ -153,7 +148,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(8);
                 }}>
-                วัตถุดิบและอื่นๆ
+                ๐ วัตถุดิบและอื่นๆ
                 <Link to={Routes.IngrAndStuffList.path} />
               </MenuItem>
               <MenuItem
@@ -161,14 +156,13 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(9);
                 }}>
-                โปรโมชั่น
+                ๐ โปรโมชัน
                 <Link to={Routes.PromotionList.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu
               onClick={() => {
                 if (open != 5) setOpen(5);
-                if (open == 5) setOpen(0);
               }}
               open={open == 5}
               title="ประวัติรายการ"
@@ -178,7 +172,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(10);
                 }}>
-                ประวัติการขาย
+                ๐ ประวัติออเดอร์
                 <Link to={Routes.OrderHistory.path} />
               </MenuItem>
               <MenuItem
@@ -186,14 +180,13 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(11);
                 }}>
-                ประวัติการเบิกจ่ายสินค้า
+                ๐ ประวัติการเบิกจ่ายสินค้า
                 <Link to={Routes.RequisitionList.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu
               onClick={() => {
                 if (open != 6) setOpen(6);
-                if (open == 6) setOpen(0);
               }}
               open={open == 6}
               title="คลังสินค้า"
@@ -203,7 +196,7 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(12);
                 }}>
-                สร้างใบเบิกสินค้า
+                ๐ สร้างใบเบิกสินค้า
                 <Link to={Routes.CreateRequisition.path} />
               </MenuItem>
               <MenuItem
@@ -211,24 +204,23 @@ const Sidebar = () => {
                 onClick={() => {
                   setActive(13);
                 }}>
-                คลังสาขา
+                ๐ คลังสาขา
                 <Link to={Routes.BranchWarehouse.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu
               onClick={() => {
                 if (open != 7) setOpen(7);
-                if (open == 7) setOpen(0);
               }}
               open={open == 7}
-              title="เดลิเวอรี่"
+              title="เดลิเวอรี"
               icon={<MdDeliveryDining color="#9D7463" size="20px" />}>
               <MenuItem
                 active={active == 14}
                 onClick={() => {
                   setActive(14);
                 }}>
-                รายการเดลิเวอรี <Link to={Routes.DeliveryHistory.path} />
+                ๐ รายการเดลิเวอรี <Link to={Routes.DeliveryHistory.path} />
               </MenuItem>
             </SubMenu>
           </Menu>

@@ -65,7 +65,7 @@ const UserList = ({ ...props }) => {
     });
 
   useEffect(() => {
-    document.title = 'รายชื่อผู้ใช้งานแดชบอร์ด';
+    document.title = 'รายชื่อผู้ใช้งาน';
     let mounted = true;
     UserService.getUserList()
       .then(res => {
@@ -134,7 +134,7 @@ const UserList = ({ ...props }) => {
             okButtonProps={{
               style: { height: 40, background: 'red', borderWidth: 0 },
             }}>
-            <a href="" style={{ color: '#646464' }}>
+            <a href="">
               <i className="fa fa-ban action mr-2" />
             </a>
           </Popconfirm>
@@ -153,7 +153,7 @@ const UserList = ({ ...props }) => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ผู้ใช้งาน</Breadcrumb.Item>
+            <Breadcrumb.Item active>รายชื่อผู้ใช้งาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -166,7 +166,7 @@ const UserList = ({ ...props }) => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <Row>
+          <Row className="mb-1">
             <Col xs={8} md={6} lg={6} xl={6}>
               <Input
                 onChange={e => search(e.target.value)}

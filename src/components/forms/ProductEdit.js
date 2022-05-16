@@ -35,7 +35,6 @@ const ProductEdit = ({ productId }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(async () => {
-    document.title = 'ข้อมูลสินค้า';
     if (productId) {
       await fetchProductData(productId);
       await fetchProductType();
@@ -161,6 +160,8 @@ const ProductEdit = ({ productId }) => {
       });
   };
   const sendData = e => {
+    if (Number(e.weight) < 1)
+      return alert.show('กรุณาใส่น้ำหนักก่อน', { type: 'error' });
     var data = {
       productName: e.productName,
       productCost: e.productCost,
@@ -191,6 +192,9 @@ const ProductEdit = ({ productId }) => {
   };
 
   const sendRecipeProduct = async e => {
+    if (Number(e.weight) < 1)
+      return alert.show('กรุณาใส่น้ำหนักก่อน', { type: 'error' });
+
     var data = {
       productData: {
         productName: e.productName,
@@ -202,6 +206,7 @@ const ProductEdit = ({ productId }) => {
         productDetail: e.productDetail,
         weight: e.weight,
         needProcess: needProcess,
+        isDelivery: isDelivery,
       },
       recipeData: {
         description: e.recipeDescription,
@@ -315,7 +320,7 @@ const ProductEdit = ({ productId }) => {
                 fontFamily: 'Prompt',
               }}>
               <Card.Body>
-                <h5 className="mb-4">ข้อมูลสินค้า / Goods Info</h5>
+                <h5 className="mb-4">ข้อมูลสินค้า</h5>
                 <Row>
                   <Col md={6}>
                     <Upload
@@ -373,13 +378,15 @@ const ProductEdit = ({ productId }) => {
                           <Form.Item
                             name="weight"
                             label="น้ำหนัก (กรัม)"
-                            rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                            rules={[
+                              { required: true, message: '*ใส่น้ำหนัก' },
+                            ]}>
                             <InputNumber
                               min="1"
+                              defaultValue="1"
                               style={{ width: '100%' }}
                               max="10000"
                               disabled={!editable}
-                              placeholder="1"
                             />
                           </Form.Item>
                         </Col>
@@ -573,20 +580,21 @@ const ProductEdit = ({ productId }) => {
                     </Col>
                   </Row>
                   <Form.List name="RecipeItem">
-                    {(fields, { add, remove }, { error }) => {
+                    {(fields, { add, remove }) => {
                       return (
                         <>
-                          {fields.map((field, index) => {
+                          {fields.map(({ key, name, ...restField }) => {
                             return (
                               <RowA
-                                key={field.key}
+                                key={key}
                                 style={{
                                   height: '100%',
                                   display: 'flex',
                                   flexDirection: 'row',
                                 }}>
                                 <Form.Item
-                                  name={[index, 'ingrId']}
+                                  name={[name, 'ingrId']}
+                                  {...restField}
                                   rules={[
                                     {
                                       required: true,
@@ -597,7 +605,6 @@ const ProductEdit = ({ productId }) => {
                                   <Select
                                     disabled={!editable}
                                     placeholder="กดเพื่อเลือกรายการ"
-                                    value={[index, 'ingrId']}
                                     dropdownStyle={{ fontFamily: 'Prompt' }}>
                                     {dataIngrStuff.map((item, index) => (
                                       <Option key={index} value={item.id}>
@@ -609,14 +616,16 @@ const ProductEdit = ({ productId }) => {
 
                                 <Form.Item
                                   style={{ flex: 1 }}
-                                  name={[index, 'amountRequired']}
+                                  name={[name, 'amountRequired']}
+                                  {...restField}
                                   rules={[
-                                    { required: true, message: 'ใส่จำนวน' },
+                                    { required: true, message: '*ใส่จำนวน' },
                                   ]}>
                                   <InputNumber
                                     min="1"
                                     disabled={!editable}
                                     max="1000"
+                                    placeholder="0"
                                     style={{
                                       textAlign: 'center',
                                       width: '100%',
@@ -628,7 +637,7 @@ const ProductEdit = ({ productId }) => {
                                   href=""
                                   onClick={e => {
                                     e.preventDefault();
-                                    remove(field.name);
+                                    remove(name);
                                   }}>
                                   <IoIosTrash
                                     size={20}

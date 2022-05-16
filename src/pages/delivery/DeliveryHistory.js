@@ -91,9 +91,9 @@ const DeliveryHistory = props => {
   }, [keyword, option, pickDate]);
 
   useEffect(() => {
-    document.title = 'ประวัติการขายสินค้า';
+    document.title = 'รายการเดลิเวอรี';
     let mounted = true;
-    if (!selectBranch) {
+    if (selectBranch == null) {
       deliveryService
         .getDeliveryList()
         .then(res => setRecord(res.data))
@@ -130,7 +130,7 @@ const DeliveryHistory = props => {
     };
   }, []);
   useEffect(() => {
-    if (selectBranch)
+    if (selectBranch != null)
       deliveryService
         .getDeliveryListBranch(selectBranch)
         .then(res => setRecord(res.data))
@@ -262,10 +262,11 @@ const DeliveryHistory = props => {
       render: text => {
         return (
           <a
-            onClick={() => {
+            href=""
+            onClick={e => {
+              e.preventDefault();
               openRecord(text);
-            }}
-            style={{ textDecorationLine: 'underline' }}>
+            }}>
             {text}
           </a>
         );
@@ -291,35 +292,35 @@ const DeliveryHistory = props => {
     },
     {
       title: 'เบอร์ติดต่อ',
-      dataIndex: 'recipientTel',
       align: 'center',
+
       render: (text, record) => (
         <Popover
           content={
             <div style={{ fontFamily: 'Prompt', width: 300 }}>
               <p style={{ fontSize: 14 }}>
-                ที่อยู่: {record.lalamove.recipientAddr}
+                ที่อยู่: {record.lalamove?.recipientAddr}
               </p>
-              <p style={{ fontSize: 14 }}>
-                Tracking:{' '}
+              <div style={{ display: 'flex' }}>
+                <p style={{ fontSize: 14, marginRight: 4 }}>Tracking: </p>
                 <a
-                  href={record.lalamove.shareLink}
+                  href={record.lalamove?.shareLink}
                   target="_blank"
                   rel="noreferrer">
-                  {record.lalamove.lalamoveOrderId}
+                  {record.lalamove?.lalamoveOrderId}
                 </a>
-              </p>
+              </div>
             </div>
           }
           title={
             <span
               style={{ fontFamily: 'Prompt', fontWeight: 500, fontSize: 16 }}>
-              คุณ{record.lalamove.recipientName}
+              คุณ{record.lalamove?.recipientName}
             </span>
           }
           trigger="click"
           style={{ fontFamily: 'Prompt' }}>
-          <a>{text}</a>
+          <a href="">{record.lalamove?.recipientTel}</a>
         </Popover>
       ),
     },
@@ -352,7 +353,7 @@ const DeliveryHistory = props => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ประวัติออเดอร์</Breadcrumb.Item>
+            <Breadcrumb.Item active>รายการเดลิเวอรี</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -365,30 +366,29 @@ const DeliveryHistory = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <div className="table-settings mb-3">
+          <div className="table-settings">
             <Row>
-              <Col xs={8} md={selectBranch ? 6 : 5}>
+              <Col xs={8} md={selectBranch != null ? 6 : 5}>
                 <Input
                   value={keyword}
                   onChange={e => setKeyword(e.target.value)}
                   placeholder={
-                    !selectBranch
+                    selectBranch == null
                       ? 'ค้นหารหัส/สถานะ/เบอร์ติดต่อ/สาขา'
                       : 'ค้นหารหัส/สถานะ/เบอร์ติดต่อ'
                   }
                 />
               </Col>
-              {!selectBranch && (
+              {selectBranch == null && (
                 <Col xs={4} md={3}>
                   <Select
-                    className="mb-3"
                     showSearch
                     allowClear
                     style={{
                       width: '100%',
                       fontFamily: 'Prompt',
                     }}
-                    placeholder="สถานะ"
+                    placeholder="สาขา"
                     value={option}
                     optionFilterProp="children"
                     dropdownStyle={{ fontFamily: 'Prompt' }}
@@ -408,7 +408,7 @@ const DeliveryHistory = props => {
                   </Select>
                 </Col>
               )}
-              <Col md={selectBranch ? 6 : 4}>
+              <Col md={selectBranch != null ? 6 : 4}>
                 <RangePicker
                   locale={locale}
                   value={pickDate}
@@ -444,6 +444,7 @@ const DeliveryHistory = props => {
                       setOption(undefined);
                       setPickDate([]);
                     } else {
+                      setKeyword('');
                       setPickDate([]);
                     }
                   }}
@@ -467,7 +468,7 @@ const DeliveryHistory = props => {
                 ? filterData
                 : record
             }
-            columns={location.state?.isManager ? headerManager : header}
+            columns={selectBranch != null ? headerManager : header}
             rowKey="orderId"
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}

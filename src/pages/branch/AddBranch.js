@@ -21,9 +21,9 @@ const AddBranch = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.BranchLists.path}>
-              สาขา
+              รายชื่อสาขา
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มสาขา</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มข้อมูลสาขา</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

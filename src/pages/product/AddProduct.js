@@ -9,7 +9,7 @@ import { ProductCreate } from 'components';
 const AddBranch = () => {
   const [needProcess, setNeedProcess] = useState(false);
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลสินค้า';
+    document.title = 'เพิ่มสินค้า';
   }, []);
 
   return (
@@ -32,10 +32,10 @@ const AddBranch = () => {
         </div>
       </div>
       <Row className="mb-4">
-          <ProductCreate
-            setNeedProcess={setNeedProcess}
-            needProcess={needProcess}
-          />
+        <ProductCreate
+          setNeedProcess={setNeedProcess}
+          needProcess={needProcess}
+        />
       </Row>
     </>
   );

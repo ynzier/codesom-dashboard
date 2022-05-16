@@ -59,7 +59,7 @@ const GetRequisition = ({ ...props }) => {
   };
 
   useEffect(() => {
-    document.title = 'ข้อมูลสินค้า';
+    document.title = 'ใบเบิกจ่ายคลังสินค้า';
     if (reqId) {
       trackPromise(
         new Promise((resolve, reject) => {
@@ -114,7 +114,9 @@ const GetRequisition = ({ ...props }) => {
                 ประวัติการเบิกจ่ายสินค้า
               </Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>ใบเบิกจ่ายคลังสินค้า</Breadcrumb.Item>
+            <Breadcrumb.Item active>
+              ใบเบิกจ่ายคลังสินค้า {reqId}
+            </Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

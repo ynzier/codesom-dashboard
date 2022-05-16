@@ -4,11 +4,11 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
+
 import { PromotionCreate } from 'components';
 const AddPromotion = () => {
   useEffect(() => {
-    document.title = 'เพิ่มข้อมูลสินค้า';
+    document.title = 'เพิ่มโปรโมชัน';
   }, []);
 
   return (
@@ -22,9 +22,9 @@ const AddPromotion = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.PromotionList.path}>
-              สินค้าโปรโมชั่น
+              โปรโมชัน
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>เพิ่มโปรโมชั่น</Breadcrumb.Item>
+            <Breadcrumb.Item active>เพิ่มโปรโมชัน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>

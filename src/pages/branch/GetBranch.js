@@ -24,7 +24,7 @@ const GetBranch = ({ ...props }) => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.BranchLists.path}>
-              สาขา
+              รายชื่อสาขา
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลสาขา</Breadcrumb.Item>
           </Breadcrumb>

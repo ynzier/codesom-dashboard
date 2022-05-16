@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { Routes } from 'routes';
-import { Row, Col, Breadcrumb } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
+import { Row, Breadcrumb } from 'react-bootstrap';
 import { ProductEdit } from 'components';
 const GetProduct = () => {
   let { productId } = useParams();
@@ -24,7 +23,7 @@ const GetProduct = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.ProductList.path}>
-              รายการสินค้า
+              สินค้า
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลสินค้า</Breadcrumb.Item>
           </Breadcrumb>

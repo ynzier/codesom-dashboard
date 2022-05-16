@@ -51,7 +51,7 @@ const EmployeeList = props => {
   };
 
   useEffect(() => {
-    document.title = 'รายชื่อพนักงานทั้งหมด';
+    document.title = 'รายชื่อพนักงาน';
     let mounted = true;
     if (!location.state?.isManager)
       EmployeeService.getEmployeeList()
@@ -70,7 +70,7 @@ const EmployeeList = props => {
     return () => (mounted = false);
   }, []);
   useEffect(() => {
-    if (selectBranch) {
+    if (selectBranch != null) {
       EmployeeService.getEmployeeBranch(selectBranch)
         .then(res => {
           setRecord(res.data);
@@ -229,7 +229,7 @@ const EmployeeList = props => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>พนักงาน</Breadcrumb.Item>
+            <Breadcrumb.Item active>รายชื่อพนักงาน</Breadcrumb.Item>
           </Breadcrumb>
         </div>
       </div>
@@ -242,7 +242,7 @@ const EmployeeList = props => {
           fontFamily: 'Prompt',
         }}>
         <Card.Header style={{ borderWidth: 0 }}>
-          <Row>
+          <Row className="mb-1">
             <Col xs={8} md={6} lg={6} xl={6}>
               <Input
                 onChange={e => search(e.target.value)}
@@ -265,7 +265,7 @@ const EmployeeList = props => {
         </Card.Header>
         <Card.Body
           className="pt-0"
-          style={{ marginTop: 30, height: '100%', width: '100%' }}>
+          style={{ marginTop: 16, height: '100%', width: '100%' }}>
           <Table
             dataSource={filterData == null ? records : filterData}
             columns={location.state?.isManager ? headerManager : header}
