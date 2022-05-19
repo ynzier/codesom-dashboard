@@ -48,6 +48,11 @@ const getEmployeeBranch = branchId => {
     params: { branchId: branchId },
   });
 };
+const empTodayReport = branchId => {
+  return http.get(prefix + '/empTodayReport', {
+    params: { branchId: branchId },
+  });
+};
 export default {
   getEmployeeList,
   createNewEmployee,
@@ -57,4 +62,5 @@ export default {
   getEmpById,
   getAdminManagerList,
   getEmployeeBranch,
+  empTodayReport,
 };

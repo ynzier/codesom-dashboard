@@ -341,8 +341,6 @@ const GetOrder = () => {
                 <Col
                   style={{
                     textAlign: 'right',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
                     whiteSpace: 'nowrap',
                   }}>
                   {moment(orderDetail.createTimestamp)
@@ -553,9 +551,6 @@ const GetOrder = () => {
                 <Col
                   style={{
                     textAlign: 'right',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
                   }}>
                   {orderDetail.branch?.branchAddr}
                 </Col>

@@ -46,7 +46,6 @@ const BranchLists = () => {
               <Input
                 onChange={e => setKeyword(e.target.value)}
                 value={keyword}
-                allowClear
                 placeholder="ค้นหาสาขา"
               />
             </Col>

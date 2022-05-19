@@ -233,6 +233,11 @@ const App = () => {
             path={Routes.DeliveryHistory.path}
             page={Page.DeliveryHistory}
           />
+          <RouteWithSidebar
+            exact
+            path={Routes.ReportEmp.path}
+            page={Page.ReportEmp}
+          />
           <Redirect to={Routes.NotFound.path} />
         </Switch>
       </AlertProvider>

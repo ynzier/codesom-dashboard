@@ -1,21 +1,192 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import { Table, Input, Button, Select } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { Table, Input, Button, Select, Form, InputNumber } from 'antd';
 import { useAlert } from 'react-alert';
 
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { Col, Row, Card, Breadcrumb, Modal } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import { IngrStffCreateModal } from 'components';
 import storageService from 'services/storage.service';
+import ingredientService from 'services/ingredient.service';
+import stuffService from 'services/stuff.service';
+
 const { Option } = Select;
 
+const IngrStuffEditForm = ({ data, closeModal }) => {
+  const [formData, setFormData] = useState(undefined);
+  const alert = useAlert();
+  const [form] = Form.useForm();
+  useEffect(() => {
+    if (data != undefined) {
+      if (data.type == 'วัตถุดิบ')
+        ingredientService
+          .getIngredientById(data.id)
+          .then(res => {
+            const recData = res.data;
+            setFormData({
+              name: recData.ingrName,
+              unit: recData.ingrUnit,
+              cost: recData.ingrCost,
+              type: 'วัตถุดิบ',
+            });
+            form.resetFields();
+          })
+          .catch(err => console.log(err));
+
+      if (data.type == 'อื่นๆ')
+        stuffService
+          .getStuffById(data.id)
+          .then(res => {
+            const recData = res.data;
+            setFormData({
+              name: recData.stuffName,
+              unit: recData.stuffUnit,
+              cost: recData.stuffCost,
+              type: 'อื่นๆ',
+            });
+            form.resetFields();
+          })
+          .catch(err => console.log(err));
+    }
+
+    return () => {};
+  }, [data]);
+  const handleSubmit = e => {
+    if (e.type == 'วัตถุดิบ') {
+      var ingrData = {
+        ingrName: e.name,
+        ingrUnit: e.unit,
+        ingrCost: e.cost,
+      };
+      ingredientService
+        .updateIngredient(data.id, ingrData)
+        .then(res => {
+          alert.show(res.data.message, { type: 'success' });
+          closeModal();
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          return alert.show(resMessage, { type: 'error' });
+        });
+    } else if (e.type == 'อื่นๆ') {
+      var stuffData = {
+        stuffName: e.name,
+        stuffUnit: e.unit,
+        stuffCost: e.cost,
+      };
+      stuffService
+        .updateStuff(data.id, stuffData)
+        .then(res => {
+          alert.show(res.data.message, { type: 'success' });
+          closeModal();
+        })
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          return alert.show(resMessage, { type: 'error' });
+        });
+    }
+  };
+
+  return (
+    <>
+      <Form
+        form={form}
+        name="createIngrStff"
+        preserve={false}
+        layout="vertical"
+        initialValues={formData}
+        onFinish={handleSubmit}>
+        <Row>
+          <Col md={12}>
+            <Row>
+              <Col md={8}>
+                <Form.Item
+                  name="name"
+                  label="ชื่อวัตถุดิบ"
+                  rules={[
+                    { required: true, message: '*ใส่ชื่อวัตถุดิบ' },
+                    { max: 20, message: '*ไม่เกิน 20 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="ชื่อวัตถุดิบ" />
+                </Form.Item>
+              </Col>
+              <Col md={4}>
+                <Form.Item
+                  name="cost"
+                  label="ราคาทุน"
+                  rules={[{ required: true, message: '*ใส่ราคา' }]}>
+                  <InputNumber
+                    min="0"
+                    precision="2"
+                    style={{ width: '100%' }}
+                    stringMode
+                    placeholder="0.00"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={4}>
+                <Form.Item
+                  name="unit"
+                  label="หน่วย"
+                  rules={[
+                    { required: true, message: '*ใส่หน่วย' },
+                    { max: 10, message: '*ไม่เกิน 10 ตัวอักษร' },
+                  ]}>
+                  <Input placeholder="อัน,ลิตร,.-,..." />
+                </Form.Item>
+              </Col>
+              <Col md={4}>
+                <Form.Item
+                  name={'type'}
+                  label="ชนิดสินค้า"
+                  rules={[{ required: true, message: '*เลือกประเภท' }]}>
+                  <Select
+                    disabled
+                    placeholder="เลือกประเภท"
+                    value={'type'}
+                    dropdownStyle={{ fontFamily: 'Prompt' }}>
+                    <Option value="วัตถุดิบ">วัตถุดิบ</Option>
+                    <Option value="อื่นๆ">อื่นๆ</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <div>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: 130, float: 'right' }}>
+              ยืนยัน
+            </Button>
+          </div>
+        </Row>
+      </Form>
+    </>
+  );
+};
+
 const IngrAndStuffList = () => {
-  let history = useHistory();
   let location = useLocation();
   const alert = useAlert();
 
@@ -24,6 +195,8 @@ const IngrAndStuffList = () => {
   });
   const [showCreate, setShowCreate] = useState(false);
   const [record, setRecord] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editId, setEditId] = useState(undefined);
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
@@ -50,9 +223,6 @@ const IngrAndStuffList = () => {
     return () => {};
   }, [keyword, option]);
 
-  const openRecord = productId => {
-    history.push('/dashboard/product/getProduct/' + productId);
-  };
   const fetchData = useCallback(() => {
     trackPromise(
       storageService
@@ -84,63 +254,39 @@ const IngrAndStuffList = () => {
       dataIndex: 'id',
       align: 'center',
       width: 200,
+      render: (text, record) => (
+        <>
+          <a
+            href=""
+            onClick={e => {
+              e.preventDefault();
+              setEditId({ id: text, type: record.type });
+              setShowEdit(true);
+            }}>
+            {text}
+            <FiEdit style={{ marginLeft: 8, marginBottom: 4 }} />
+          </a>
+        </>
+      ),
     },
     {
       title: 'ชื่อสินค้า',
       dataIndex: 'name',
       align: 'center',
       width: 300,
-      render: (text, record) => {
-        return (
-          <>
-            <div
-              style={{
-                textAlign: 'center',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}>
-              {record.name}
-            </div>
-          </>
-        );
-      },
     },
     {
       title: 'ประเภทสินค้า',
       dataIndex: 'type',
       align: 'center',
       width: 300,
-      render: (text, record) => {
-        return <div>{record.type}</div>;
-      },
     },
     {
       title: 'หน่วย',
       dataIndex: 'unit',
       align: 'center',
       width: 200,
-      render: (text, record) => {
-        return <div>{record.unit}</div>;
-      },
     },
-    // {
-    //   key: 'key',
-    //   title: 'Action',
-    //   dataIndex: 'key',
-    //   render: (text, record) => {
-    //     return (
-    //       <div>
-    //         <a
-    //           onClick={() => {
-    //             const productId = record.productId;
-    //             openRecord(productId);
-    //           }}>
-    //           <FiEdit size={18} />
-    //         </a>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   const headerManager = [
     {
@@ -190,11 +336,36 @@ const IngrAndStuffList = () => {
   ];
   return (
     <>
-      <IngrStffCreateModal
-        showCreate={showCreate}
-        setShowCreate={setShowCreate}
-        fetchData={fetchData}
-      />
+      {showCreate && (
+        <IngrStffCreateModal
+          showCreate={showCreate}
+          setShowCreate={setShowCreate}
+          fetchData={fetchData}
+        />
+      )}
+      {showEdit && (
+        <Modal
+          show={showEdit}
+          onHide={() => {
+            setEditId(undefined);
+            setShowEdit(false);
+          }}
+          centered>
+          <Modal.Header closeButton>
+            <Modal.Title>แก้ไขข้อมูล</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="p-4">
+            <IngrStuffEditForm
+              data={editId}
+              closeModal={() => {
+                setEditId(undefined);
+                fetchData();
+                setShowEdit(false);
+              }}
+            />
+          </Modal.Body>
+        </Modal>
+      )}
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4 mt-2">
         <div className="d-block mb-4 mb-md-0">
           <Breadcrumb

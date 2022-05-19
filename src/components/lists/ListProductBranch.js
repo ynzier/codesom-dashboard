@@ -96,7 +96,7 @@ const ListProductBranch = ({ productId, editable }) => {
                   deleteRecord(record.branch.branchId);
                 }}>
                 <FontAwesomeIcon
-                  style={{ right: 20, position: 'absolute', color: '#C96480' }}
+                  style={{ marginLeft: 4, color: '#C96480' }}
                   icon={faMinusCircle}
                 />
               </a>

@@ -12,6 +12,24 @@ const createStuff = data => {
     },
   );
 };
+const getStuffById = id => {
+  return http.get(prefix + '/getStuffById', {
+    headers: authHeader(),
+    params: { stuffId: id },
+  });
+};
+const updateStuff = (id, data) => {
+  return http.put(
+    prefix + '/updateStuff',
+    { data: data },
+    {
+      headers: authHeader(),
+      params: { stuffId: id },
+    },
+  );
+};
 export default {
   createStuff,
+  getStuffById,
+  updateStuff,
 };

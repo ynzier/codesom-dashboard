@@ -401,22 +401,15 @@ const ProductList = props => {
               <Col xs={4} md={4} xl={3}>
                 <Select
                   className="mb-3"
-                  showSearch
                   style={{
                     width: 300,
                     fontFamily: 'Prompt',
                   }}
                   placeholder="ชนิดสินค้า"
-                  optionFilterProp="children"
                   dropdownStyle={{ fontFamily: 'Prompt' }}
                   onChange={value => {
                     setOption(value);
-                  }}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }>
+                  }}>
                   {typeData.map(option => (
                     <Option key={option.typeId} value={option.typeId}>
                       {option.typeName}

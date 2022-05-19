@@ -50,6 +50,7 @@ export const Routes = {
   //Report
   ReportSale: { path: '/dashboard/report/salereport' },
   ReportIngr: { path: '/dashboard/report/ingrreport' },
+  ReportEmp: { path: '/dashboard/report/empreport' },
 
   //Delivery
   DeliveryHistory: { path: '/dashboard/delivery' },

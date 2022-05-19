@@ -86,6 +86,7 @@ const Sidebar = () => {
                   setActive(3);
                 }}>
                 ๐ รายงานข้อมูลพนักงาน
+                <Link to={Routes.ReportEmp.path} />
               </MenuItem>
             </SubMenu>
             <SubMenu

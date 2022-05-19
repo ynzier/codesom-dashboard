@@ -58,6 +58,7 @@ const SettingModal = ({ setModalShow, ...props }) => {
       <Modal.Body className="px-4 mt-3" style={{ fontFamily: 'Prompt' }}>
         <Form
           name="settingForm"
+          form={form}
           onFinish={handleSubmit}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 12 }}>
@@ -76,7 +77,7 @@ const SettingModal = ({ setModalShow, ...props }) => {
               { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
               { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
             ]}>
-            <Input.Password />
+            <Input.Password placeholder="********" />
           </Form.Item>
 
           <Form.Item
@@ -87,7 +88,7 @@ const SettingModal = ({ setModalShow, ...props }) => {
               { max: 16, message: 'ไม่เกิน 16 ตัวอักษร' },
               { min: 8, message: 'รหัสผ่านต้องมากกว่า 7 ตัวอักษร' },
             ]}>
-            <Input.Password />
+            <Input.Password placeholder="********" />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 18, span: 6 }}>
@@ -108,13 +109,15 @@ const NavbarComponent = () => {
 
   return (
     <>
-      <SettingModal
-        show={modalShow}
-        onHide={() => {
-          setModalShow(false);
-        }}
-        setModalShow={setModalShow}
-      />
+      {modalShow && (
+        <SettingModal
+          show={modalShow}
+          onHide={() => {
+            setModalShow(false);
+          }}
+          setModalShow={setModalShow}
+        />
+      )}
       <Navbar
         variant="dark"
         expanded

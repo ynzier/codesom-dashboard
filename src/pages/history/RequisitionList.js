@@ -320,24 +320,16 @@ const RequisitionList = props => {
               </Col>
               <Col xs={4} md={3}>
                 <Select
-                  showSearch
-                  allowClear
                   style={{
                     width: '100%',
                     fontFamily: 'Prompt',
                   }}
                   placeholder="สถานะ"
                   value={option}
-                  optionFilterProp="children"
                   dropdownStyle={{ fontFamily: 'Prompt' }}
                   onChange={value => {
                     setOption(value);
-                  }}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }>
+                  }}>
                   <Option value="0">รออนุมัติ</Option>
                   <Option value="1">อนุมัติแล้ว</Option>
                   <Option value="2">กำลังดำเนินการ</Option>

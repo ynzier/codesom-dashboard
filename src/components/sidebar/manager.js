@@ -128,7 +128,7 @@ const Sidebar = props => {
                   onClick={() => {
                     setActive(3);
                   }}>
-                  ๐ รายงานข้อมูลพนักงาน
+                  ๐ รายงานข้อมูลพนักงาน <Link to={Routes.ReportEmp.path} />
                 </MenuItem>
               </SubMenu>
               <SubMenu
