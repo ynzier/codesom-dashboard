@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card, Breadcrumb, Modal } from 'react-bootstrap';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Routes } from 'routes';
 import { Table, Input, Button } from 'antd';
 import { useAlert } from 'react-alert';
 
-import 'antd/dist/antd.min.css';
-
 import EmployeeService from 'services/employee.service';
+import TokenService from 'services/token.service';
 const EmployeeList = props => {
   const { selectBranch } = props;
   let location = useLocation();
 
+  const { promiseInProgress } = usePromiseTracker();
   let history = useHistory();
   const alert = useAlert();
 
   const [records, setRecord] = useState([]);
   const [deleteData, setDeleteData] = useState([]);
   const [modalShow, setModalShow] = useState(false);
+  const [isManager, setIsManager] = useState(true);
   const [filterData, setfilterData] = useState();
   const search = value => {
     const filterTable = records.filter(o =>
@@ -34,74 +36,117 @@ const EmployeeList = props => {
   const openRecord = empId => {
     history.push('/dashboard/employee/getEmployee/' + empId);
   };
-  const refreshList = () => {
-    EmployeeService.getEmployeeList()
-      .then(res => {
-        setRecord(res.data);
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
+  const refreshList = async () => {
+    await trackPromise(
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(
+            EmployeeService.getEmployeeList()
+              .then(res => {
+                setRecord(res.data);
+              })
+              .catch(error => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+                alert.show(resMessage, { type: 'error' });
+              }),
+          );
+        }, 1000);
+      }),
+    );
   };
 
   useEffect(() => {
     document.title = 'รายชื่อพนักงาน';
     let mounted = true;
-    if (!location.state?.isManager)
-      EmployeeService.getEmployeeList()
-        .then(res => {
-          if (mounted) {
-            setRecord(res.data);
-          }
-        })
-        .catch(e => {
-          const resMessage =
-            (e.response && e.response.data && e.response.data.message) ||
-            e.message ||
-            e.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
+    const fetch = async () => {
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              EmployeeService.getEmployeeList()
+                .then(res => {
+                  if (mounted) {
+                    setRecord(res.data);
+                  }
+                })
+                .catch(e => {
+                  const resMessage =
+                    (e.response &&
+                      e.response.data &&
+                      e.response.data.message) ||
+                    e.message ||
+                    e.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
+    };
+    const user = TokenService.getUser();
+    if (user.authPayload.roleId == 1) {
+      fetch();
+      setIsManager(false);
+    }
     return () => (mounted = false);
   }, []);
   useEffect(() => {
-    if (selectBranch != null) {
-      EmployeeService.getEmployeeBranch(selectBranch)
-        .then(res => {
-          setRecord(res.data);
-        })
-        .catch(e => {
-          const resMessage =
-            (e.response && e.response.data && e.response.data.message) ||
-            e.message ||
-            e.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
-    }
+    const fetch = async () => {
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              EmployeeService.getEmployeeBranch(selectBranch)
+                .then(res => {
+                  setRecord(res.data);
+                })
+                .catch(e => {
+                  const resMessage =
+                    (e.response &&
+                      e.response.data &&
+                      e.response.data.message) ||
+                    e.message ||
+                    e.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
+    };
+    if (selectBranch != null) fetch();
 
     return () => {};
   }, [selectBranch]);
 
-  const deleteRecord = () => {
-    EmployeeService.deleteEmp(deleteData.empId)
-      .then(response => {
-        refreshList();
-        alert.show(response.data.message, { type: 'success' });
-      })
-      .catch(error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        alert.show(resMessage, { type: 'error' });
-      });
+  const deleteRecord = async () => {
+    await trackPromise(
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(
+            EmployeeService.deleteEmp(deleteData.empId)
+              .then(response => {
+                refreshList();
+                alert.show(response.data.message, { type: 'success' });
+              })
+              .catch(error => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+                alert.show(resMessage, { type: 'error' });
+              }),
+          );
+        }, 1000);
+      }),
+    );
   };
   const header = [
     {
@@ -251,7 +296,7 @@ const EmployeeList = props => {
             </Col>
             <Col md={1} lg={2} xl={4} />
             <Col xs={4} md={5} lg={4} xl={2}>
-              {!location.state?.isManager && (
+              {!isManager && (
                 <Button
                   type="primary"
                   onClick={() => {
@@ -268,8 +313,9 @@ const EmployeeList = props => {
           style={{ marginTop: 16, height: '100%', width: '100%' }}>
           <Table
             dataSource={filterData == null ? records : filterData}
-            columns={location.state?.isManager ? headerManager : header}
+            columns={isManager ? headerManager : header}
             rowKey="empId"
+            loading={promiseInProgress}
             pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{ fontFamily: 'Prompt' }}
           />

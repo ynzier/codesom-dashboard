@@ -219,6 +219,7 @@ const BranchCreate = () => {
                       <Select
                         placeholder="เลือกผู้จัดการ"
                         showSearch
+                        allowClear
                         dropdownStyle={{ fontFamily: 'Prompt' }}
                         optionFilterProp="children"
                         filterOption={(input, option) =>

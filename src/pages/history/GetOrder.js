@@ -5,17 +5,18 @@ import { Routes } from 'routes';
 import { Table, Steps } from 'antd';
 import NumberFormat from 'react-number-format';
 import moment from 'moment-timezone';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import 'moment/locale/th';
 import { Image, Popover } from 'antd';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Preloader } from 'components';
-import { Card, Col, Row, Breadcrumb, Button } from 'react-bootstrap';
+import { Card, Col, Row, Breadcrumb } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 import historyService from 'services/history.service';
 
 const GetOrder = () => {
+  let history = useHistory();
   const { promiseInProgress: loadingRecord } = usePromiseTracker({
     area: 'loadingRecord',
   });
@@ -49,6 +50,8 @@ const GetOrder = () => {
               error.response.data.message) ||
             error.message ||
             error.toString();
+
+          if (resMessage == 'ไม่พบออเดอร์ที่ค้นหา') return history.push('/404');
           alert.show(resMessage, { type: 'error' });
         }),
     );
@@ -343,9 +346,10 @@ const GetOrder = () => {
                     textAlign: 'right',
                     whiteSpace: 'nowrap',
                   }}>
-                  {moment(orderDetail.createTimestamp)
-                    .locale('th')
-                    .format('LLL')}
+                  {orderDetail?.createTimestamp &&
+                    moment(orderDetail.createTimestamp)
+                      .locale('th')
+                      .format('LLL')}
                 </Col>
               </Row>
               <Row>

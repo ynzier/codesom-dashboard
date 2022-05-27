@@ -8,7 +8,7 @@ import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import NumberFormat from 'react-number-format';
 import { useAlert } from 'react-alert';
 import historyService from 'services/history.service';
@@ -21,6 +21,7 @@ const OrderHistory = props => {
   let history = useHistory();
   let location = useLocation();
   const { selectBranch } = props;
+  const { promiseInProgress } = usePromiseTracker();
   const alert = useAlert();
   const [record, setRecord] = useState([]);
   const [branchData, setbranchData] = useState([]);
@@ -95,36 +96,46 @@ const OrderHistory = props => {
     document.title = 'ประวัติออเดอร์';
     let mounted = true;
     if (selectBranch == null) {
-      historyService
-        .listOrderDashboard()
-        .then(res => setRecord(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
-      BranchesService.getAllBranch()
-        .then(res => {
-          if (mounted) {
-            getBranchData = res.data;
-            setbranchData(getBranchData);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              historyService
+                .listOrderDashboard()
+                .then(res => setRecord(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+            resolve(
+              BranchesService.getAllBranch()
+                .then(res => {
+                  if (mounted) {
+                    getBranchData = res.data;
+                    setbranchData(getBranchData);
+                  }
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
     }
     return () => {
       mounted = false;
@@ -132,19 +143,27 @@ const OrderHistory = props => {
   }, []);
   useEffect(() => {
     if (selectBranch != null)
-      historyService
-        .listOrderDashboardByBranch(selectBranch)
-        .then(res => setRecord(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              historyService
+                .listOrderDashboardByBranch(selectBranch)
+                .then(res => setRecord(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
 
     return () => {};
   }, [selectBranch]);
@@ -408,6 +427,7 @@ const OrderHistory = props => {
             }
             columns={selectBranch != null ? headerManager : header}
             rowKey="orderId"
+            loading={promiseInProgress}
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}
           />

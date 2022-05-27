@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Routes } from 'routes';
 import BranchesService from 'services/branches.service';
 import NumberFormat from 'react-number-format';
 import { Row, Col, Breadcrumb, Card } from 'react-bootstrap';
 import { Select, Tabs } from 'antd';
 import { Line } from '@ant-design/plots';
+import { Preloader } from 'components';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-import 'antd/dist/antd.min.css';
+
 import reportService from 'services/report.service';
 import TokenService from 'services/token.service';
 
@@ -105,6 +106,7 @@ const ReportIngr = props => {
   const [branchId, setBranchId] = useState([]);
   const [branchData, setbranchData] = useState([]);
   const [graphTotal, setGraphTotal] = useState([]);
+  const { promiseInProgress } = usePromiseTracker();
   const fetchChart = async branchId => {
     await reportService
       .getIngrChart({ branchId: branchId })
@@ -118,7 +120,13 @@ const ReportIngr = props => {
     let mounted = true;
     const role = await TokenService.getUser().authPayload.roleId;
     if (role == 1) {
-      fetchChart();
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(fetchChart());
+          }, 500);
+        }),
+      );
       BranchesService.getAllBranchName()
         .then(res => {
           if (mounted) {
@@ -154,9 +162,15 @@ const ReportIngr = props => {
 
   useEffect(async () => {
     const role = await TokenService.getUser().authPayload.roleId;
-    if (role == 1) {
-      if (branchId) fetchChart(branchId);
-    }
+    if (role == 1)
+      if (branchId)
+        await trackPromise(
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(fetchChart(branchId));
+            }, 500);
+          }),
+        );
     return () => {};
   }, [branchId]);
 
@@ -226,10 +240,18 @@ const ReportIngr = props => {
                     <Row>
                       <Tabs defaultActiveKey="1" centered>
                         <TabPane tab="ปริมาณที่ใช้" key="1">
-                          <LineChart data={graphTotal} type="totalCount" />
+                          {promiseInProgress ? (
+                            <Preloader show={promiseInProgress} />
+                          ) : (
+                            <LineChart data={graphTotal} type="totalCount" />
+                          )}
                         </TabPane>
                         <TabPane tab="ต้นทุน" key="2">
-                          <LineChart data={graphTotal} type="totalCost" />
+                          {promiseInProgress ? (
+                            <Preloader show={promiseInProgress} />
+                          ) : (
+                            <LineChart data={graphTotal} type="totalCost" />
+                          )}
                         </TabPane>
                       </Tabs>
                     </Row>

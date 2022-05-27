@@ -4,16 +4,13 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
-import locale from 'antd/es/date-picker/locale/th_TH';
 import { Routes } from 'routes';
 import { Preloader } from 'components';
 import BranchesService from 'services/branches.service';
 import { Row, Col, Breadcrumb, Card } from 'react-bootstrap';
 import { Select, Tabs, Table } from 'antd';
-
 const { TabPane } = Tabs;
 const { Option } = Select;
-import 'antd/dist/antd.min.css';
 import storageService from 'services/storage.service';
 const BranchWarehouse = props => {
   const { selectBranch } = props;
@@ -46,15 +43,27 @@ const BranchWarehouse = props => {
   useEffect(async () => {
     if (selectBranch != null)
       try {
-        await storageService
-          .getAllProductInStorage(selectBranch)
-          .then(res => setProductList(res.data));
-        await storageService
-          .getAllIngrInStorage(selectBranch)
-          .then(res => setIngrList(res.data));
-        await storageService
-          .getAllStuffInStorage(selectBranch)
-          .then(res => setStuffList(res.data));
+        void trackPromise(
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(
+                storageService
+                  .getAllProductInStorage(selectBranch)
+                  .then(res => setProductList(res.data)),
+              );
+              resolve(
+                storageService
+                  .getAllIngrInStorage(selectBranch)
+                  .then(res => setIngrList(res.data)),
+              );
+              resolve(
+                storageService
+                  .getAllStuffInStorage(selectBranch)
+                  .then(res => setStuffList(res.data)),
+              );
+            }, 1000);
+          }),
+        );
       } catch (error) {
         const resMessage =
           (error.response &&

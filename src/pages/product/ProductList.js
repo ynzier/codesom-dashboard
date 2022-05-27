@@ -13,6 +13,7 @@ import { FiEdit } from 'react-icons/fi';
 import { Routes } from 'routes';
 import ProductService from 'services/product.service';
 import { RecipeLookUp } from 'components';
+import TokenService from 'services/token.service';
 const { Option } = Select;
 
 const ProductList = props => {
@@ -31,6 +32,7 @@ const ProductList = props => {
   const [typeData, setTypeData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
+  const [isManager, setIsManager] = useState(true);
 
   useEffect(async () => {
     const filterTable = record.filter(obj => {
@@ -81,9 +83,14 @@ const ProductList = props => {
   useEffect(async () => {
     document.title = 'สินค้า';
     let mounted = true;
+
+    const user = TokenService.getUser();
+    if (user.authPayload.roleId == 1) {
+      setIsManager(false);
+    }
     await trackPromise(
       new Promise((resolve, reject) => {
-        if (!location.state?.isManager)
+        if (user.authPayload.roleId == 1)
           resolve(
             ProductService.getAllProducts()
               .then(res => {
@@ -417,7 +424,7 @@ const ProductList = props => {
                   ))}
                 </Select>
               </Col>
-              {!location.state?.isManager && (
+              {!isManager && (
                 <Col xs={5} xl={{ span: 2, offset: 3 }}>
                   <Button
                     type="primary"
@@ -434,7 +441,7 @@ const ProductList = props => {
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             dataSource={keyword != '' || option != '' ? filterData : record}
-            columns={location.state?.isManager ? headerManager : header}
+            columns={isManager ? headerManager : header}
             loading={promiseInProgress}
             rowKey="productId"
             pagination={{ pageSize: 20, showSizeChanger: false }}

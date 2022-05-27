@@ -98,38 +98,50 @@ const RequisitionList = props => {
   const fetchData = useCallback(async id => {
     if (id != null) {
       await trackPromise(
-        requisitionService
-          .listAllReqByBranch(id)
-          .then(res => {
-            setRecord(res.data);
-          })
-          .catch(error => {
-            const resMessage =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-            alert.show(resMessage, { type: 'error' });
-          }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .listAllReqByBranch(id)
+                .then(res => {
+                  setRecord(res.data);
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
         requisitionService.area.listAllReq,
       );
     } else {
       await trackPromise(
-        requisitionService
-          .listAllReq()
-          .then(res => {
-            setRecord(res.data);
-          })
-          .catch(error => {
-            const resMessage =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-            alert.show(resMessage, { type: 'error' });
-          }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .listAllReq()
+                .then(res => {
+                  setRecord(res.data);
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
         requisitionService.area.listAllReq,
       );
     }

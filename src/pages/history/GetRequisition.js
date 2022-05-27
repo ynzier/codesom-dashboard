@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment-timezone';
 import { faHome, faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import requisitionService from 'services/requisition.service';
 import { Routes } from 'routes';
@@ -22,6 +22,7 @@ const GetRequisition = ({ ...props }) => {
   const [productList, setProductList] = useState([]);
   const [ingrList, setIngrList] = useState([]);
   const [stuffList, setStuffList] = useState([]);
+  let history = useHistory();
 
   const updateStatus = status => {
     requisitionService
@@ -37,6 +38,8 @@ const GetRequisition = ({ ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
+        if (resMessage == 'ไม่มีสิทธิ์ในรายการนี้')
+          return history.push('/notfound');
         alert.show(resMessage, { type: 'error' });
       });
   };
@@ -54,6 +57,9 @@ const GetRequisition = ({ ...props }) => {
             error.response.data.message) ||
           error.message ||
           error.toString();
+
+        if (resMessage == 'ไม่มีสิทธิ์ในรายการนี้')
+          return history.push('/notfound');
         alert.show(resMessage, { type: 'error' });
       });
   };
@@ -80,6 +86,9 @@ const GetRequisition = ({ ...props }) => {
                       error.response.data.message) ||
                     error.message ||
                     error.toString();
+
+                  if (resMessage == 'ไม่มีสิทธิ์ในรายการนี้')
+                    return history.push('/notfound');
                   alert.show(resMessage, { type: 'error' });
                 }),
             );
@@ -321,17 +330,15 @@ const GetRequisition = ({ ...props }) => {
               <Row>
                 <Col>เวลาที่สร้าง: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {requisitData.createdAt
-                    ? moment(requisitData.createdAt).local('th').format('LLL')
-                    : ''}
+                  {requisitData?.createdAt &&
+                    moment(requisitData.createdAt).local('th').format('LLL')}
                 </Col>
               </Row>
               <Row>
                 <Col>อัพเดทล่าสุด: </Col>
                 <Col style={{ textAlign: 'right' }}>
-                  {requisitData.updatedAt
-                    ? moment(requisitData.updatedAt).local('th').format('LLL')
-                    : ''}
+                  {requisitData?.updatedAt &&
+                    moment(requisitData.updatedAt).local('th').format('LLL')}
                 </Col>
               </Row>
               <Row>

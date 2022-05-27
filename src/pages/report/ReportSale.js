@@ -5,6 +5,7 @@ import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
+import { Preloader } from 'components';
 import { Routes } from 'routes';
 import NumberFormat from 'react-number-format';
 import BranchesService from 'services/branches.service';
@@ -467,6 +468,7 @@ const BestSellerChart = ({ data, type }) => {
 
 const ReportSale = props => {
   const { selectBranch } = props;
+  const { promiseInProgress } = usePromiseTracker();
   const { RangePicker } = DatePicker;
   const [branchId, setBranchId] = useState([]);
   const [branchData, setbranchData] = useState([]);
@@ -522,8 +524,22 @@ const ReportSale = props => {
     let mounted = true;
     const role = await TokenService.getUser().authPayload.roleId;
     if (role == 1) {
-      fetchReport();
-      fetchChart();
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(fetchReport());
+          }, 500);
+        }),
+      );
+
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(fetchChart());
+          }, 500);
+        }),
+      );
+
       BranchesService.getAllBranchName()
         .then(res => {
           if (mounted) {
@@ -689,115 +705,31 @@ const ReportSale = props => {
                     />
                   </Col>
                 </Row>
-                <Card>
-                  <Card.Body>
-                    <Row style={{ textAlign: 'center' }} className="mb-2">
-                      <Col md={{ offset: 2, span: 4 }}>จำนวนออเดอร์</Col>
-                      <Col md="4">จำนวนสินค้าที่ขาย</Col>
-                    </Row>
-                    <Row style={{ textAlign: 'center' }} className="mb-3">
-                      <Col md={{ offset: 2, span: 4 }}>
-                        <div className="box-report">{report.totalOrder}</div>
-                      </Col>
-                      <Col md="4">
-                        <div className="box-report">{totalItems}</div>
-                      </Col>
-                    </Row>
-                    <Row style={{ textAlign: 'center' }} className="mb-2">
-                      <Col>ยอดขาย</Col>
-                      <Col>ต้นทุน</Col>
-                      <Col>กำไร</Col>
-                    </Row>
-                    <Row style={{ textAlign: 'center' }} className="mb-3">
-                      <Col>
-                        <div className="box-report">
-                          <NumberFormat
-                            value={report.orderNet}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            decimalSeparator="."
-                            displayType={'text'}
-                            thousandSeparator={true}
-                          />
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="box-report">
-                          <NumberFormat
-                            value={report.totalCost}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            decimalSeparator="."
-                            displayType={'text'}
-                            thousandSeparator={true}
-                          />
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="box-report">
-                          <NumberFormat
-                            value={report.totalBenefit}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            decimalSeparator="."
-                            displayType={'text'}
-                            thousandSeparator={true}
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="my-5">
-                      <Col className="mx-5">
-                        <Row>
-                          <Col>
-                            <h5>สรุปยอด</h5>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>ค่าจัดส่ง</Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.lalaFare}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              decimalSeparator="."
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>ค่าบริการ Omise</Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.omiseFee}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              decimalSeparator="."
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>VAT 7%</Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalVat}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              decimalSeparator="."
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>ยอดขายทั้งหมด (Net)</Col>
-                          <Col style={{ textAlign: 'right' }}>
+                {promiseInProgress ? (
+                  <Preloader show={promiseInProgress} />
+                ) : (
+                  <Card>
+                    <Card.Body>
+                      <Row style={{ textAlign: 'center' }} className="mb-2">
+                        <Col md={{ offset: 2, span: 4 }}>จำนวนออเดอร์</Col>
+                        <Col md="4">จำนวนสินค้าที่ขาย</Col>
+                      </Row>
+                      <Row style={{ textAlign: 'center' }} className="mb-3">
+                        <Col md={{ offset: 2, span: 4 }}>
+                          <div className="box-report">{report.totalOrder}</div>
+                        </Col>
+                        <Col md="4">
+                          <div className="box-report">{totalItems}</div>
+                        </Col>
+                      </Row>
+                      <Row style={{ textAlign: 'center' }} className="mb-2">
+                        <Col>ยอดขาย</Col>
+                        <Col>ต้นทุน</Col>
+                        <Col>กำไร</Col>
+                      </Row>
+                      <Row style={{ textAlign: 'center' }} className="mb-3">
+                        <Col>
+                          <div className="box-report">
                             <NumberFormat
                               value={report.orderNet}
                               decimalScale={2}
@@ -805,354 +737,442 @@ const ReportSale = props => {
                               decimalSeparator="."
                               displayType={'text'}
                               thousandSeparator={true}
-                              suffix=" บาท"
                             />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>ยอดสุทธิ</Col>
-                          <Col style={{ textAlign: 'right' }}>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="box-report">
                             <NumberFormat
-                              value={report.finalTotal}
+                              value={report.totalCost}
                               decimalScale={2}
                               fixedDecimalScale={true}
                               decimalSeparator="."
                               displayType={'text'}
                               thousandSeparator={true}
-                              suffix=" บาท"
                             />
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col className="mx-5">
-                        <Row>
-                          <Col>หน้าร้าน</Col>
-                          <Col style={{ textAlign: 'center' }}>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="box-report">
                             <NumberFormat
-                              value={report.takeAway}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalTakeAway}
+                              value={report.totalBenefit}
                               decimalScale={2}
                               fixedDecimalScale={true}
+                              decimalSeparator="."
                               displayType={'text'}
                               thousandSeparator={true}
-                              suffix=" บาท"
                             />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Online Store</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryOnline}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalOnline}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Line Man</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryLineman}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalLineman}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Robinhood</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryRobinhood}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalRobinhood}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Grab</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryGrab}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalGrab}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Line Official</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryOff}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalOff}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>อื่นๆ</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.deliveryETC}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalETC}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row
-                          style={{ height: 1, backgroundColor: '#d6d6d6' }}
-                          className="my-3"
-                        />
-                        <Row>
-                          <Col>เงินสด</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.paidCash}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalCash}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Thai QR</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.paidQR}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalQR}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Shopee Wallet</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.paidShopee}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalShopee}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>Dolphin Wallet</Col>
-                          <Col style={{ textAlign: 'center' }}>
-                            <NumberFormat
-                              value={report.paidDolphin}
-                              decimalScale={0}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" รายการ"
-                            />
-                          </Col>
-                          <Col style={{ textAlign: 'right' }}>
-                            <NumberFormat
-                              value={report.totalDolphin}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              suffix=" บาท"
-                            />
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                    <Row
-                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
-                      className="my-3 mx-4"
-                    />
-                    <Row>
-                      <h4>สินค้าขายดี</h4>
-                      <Col>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row className="my-5">
+                        <Col className="mx-5">
+                          <Row>
+                            <Col>
+                              <h5>สรุปยอด</h5>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>ค่าจัดส่ง</Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.lalaFare}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                decimalSeparator="."
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>ค่าบริการ Omise</Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.omiseFee}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                decimalSeparator="."
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>VAT 7%</Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalVat}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                decimalSeparator="."
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>ยอดขายทั้งหมด (Net)</Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.orderNet}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                decimalSeparator="."
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>ยอดสุทธิ</Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.finalTotal}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                decimalSeparator="."
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col className="mx-5">
+                          <Row>
+                            <Col>หน้าร้าน</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.takeAway}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalTakeAway}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Online Store</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryOnline}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalOnline}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Line Man</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryLineman}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalLineman}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Robinhood</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryRobinhood}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalRobinhood}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Grab</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryGrab}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalGrab}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Line Official</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryOff}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalOff}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>อื่นๆ</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.deliveryETC}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalETC}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row
+                            style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                            className="my-3"
+                          />
+                          <Row>
+                            <Col>เงินสด</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.paidCash}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalCash}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Thai QR</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.paidQR}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalQR}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Shopee Wallet</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.paidShopee}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalShopee}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Dolphin Wallet</Col>
+                            <Col style={{ textAlign: 'center' }}>
+                              <NumberFormat
+                                value={report.paidDolphin}
+                                decimalScale={0}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" รายการ"
+                              />
+                            </Col>
+                            <Col style={{ textAlign: 'right' }}>
+                              <NumberFormat
+                                value={report.totalDolphin}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix=" บาท"
+                              />
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                      <Row
+                        style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                        className="my-3 mx-4"
+                      />
+                      <Row>
+                        <h4>สินค้าขายดี</h4>
+                        <Col>
+                          <Tabs defaultActiveKey="1" centered>
+                            <TabPane tab="ยอดขาย" key="1">
+                              <TopSalePie data={topSale} type="totalValue" />
+                              <BestSellerChart
+                                data={bestSeller}
+                                type="totalValue"
+                              />
+                            </TabPane>
+                            <TabPane tab="จำนวนสินค้า" key="2">
+                              <TopSalePie data={topSale} type="totalCount" />
+                              <BestSellerChart
+                                data={bestSeller}
+                                type="totalCount"
+                              />
+                            </TabPane>
+                          </Tabs>
+                        </Col>
+                      </Row>
+                      <Row
+                        style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                        className="my-3"
+                      />
+                      <Row>
+                        <h4>ช่องทางการจำหน่าย</h4>
                         <Tabs defaultActiveKey="1" centered>
                           <TabPane tab="ยอดขาย" key="1">
-                            <TopSalePie data={topSale} type="totalValue" />
-                            <BestSellerChart
-                              data={bestSeller}
-                              type="totalValue"
-                            />
+                            <LineChart data={graphTotal} type="totalValue" />
                           </TabPane>
-                          <TabPane tab="จำนวนสินค้า" key="2">
-                            <TopSalePie data={topSale} type="totalCount" />
-                            <BestSellerChart
-                              data={bestSeller}
-                              type="totalCount"
-                            />
+                          <TabPane tab="จำนวนออเดอร์" key="2">
+                            <LineChart data={graphTotal} type="total" />
                           </TabPane>
                         </Tabs>
-                      </Col>
-                    </Row>
-                    <Row
-                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
-                      className="my-3"
-                    />
-                    <Row>
-                      <h4>ช่องทางการจำหน่าย</h4>
-                      <Tabs defaultActiveKey="1" centered>
-                        <TabPane tab="ยอดขาย" key="1">
-                          <LineChart data={graphTotal} type="totalValue" />
-                        </TabPane>
-                        <TabPane tab="จำนวนออเดอร์" key="2">
-                          <LineChart data={graphTotal} type="total" />
-                        </TabPane>
-                      </Tabs>
-                    </Row>
-                    <Row
-                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
-                      className="my-3"
-                    />
-                    <Row>
-                      <h4>ยอดขายตามช่วงเวลา</h4>
-                      <Tabs defaultActiveKey="1" centered>
-                        <TabPane tab="ยอดขาย" key="1">
-                          <TimeChart data={scatterData} type="orderTotal" />
-                        </TabPane>
-                        <TabPane tab="จำนวนออเดอร์" key="2">
-                          <TimeChart data={scatterData} type="ordDuplicate" />
-                        </TabPane>
-                      </Tabs>
-                    </Row>
-                    <Row
-                      style={{ height: 1, backgroundColor: '#d6d6d6' }}
-                      className="my-3"
-                    />
-                    <Row>
-                      <h4>ต้นทุน/ยอดขาย</h4>
-                      <Tabs defaultActiveKey="1" centered>
-                        <TabPane tab="ต้นทุน/ยอดขาย" key="1">
-                          <BenefitChart data={benefitGraph} />
-                        </TabPane>
-                      </Tabs>
-                    </Row>
-                  </Card.Body>
-                </Card>
+                      </Row>
+                      <Row
+                        style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                        className="my-3"
+                      />
+                      <Row>
+                        <h4>ยอดขายตามช่วงเวลา</h4>
+                        <Tabs defaultActiveKey="1" centered>
+                          <TabPane tab="ยอดขาย" key="1">
+                            <TimeChart data={scatterData} type="orderTotal" />
+                          </TabPane>
+                          <TabPane tab="จำนวนออเดอร์" key="2">
+                            <TimeChart data={scatterData} type="ordDuplicate" />
+                          </TabPane>
+                        </Tabs>
+                      </Row>
+                      <Row
+                        style={{ height: 1, backgroundColor: '#d6d6d6' }}
+                        className="my-3"
+                      />
+                      <Row>
+                        <h4>ต้นทุน/ยอดขาย</h4>
+                        <Tabs defaultActiveKey="1" centered>
+                          <TabPane tab="ต้นทุน/ยอดขาย" key="1">
+                            <BenefitChart data={benefitGraph} />
+                          </TabPane>
+                        </Tabs>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                )}
               </Col>
             </Card.Body>
           </Card>

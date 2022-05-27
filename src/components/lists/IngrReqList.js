@@ -27,7 +27,6 @@ const AddReqList = ({ ...props }) => {
     var inputData = values.requisitionItems;
     var tempData = [];
     var isDuplicate = false;
-    console.log(inputData);
 
     const uniqueValues = new Set(inputData.map(v => v.reqItemKey));
 
@@ -239,51 +238,75 @@ const IngrReqList = ({ ...props }) => {
   useEffect(() => {
     let mounted = true;
     if (selectBranch == null)
-      BranchesService.getAllBranch()
-        .then(res => {
-          if (mounted) {
-            getBranchData = res.data;
-            setbranchData(getBranchData);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              BranchesService.getAllBranch()
+                .then(res => {
+                  if (mounted) {
+                    getBranchData = res.data;
+                    setbranchData(getBranchData);
+                  }
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
     return () => (mounted = false);
   }, []);
   useEffect(() => {
     if (selectBranch != null) {
-      requisitionService
-        .getItemMakeRequest(selectBranch)
-        .then(res => setAvailableItem(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .getItemMakeRequest(selectBranch)
+                .then(res => setAvailableItem(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
     } else {
-      requisitionService
-        .getItemMakeRequest(selectedBranchId)
-        .then(res => setAvailableItem(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              requisitionService
+                .getItemMakeRequest(selectedBranchId)
+                .then(res => setAvailableItem(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+      );
     }
   }, [selectedBranchId, selectBranch]);
   const [form] = Form.useForm();
@@ -323,7 +346,6 @@ const IngrReqList = ({ ...props }) => {
 
   return (
     <>
-      <Preloader show={promiseInProgress} />
       <Card
         border="light"
         className="bg-white px-6 py-4"
@@ -342,6 +364,7 @@ const IngrReqList = ({ ...props }) => {
                   showSearch
                   label="สาขา"
                   value={selectedBranchId}
+                  loading={promiseInProgress}
                   disabled={props.reqData.length > 0}
                   style={{ width: 300, fontFamily: 'Prompt' }}
                   placeholder="เลือกสาขา"
@@ -373,6 +396,7 @@ const IngrReqList = ({ ...props }) => {
                   <Table
                     dataSource={props.reqData}
                     columns={header}
+                    loading={promiseInProgress}
                     rowKey="id"
                     pagination={false}
                     style={{ fontFamily: 'Prompt' }}

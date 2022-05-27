@@ -13,6 +13,7 @@ import { IngrStffCreateModal } from 'components';
 import storageService from 'services/storage.service';
 import ingredientService from 'services/ingredient.service';
 import stuffService from 'services/stuff.service';
+import TokenService from 'services/token.service';
 
 const { Option } = Select;
 
@@ -187,7 +188,6 @@ const IngrStuffEditForm = ({ data, closeModal }) => {
 };
 
 const IngrAndStuffList = () => {
-  let location = useLocation();
   const alert = useAlert();
 
   const { promiseInProgress } = usePromiseTracker({
@@ -200,7 +200,7 @@ const IngrAndStuffList = () => {
   const [filterData, setfilterData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [option, setOption] = useState('');
-
+  const [isManager, setIsManager] = useState(true);
   useEffect(async () => {
     const filterTable = record.filter(obj => {
       // keyword
@@ -245,6 +245,11 @@ const IngrAndStuffList = () => {
   useEffect(async () => {
     document.title = 'วัตถุดิบและอื่นๆ';
     fetchData();
+
+    const user = TokenService.getUser();
+    if (user.authPayload.roleId == 1) {
+      setIsManager(false);
+    }
     return () => {};
   }, []);
 
@@ -414,7 +419,7 @@ const IngrAndStuffList = () => {
                   <Option value="อื่นๆ">อื่นๆ</Option>
                 </Select>
               </Col>
-              {!location.state?.isManager && (
+              {!isManager && (
                 <Col xs={5} xl={{ span: 2, offset: 3 }}>
                   <Button
                     type="primary"
@@ -431,7 +436,7 @@ const IngrAndStuffList = () => {
         <Card.Body className="pt-0 w-100 mt-0 h-auto justify-content-center align-items-center">
           <Table
             dataSource={keyword != '' || option != '' ? filterData : record}
-            columns={location.state?.isManager ? headerManager : header}
+            columns={isManager ? headerManager : header}
             rowKey="productId"
             loading={promiseInProgress}
             pagination={{ pageSize: 20, showSizeChanger: false }}

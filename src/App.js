@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Routes } from 'routes';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-// Components
 import 'antd/dist/antd.min.css';
 import './index.less';
 import {
@@ -13,16 +12,12 @@ import {
   Preloader,
 } from 'components';
 import AuthService from 'services/auth.service';
-
-// Error Pages
 import * as Page from 'pages';
 
 const options = {
-  // you can also just use 'bottom center'
   position: positions.TOP_RIGHT,
   timeout: 5000,
   offset: '10px',
-  // you can also just use 'scale'
   transition: transitions.FADE,
 };
 
@@ -98,11 +93,7 @@ const App = () => {
     <>
       <AlertProvider template={AlertTemplate} {...options}>
         <Switch>
-          <RouteWithLoader
-            exact
-            path={Routes.NotFound.path}
-            page={Page.NotFound}
-          />
+          <Route path={Routes.NotFound.path} component={Page.NotFound} />
           <RouteWithLoader
             exact
             path={Routes.ServerError.path}
@@ -116,37 +107,17 @@ const App = () => {
             path={Routes.EmployeeList.path}
             page={Page.EmployeeList}
           />
-          <RouteWithSidebar
-            exact
-            path={Routes.GetEmployee.path}
-            page={Page.GetEmployee}
-          />
-          <RouteWithSidebar
-            exact
-            path={Routes.CreateNewEmployee.path}
-            page={Page.CreateNewEmployee}
-          />
           {/* User */}
           <RouteWithSidebar
             exact
             path={Routes.UserList.path}
             page={Page.UserList}
           />
-          <RouteWithSidebar
-            exact
-            path={Routes.AddPermission.path}
-            page={Page.AddPermission}
-          />
           {/* Branch */}
           <RouteWithSidebar
             exact
             path={Routes.BranchLists.path}
             page={Page.BranchLists}
-          />
-          <RouteWithSidebar
-            exact
-            path={Routes.AddBranch.path}
-            page={Page.AddBranch}
           />
           <RouteWithSidebar
             exact
@@ -185,23 +156,8 @@ const App = () => {
           />
           <RouteWithSidebar
             exact
-            path={Routes.AddProduct.path}
-            page={Page.AddProduct}
-          />
-          <RouteWithSidebar
-            exact
-            path={Routes.GetProduct.path}
-            page={Page.GetProduct}
-          />
-          <RouteWithSidebar
-            exact
             path={Routes.PromotionList.path}
             page={Page.PromotionList}
-          />
-          <RouteWithSidebar
-            exact
-            path={Routes.AddPromotion.path}
-            page={Page.AddPromotion}
           />
           <RouteWithSidebar
             exact
@@ -238,6 +194,46 @@ const App = () => {
             path={Routes.ReportEmp.path}
             page={Page.ReportEmp}
           />
+
+          {currentUser?.authPayload?.roleId == 1 && (
+            <>
+              <RouteWithSidebar
+                exact
+                path={Routes.CreateNewEmployee.path}
+                page={Page.CreateNewEmployee}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.GetEmployee.path}
+                page={Page.GetEmployee}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.AddPermission.path}
+                page={Page.AddPermission}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.AddBranch.path}
+                page={Page.AddBranch}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.AddProduct.path}
+                page={Page.AddProduct}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.AddPromotion.path}
+                page={Page.AddPromotion}
+              />
+              <RouteWithSidebar
+                exact
+                path={Routes.GetProduct.path}
+                page={Page.GetProduct}
+              />
+            </>
+          )}
           <Redirect to={Routes.NotFound.path} />
         </Switch>
       </AlertProvider>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Table, DatePicker, Popover, Input, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Routes } from 'routes';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
-import { Col, Row, Form, Card, Breadcrumb, InputGroup } from 'react-bootstrap';
-import 'antd/dist/antd.min.css';
+import { Col, Row, Form, Card, Breadcrumb } from 'react-bootstrap';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import NumberFormat from 'react-number-format';
 import BranchesService from 'services/branches.service';
 import deliveryService from 'services/delivery.service';
@@ -20,6 +20,9 @@ const DeliveryHistory = props => {
   let history = useHistory();
   let location = useLocation();
   const { selectBranch } = props;
+  const { promiseInProgress: deliveryHistory } = usePromiseTracker({
+    area: 'deliveryHistory',
+  });
 
   const [record, setRecord] = useState([]);
   const [branchData, setbranchData] = useState([]);
@@ -94,36 +97,47 @@ const DeliveryHistory = props => {
     document.title = 'รายการเดลิเวอรี';
     let mounted = true;
     if (selectBranch == null) {
-      deliveryService
-        .getDeliveryList()
-        .then(res => setRecord(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
-      BranchesService.getAllBranch()
-        .then(res => {
-          if (mounted) {
-            getBranchData = res.data;
-            setbranchData(getBranchData);
-          }
-        })
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              deliveryService
+                .getDeliveryList()
+                .then(res => setRecord(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+            resolve(
+              BranchesService.getAllBranch()
+                .then(res => {
+                  if (mounted) {
+                    getBranchData = res.data;
+                    setbranchData(getBranchData);
+                  }
+                })
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+        'deliveryHistory',
+      );
     }
     return () => {
       mounted = false;
@@ -131,19 +145,28 @@ const DeliveryHistory = props => {
   }, []);
   useEffect(() => {
     if (selectBranch != null)
-      deliveryService
-        .getDeliveryListBranch(selectBranch)
-        .then(res => setRecord(res.data))
-        .catch(error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error);
-          alert.show(resMessage, { type: 'error' });
-        });
+      void trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(
+              deliveryService
+                .getDeliveryListBranch(selectBranch)
+                .then(res => setRecord(res.data))
+                .catch(error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  console.log(error);
+                  alert.show(resMessage, { type: 'error' });
+                }),
+            );
+          }, 1000);
+        }),
+        'deliveryHistory',
+      );
 
     return () => {};
   }, [selectBranch]);
@@ -470,6 +493,7 @@ const DeliveryHistory = props => {
             }
             columns={selectBranch != null ? headerManager : header}
             rowKey="orderId"
+            loading={deliveryHistory}
             showSizeChanger={false}
             pagination={{ pageSize: 20, showSizeChanger: false }}
           />

@@ -8,7 +8,6 @@ import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import NumberFormat from 'react-number-format';
 import { IoIosTrash } from 'react-icons/io';
 import {
-  Col as ColA,
   Row as RowA,
   Form,
   InputNumber,

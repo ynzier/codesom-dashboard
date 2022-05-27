@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { Routes } from 'routes';
-import BranchesService from 'services/branches.service';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import { Row, Col, Breadcrumb, Card } from 'react-bootstrap';
-import { Table, Badge, Menu, Dropdown, Space } from 'antd';
+import { Table } from 'antd';
 import TokenService from 'services/token.service';
 import employeeService from 'services/employee.service';
 
 const ReportEmp = props => {
   const { selectBranch } = props;
+  const { promiseInProgress } = usePromiseTracker();
+
   const [reportData, setReportData] = useState([]);
   const fetchData = async branchId => {
     await employeeService
@@ -35,7 +36,13 @@ const ReportEmp = props => {
 
     const role = await TokenService.getUser().authPayload.roleId;
     if (role == 1) {
-      fetchData();
+      await trackPromise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(fetchData());
+          }, 500);
+        }),
+      );
     }
     return () => {};
   }, []);
@@ -149,6 +156,7 @@ const ReportEmp = props => {
                     columns={columns}
                     expandable={{ expandedRowRender }}
                     dataSource={reportData}
+                    loading={promiseInProgress}
                     pagination={{ pageSize: 20, showSizeChanger: false }}
                   />
                 </Row>
