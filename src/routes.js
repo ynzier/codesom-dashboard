@@ -13,12 +13,12 @@ export const Routes = {
 
   // People
   Home: { path: '/dashboard' },
-  EmployeeList: { path: '/dashboard/employee' },
+  EmployeeList: { path: '/dashboard/employee/list' },
   GetEmployee: { path: '/dashboard/employee/getEmployee/:empId' },
   CreateNewEmployee: { path: '/dashboard/employee/create' },
 
   // Dashboard User
-  UserList: { path: '/dashboard/users' },
+  UserList: { path: '/dashboard/users/list' },
   AddPermission: { path: '/dashboard/users/addPermission' },
 
   // Branch
@@ -32,7 +32,7 @@ export const Routes = {
 
   // Products
   ProductList: { path: '/dashboard/product' },
-  IngrAndStuffList: { path: '/dashboard/product/ingredient' },
+  IngrAndStuffList: { path: '/dashboard/ingredient' },
   AddProduct: { path: '/dashboard/product/create' },
   GetProduct: { path: '/dashboard/product/getProduct/:productId' },
   // Promotion
@@ -42,7 +42,7 @@ export const Routes = {
 
   //History
 
-  OrderHistory: { path: '/dashboard/history' },
+  OrderHistory: { path: '/dashboard/history/orderlist' },
   GetOrder: { path: '/dashboard/history/GetOrder/:id' },
   RequisitionList: { path: '/dashboard/history/RequisitionList' },
   GetRequisition: { path: '/dashboard/history/getRequisition/:reqId' },

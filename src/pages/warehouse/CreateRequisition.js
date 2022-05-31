@@ -25,17 +25,13 @@ const IngrRequestPage = props => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             {reqData.length > 0 ? (
               <>
-                <Breadcrumb.Item>
-                  <Link to={Routes.CreateRequisition.path}>
-                    สร้างใบเบิกสินค้า
-                  </Link>
+                <Breadcrumb.Item href={Routes.CreateRequisition.path}>
+                  สร้างใบเบิกสินค้า
                 </Breadcrumb.Item>
                 <Breadcrumb.Item active>ตรวจสอบรายการ</Breadcrumb.Item>
               </>

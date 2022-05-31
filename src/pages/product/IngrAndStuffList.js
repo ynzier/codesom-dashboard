@@ -376,10 +376,8 @@ const IngrAndStuffList = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item active>วัตถุดิบและอื่นๆ</Breadcrumb.Item>
           </Breadcrumb>
@@ -437,7 +435,7 @@ const IngrAndStuffList = () => {
           <Table
             dataSource={keyword != '' || option != '' ? filterData : record}
             columns={isManager ? headerManager : header}
-            rowKey="productId"
+            rowKey="key"
             loading={promiseInProgress}
             pagination={{ pageSize: 20, showSizeChanger: false }}
             style={{

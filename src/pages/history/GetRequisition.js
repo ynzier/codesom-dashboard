@@ -113,15 +113,11 @@ const GetRequisition = ({ ...props }) => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.RequisitionList.path}>
-                ประวัติการเบิกจ่ายสินค้า
-              </Link>
+            <Breadcrumb.Item href={Routes.RequisitionList.path}>
+              ประวัติการเบิกจ่ายสินค้า
             </Breadcrumb.Item>
             <Breadcrumb.Item active>
               ใบเบิกจ่ายคลังสินค้า {reqId}

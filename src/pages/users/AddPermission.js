@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { UserCreateForm } from 'components';
-import { Link } from 'react-router-dom';
 import { Routes } from 'routes';
 
 const AddPermission = () => {
@@ -17,10 +16,8 @@ const AddPermission = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Breadcrumb.Item href={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Breadcrumb.Item>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.UserList.path}>
               รายชื่อผู้ใช้งาน

@@ -4,9 +4,10 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { EmployeeEdit } from 'components';
 import { Routes } from 'routes';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 const GetEmployee = () => {
   const { empId } = useParams();
+
   useEffect(() => {
     document.title = 'ข้อมูลพนักงาน';
   }, []);
@@ -21,7 +22,7 @@ const GetEmployee = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.EmployeeList.path}>
-            รายชื่อพนักงาน
+              รายชื่อพนักงาน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลพนักงาน</Breadcrumb.Item>
           </Breadcrumb>

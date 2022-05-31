@@ -5,7 +5,6 @@ import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
-import NumberFormat from 'react-number-format';
 import { IoIosTrash } from 'react-icons/io';
 import {
   Row as RowA,
@@ -85,7 +84,6 @@ const PromotionCreate = () => {
       productService
         .getProductCreatePromo()
         .then(res => {
-          console.log(res.data);
           setProductData(res.data);
         })
         .catch(error => {
@@ -349,36 +347,37 @@ const PromotionCreate = () => {
                         );
                       })}
                       <RowA style={{ justifyContent: 'center' }}>
-                        <ButtonA
-                          type="primary"
+                        <Button
+                          variant="codesom"
                           onClick={() => {
                             add();
                           }}
                           style={{
                             color: '#97515F',
                             backgroundColor: 'transparent',
-                            width: 40,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            display: 'flex',
+                            borderStyle: 'none',
+                            display: 'block',
                           }}>
                           <PlusOutlined />
-                        </ButtonA>
+                        </Button>
                       </RowA>
                     </>
                   );
                 }}
               </Form.List>
-              <RowA style={{ justifyContent: 'flex-end' }}>
-                <NumberFormat
-                  value={promoCost}
-                  decimalScale={2}
-                  fixedDecimalScale={true}
-                  decimalSeparator="."
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  prefix={'ราคาปกติ:'}
-                />
+              <RowA style={{ justifyContent: 'flex-end' }} className="mb-3">
+                <Col md={4}>
+                  <div style={{ fontWeight: 600 }}>ราคาปกติ</div>
+                  <InputNumber
+                    min="0"
+                    precision="2"
+                    stringMode
+                    style={{ width: '100%' }}
+                    disabled
+                    placeholder="0.00"
+                    value={promoCost}
+                  />
+                </Col>
               </RowA>
               <Row>
                 <Col md={{ span: 3, offset: 6 }}>

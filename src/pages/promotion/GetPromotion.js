@@ -22,8 +22,8 @@ const GetPromotion = () => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.ProductList.path}>โปรโมชัน</Link>
+            <Breadcrumb.Item href={Routes.PromotionList.path}>
+              โปรโมชัน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>ข้อมูลโปรโมชัน</Breadcrumb.Item>
           </Breadcrumb>

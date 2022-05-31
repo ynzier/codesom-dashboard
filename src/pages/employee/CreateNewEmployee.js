@@ -4,7 +4,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import { EmployeeCreate } from 'components';
 import { Routes } from 'routes';
-import { Link } from 'react-router-dom';
+
 const AddAdmin = () => {
   useEffect(() => {
     document.title = 'เพิ่มพนักงาน';
@@ -20,7 +20,7 @@ const AddAdmin = () => {
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
             <Breadcrumb.Item href={Routes.EmployeeList.path}>
-            รายชื่อพนักงาน
+              รายชื่อพนักงาน
             </Breadcrumb.Item>
             <Breadcrumb.Item active>เพิ่มพนักงาน</Breadcrumb.Item>
           </Breadcrumb>

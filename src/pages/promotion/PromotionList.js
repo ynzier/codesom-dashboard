@@ -110,7 +110,7 @@ const PromotionList = props => {
                   hoverable
                   style={{ fontFamily: 'Prompt' }}
                   onClick={() => {
-                    openRecord(item.promoId);
+                    if (selectBranch == null) openRecord(item.promoId);
                   }}
                   cover={
                     <Image

@@ -7,7 +7,7 @@ import { Routes } from 'routes';
 import moment from 'moment-timezone';
 import 'moment/locale/th';
 import locale from 'antd/es/date-picker/locale/th_TH';
-import { Col, Row, Form, Card, Breadcrumb } from 'react-bootstrap';
+import { Col, Row, Card, Breadcrumb } from 'react-bootstrap';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import NumberFormat from 'react-number-format';
 import BranchesService from 'services/branches.service';
@@ -172,7 +172,10 @@ const DeliveryHistory = props => {
   }, [selectBranch]);
 
   const openRecord = id => {
-    history.push('/dashboard/history/GetOrder/' + id);
+    history.push({
+      pathname: '/dashboard/history/GetOrder/' + id,
+      state: { from: location.pathname },
+    });
   };
 
   const header = [

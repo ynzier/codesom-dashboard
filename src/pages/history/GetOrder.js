@@ -151,9 +151,15 @@ const GetOrder = () => {
             <Breadcrumb.Item href={Routes.Home.path}>
               <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item href={Routes.OrderHistory.path}>
-              ประวัติออเดอร์
-            </Breadcrumb.Item>
+            {history.location?.state?.from != Routes.DeliveryHistory.path ? (
+              <Breadcrumb.Item href={Routes.OrderHistory.path}>
+                ประวัติออเดอร์
+              </Breadcrumb.Item>
+            ) : (
+              <Breadcrumb.Item href={Routes.DeliveryHistory.path}>
+                รายการเดลิเวอรี
+              </Breadcrumb.Item>
+            )}
             <Breadcrumb.Item active>ข้อมูลออเดอร์ {id}</Breadcrumb.Item>
           </Breadcrumb>
         </div>

@@ -19,6 +19,7 @@ const signinDashboard = (userName, password) => {
 
 const logoutDashboard = () => {
   localStorage.removeItem('user');
+  localStorage.removeItem('branchState');
   window.location.reload();
 };
 

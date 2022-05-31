@@ -19,13 +19,11 @@ const AddBranch = () => {
           <Breadcrumb
             className="d-none d-md-inline-block"
             listProps={{ className: 'breadcrumb-dark breadcrumb-transparent' }}>
-            <Breadcrumb.Item>
-              <Link to={Routes.Home.path}>
-                <FontAwesomeIcon icon={faHome} />
-              </Link>
+            <Breadcrumb.Item href={Routes.Home.path}>
+              <FontAwesomeIcon icon={faHome} />
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to={Routes.ProductList.path}>รายการสินค้า</Link>
+            <Breadcrumb.Item href={Routes.ProductList.path}>
+              รายการสินค้า
             </Breadcrumb.Item>
             <Breadcrumb.Item active>เพิ่มสินค้า</Breadcrumb.Item>
           </Breadcrumb>

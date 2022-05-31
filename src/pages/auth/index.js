@@ -25,8 +25,8 @@ const Login = ({ ...props }) => {
     delay: 300000,
   });
 
-  const [Username, setUsername] = useState('');
-  const [Password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   useEffect(() => {
     document.title = 'Log In';
   }, []);
@@ -35,7 +35,7 @@ const Login = ({ ...props }) => {
     e.preventDefault();
 
     await trackPromise(
-      AuthService.signinDashboard(Username, Password)
+      AuthService.signinDashboard(username, password)
         .then(() => {
           props.history.push('/dashboard/report/salereport');
           window.location.reload();
